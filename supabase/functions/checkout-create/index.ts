@@ -12,8 +12,9 @@ export default {
       const body = await readJson(req); const customerValue = body.customer;
       if (!customerValue || typeof customerValue !== "object" || Array.isArray(customerValue)) throw new Error("Customer details are required");
       const customer = customerValue as Record<string, unknown>;
-      const pCustomer = { name: stringValue(customer.name, 160), email: emailValue(customer.email), phone: stringValue(customer.phone, 40), address_line_1: stringValue(customer.address_line_1, 240), address_line_2: stringValue(customer.address_line_2, 240, false), city: stringValue(customer.city, 120), postal_code: stringValue(customer.postal_code, 32, false), country: stringValue(customer.country, 120) };
-      const countryCode = stringValue(body.country_code, 2).toUpperCase(); const paymentMethod = stringValue(body.payment_method, 24); const idempotencyKey = stringValue(body.idempotency_key, 120);
+      const countryCode = stringValue(body.country_code, 2).toUpperCase();
+      const pCustomer = { name: stringValue(customer.name, 160), email: emailValue(customer.email), phone: stringValue(customer.phone, 40), address_line_1: stringValue(customer.address_line_1, 240), address_line_2: stringValue(customer.address_line_2, 240, false), city: stringValue(customer.city, 120), postal_code: stringValue(customer.postal_code, 32, false), country: stringValue(customer.country, 120, false) || countryCode };
+      const paymentMethod = stringValue(body.payment_method, 24); const idempotencyKey = stringValue(body.idempotency_key, 120);
       if (!/^[A-Z]{2}$/.test(countryCode) || !["cod", "bank_transfer"].includes(paymentMethod) || idempotencyKey.length < 20) throw new Error("Checkout details are invalid");
       const pepper = Deno.env.get("ORDER_TOKEN_PEPPER"); if (!pepper) throw new Error("Order confirmation is not configured");
       const confirmationToken = token(); const confirmationTokenHash = await sha256(`${confirmationToken}:${pepper}`);

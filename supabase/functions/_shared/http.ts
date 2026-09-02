@@ -59,7 +59,7 @@ export function itemsValue(value: unknown): Array<{ product_id: string; quantity
     if (!line || typeof line !== "object") throw new Error("Invalid cart line");
     const product_id = stringValue((line as Record<string, unknown>).product_id, 80);
     const quantity = Number((line as Record<string, unknown>).quantity);
-    if (!/^[0-9a-f-]{20,}$/i.test(product_id) || !Number.isInteger(quantity) || quantity < 1 || quantity > 99 || seen.has(product_id)) throw new Error("Invalid cart line");
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(product_id) || !Number.isInteger(quantity) || quantity < 1 || quantity > 99 || seen.has(product_id)) throw new Error("Invalid cart line");
     seen.add(product_id); return { product_id, quantity };
   });
 }

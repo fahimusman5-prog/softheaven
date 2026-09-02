@@ -1,15 +1,6 @@
+-- Keep payment methods owner-configurable. COD/card/bank transfer are only
+-- usable when their payment_method_settings row is explicitly enabled.
 revoke execute on function public.is_admin() from anon;
-
-create or replace function public.reject_cash_on_delivery()
-returns trigger language plpgsql set search_path = public as $$
-begin
-  if new.method = 'cod' then raise exception 'Cash on delivery is disabled'; end if;
-  return new;
-end;
-$$;
-drop trigger if exists payment_method_no_cod on public.payment_method_settings;
-create trigger payment_method_no_cod before insert or update on public.payment_method_settings for each row execute function public.reject_cash_on_delivery();
-delete from public.payment_method_settings where method = 'cod';
 
 insert into storage.buckets (id, name, public)
 values ('product-media', 'product-media', true)
