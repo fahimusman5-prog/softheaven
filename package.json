@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-seo.mjs",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b --pretty false",
     "lint": "tsc -b --pretty false"
@@ -22,5 +23,8 @@
   "devDependencies": {
     "lightningcss-darwin-arm64": "1.33.0",
     "supabase": "2.116.0"
+  },
+  "overrides": {
+    "nanoid": "3.3.18"
   }
 }

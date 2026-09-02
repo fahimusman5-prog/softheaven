@@ -1,0 +1,2 @@
+-- Intentionally empty. Products, pricing, stock, shipping, payment methods and policies
+-- must be entered from verified owner inputs after the migration is applied.

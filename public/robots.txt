@@ -1,14 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /account
-Disallow: /addresses
-Disallow: /orders
-Disallow: /wishlist
-Disallow: /rewards
 Disallow: /checkout
 Disallow: /order-confirmed
-Disallow: /login
-Disallow: /register
-Disallow: /forgot-password
-Disallow: /reset-password
-Sitemap: http://localhost:5173/sitemap.xml
+Disallow: /admin
