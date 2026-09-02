@@ -17,6 +17,6 @@ NOT READY — code and deployment scaffolding are implemented, but the owner’s
 
 - Hosted Supabase migration/RLS execution, real catalogue and inventory, domain/HTTPS, owner-approved policies, payment sandbox/live callbacks, email provider delivery, contact delivery, and database order persistence.
 - Full mobile browser flow at every requested viewport and production deployment.
-- `npm audit` still reports a high `nanoid` advisory through the current Vite/PostCSS dependency chain; update only after compatibility review.
+- `npm audit` and `npm audit --omit=dev` pass with zero reported vulnerabilities after the compatible `nanoid` override.
 
 See `LAUNCH_REQUIRED_INPUTS.md` for the exact owner actions. Do not claim production launch readiness until the full live checklist in the implementation report passes.
