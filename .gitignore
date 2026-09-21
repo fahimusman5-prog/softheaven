@@ -1,9 +1,10 @@
-node_modules/
-dist/
-.DS_Store
-.env
-.env.*
+node_modules
+.next
+out
+.env*
 !.env.example
-*.local
+*.log
 tsconfig.tsbuildinfo
-
+AGENTS.md
+CLAUDE.md
+.DS_Store
