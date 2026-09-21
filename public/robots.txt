@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /checkout
-Disallow: /order-confirmed
-Disallow: /admin
