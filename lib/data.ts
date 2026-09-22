@@ -20,6 +20,12 @@ export const images = {
   gift: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCXdJ3VujKAboQltkaIoDSsWdN3Fa5hfUOFwFZcAtPsGF5lcKjYfH9TTe7ZPs9e2tExoXv3P0mAIMeDW_uv831hNAWUhoew31eZBB3vv_XW4mdeArdk_IC6NerghQf_IEiGIqxMoiHCqVh84LT6ao5tEHboXdg_02oIIUfT2ajgbtIwnWvWHoBekG02csQule2BUFHRhXMA9dR15AJML6ETwGXAfBP8txr359EHQj6jA6BbyrZAOrNDXg',
 };
 
+/*
+ * These catalog numbers are the existing storefront values. The repository does
+ * not contain an authoritative LKR price list, so the migration preserves the
+ * numeric values instead of inventing an exchange-rate conversion; replace them
+ * with approved rupee amounts when the source price list is available.
+ */
 export const products: Product[] = [
   { id: 'aurelius', slug: 'aurelius-heritage-bear', name: 'The Aurelius Heritage Bear', price: 88, compareAt: 115, category: 'Teddy Bear Collection', color: 'Honey Caramel', badge: 'Heritage Archive', image: images.bear, description: 'A grounded sensory instrument for softer rooms, slower evenings, and better hugs.', details: ['0.8 Denier Cloud Fleece', 'Weighted Micro-Glass Core', 'French Double-Lock Seams', 'Brass Ear-Stamp №'] },
   { id: 'celeste', slug: 'celeste-cloud-bunny', name: 'Celeste Cloud Bunny', price: 72, category: 'Soft Animal Friends', color: 'Cloud Cream', badge: 'New arrival', image: images.bunny, description: 'A quiet, cloud-soft companion with a little extra room for tenderness.', details: ['Hypoallergenic fibers', 'Hand-finished features', 'Lavender-safe lining'] },

@@ -1,20 +1,24 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useState } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { products } from '@/lib/data';
 
 const categories = ['All', 'Teddy Bear Collection', 'Love & Gifting', 'Soft Animal Friends'];
+type ShopSearchParams = { search?: string | string[]; category?: string | string[] };
 
-export default function ShopPage() {
-  const [category, setCategory] = useState('All');
-  const [query, setQuery] = useState('');
+export default function ShopPage({ searchParams }: { searchParams: Promise<ShopSearchParams> }) {
+  const params = use(searchParams);
+  const searchValue = Array.isArray(params.search) ? params.search[0] : params.search;
+  const requestedCategory = Array.isArray(params.category) ? params.category[0] : params.category;
+  const [category, setCategory] = useState(() => requestedCategory && categories.includes(requestedCategory) ? requestedCategory : 'All');
+  const [query, setQuery] = useState(searchValue ?? '');
   const [sort, setSort] = useState('Featured');
 
   useEffect(() => {
-    const search = new URLSearchParams(window.location.search).get('search');
-    if (search) setQuery(search);
-  }, []);
+    if (searchValue !== undefined) setQuery(searchValue);
+    if (requestedCategory && categories.includes(requestedCategory)) setCategory(requestedCategory);
+  }, [requestedCategory, searchValue]);
 
   const visible = useMemo(() => products
     .filter((product) => (category === 'All' || product.category === category) && product.name.toLowerCase().includes(query.toLowerCase()))
