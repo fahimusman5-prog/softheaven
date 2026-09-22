@@ -1,20 +1,26 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { findProduct, products } from '@/lib/data';
-import { formatPrice } from '@/lib/format';
-import { AddToCart } from '@/components/add-to-cart';
-import { ProductCard } from '@/components/product-card';
-import { SectionReveal } from '@/components/section-reveal';
-export function generateStaticParams() { return products.map((product) => ({ slug: product.slug })); }
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> { const { slug } = await params; const product = findProduct(slug); return { title: product.name, description: product.description }; }
+import { ProductDetail } from '@/components/product-detail';
+
+export function generateStaticParams() {
+  return products.map((product) => ({ slug: product.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const product = findProduct(slug);
+  return {
+    title: `${product.name} | SoftHaven`,
+    description: product.description,
+    openGraph: { title: `${product.name} | SoftHaven`, description: product.description, images: [product.image] },
+  };
+}
+
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = findProduct(slug);
-  const keepsakeScales = [
-    { name: 'Mini • 20cm', note: 'Desk companion', price: 54 },
-    { name: 'Classic • 35cm', note: 'Most cherished', price: 88 },
-    { name: 'Heirloom • 50cm', note: 'Full chest hug', price: 145 },
-    { name: 'Giant • 90cm', note: 'Floor friend', price: 280 },
-  ];
-  return <div className="product-page"><div className="breadcrumbs"><Link href="/shop">Shop</Link><span>/</span><span>{product.name}</span></div><section className="product-hero"><div className="product-gallery"><div className="main-product-image"><span className="badge">{product.badge ?? 'SoftHaven original'}</span><img src={product.image} alt={product.name}/><span className="image-note">⌁ Hover to inspect every little detail</span></div><div className="gallery-thumbs"><img src={product.image} alt="Front view"/><img src={product.image} alt="Detail view"/><img src={product.image} alt="Unboxing view"/><img src={product.image} alt="Interior view"/></div><div className="feature-strip"><span>◌<b>OEKO-TEX® 100</b><small>Class 1 Infant Certified</small></span><span>♧<b>Hypoallergenic</b><small>Soft for every hug</small></span><span>⌁<b>London Studio</b><small>Individually finished</small></span></div></div><div className="product-purchase"><span className="eyebrow">Available for dispatch　•　London atelier edition</span><h1>{product.name}</h1><div className="rating">☆ ☆ ☆ ☆ ☆　4.95　 <u>542 verified hugs</u></div><div className="big-price">{formatPrice(product.price)} {product.compareAt && <del>{formatPrice(product.compareAt)}</del>} <span>Save 23% · keepsake value</span></div><p className="product-description">{product.description}</p><div className="variant-box"><span>Select Keepsake Hug Scale</span><div>{keepsakeScales.map((scale, index) => <button className={index === 0 ? 'selected' : ''} key={scale.name}>{scale.name}<small>{scale.note} · +{formatPrice(scale.price)}</small></button>)}</div></div><p className="color-line">Artisanal Colorway: <b>{product.color}</b> <i></i><i className="sage"></i></p><div className="inscription"><b>♧　Signature Unboxing Ritual Included</b><p>Complimentary hand-bound archival gift box, ribbon bow wrapping & a numbered heirloom certificate of adoption.</p><label><input type="checkbox"/> Infuse Provenance Lavender Sleep Sachet <strong>+ {formatPrice(5)}</strong></label></div><AddToCart product={product}/><Link className="secondary-button full" href="/cart">Send as Instant Gift <span>⌁</span></Link><p className="small-note">✓ Complimentary carbon-neutral express courier. Dispatches within 24h.<br/>✓ 60-Day Comfort Guarantee. Loved infinitely or heartfelt return.</p></div></section><SectionReveal><section className="anatomy"><span className="eyebrow">The anatomy of softness</span><h2>Why {product.name.split(' ')[1]} Touches the Soul<br className="desktop-only"/> Differently</h2><p>Engineered not as ordinary stuffed doll, but as a grounded sensory instrument designed to soothe overstimulated nervous systems.</p><div className="anatomy-grid">{product.details.map((detail, index) => <div key={detail}><span>0{index + 1}</span><h3>{detail}</h3><p>Considered materials and tactile finishing, made to feel good day after day.</p></div>)}</div></section></SectionReveal><SectionReveal><section className="bundle"><span>✦　Frequently paired ritual</span><b>The Sanctuary Keepsake Suite</b><span className="bundle-items">Aurelius Classic　+　Cashmere Mini Scarf　+　Lavender Pillow Mist</span><strong>{formatPrice(115)}　<button className="primary-button">Add all 3 items to Cart</button></strong></section></SectionReveal><section className="reviews"><span className="eyebrow">Collector notes</span><h2>4.95 <small>from 542 reviews</small></h2><div className="quotes"><blockquote>“Brought tears to my sister&apos;s eyes.”<cite>— Eleanor L.</cite></blockquote><blockquote>“Architectural luxury for the bedroom.”<cite>— Marcus K.</cite></blockquote><blockquote>“The weighted calming touch really works.”<cite>— Claire L.</cite></blockquote></div></section></div>;
+  const relatedProducts = products.filter((candidate) => candidate.id !== product.id && candidate.category === product.category);
+  const remainingProducts = products.filter((candidate) => candidate.id !== product.id && !relatedProducts.some((related) => related.id === candidate.id));
+
+  return <ProductDetail product={product} relatedProducts={[...relatedProducts, ...remainingProducts]} />;
 }
