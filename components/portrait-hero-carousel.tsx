@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import Image from 'next/image';
+import { useSyncExternalStore } from 'react';
 
 export type PortraitHeroSlide = {
   id: string;
@@ -29,6 +31,18 @@ function getPosition(index: number, activeIndex: number, total: number): Positio
   return Math.max(-3, Math.min(3, offset)) as Position;
 }
 
+function useMediaQuery(query: string) {
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const mediaQuery = window.matchMedia(query);
+      mediaQuery.addEventListener('change', onStoreChange);
+      return () => mediaQuery.removeEventListener('change', onStoreChange);
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
+}
+
 function ArrowIcon({ direction }: { direction: 'left' | 'right' }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d={direction === 'left' ? 'm14.5 5-7 7 7 7' : 'm9.5 5 7 7-7 7'} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>;
 }
@@ -49,9 +63,12 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [isDocumentVisible, setIsDocumentVisible] = useState(true);
   const dragStart = useRef<number | null>(null);
   const isHovering = useRef(false);
   const resumeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMobile = useMediaQuery('(max-width: 620px)');
+  const visibleRadius = isMobile ? 1 : 2;
 
   const scheduleResume = () => {
     if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
@@ -73,12 +90,19 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
   }, []);
 
   useEffect(() => {
-    if (reducedMotion || isPaused) return;
+    const updateVisibility = () => setIsDocumentVisible(document.visibilityState === 'visible');
+    updateVisibility();
+    document.addEventListener('visibilitychange', updateVisibility);
+    return () => document.removeEventListener('visibilitychange', updateVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (reducedMotion || isPaused || !isDocumentVisible) return;
     const timer = setInterval(() => {
-      if (document.visibilityState === 'visible') move(1);
-    }, 2600);
+      move(1);
+    }, 3200);
     return () => clearInterval(timer);
-  }, [isPaused, reducedMotion, slides.length]);
+  }, [isDocumentVisible, isPaused, reducedMotion, slides.length]);
 
   useEffect(() => () => {
     if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
@@ -131,6 +155,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
       >
         {slides.map((slide, index) => {
           const position = getPosition(index, activeIndex, slides.length);
+          if (Math.abs(position) > visibleRadius) return null;
           const isActive = position === 0;
           return (
             <article
@@ -140,11 +165,14 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
               aria-label={`${slide.name}, slide ${index + 1} of ${slides.length}`}
               aria-roledescription="slide"
             >
-              <img
+              <Image
                 src={slide.image}
                 alt={isActive ? slide.name : ''}
-                loading={isActive ? 'eager' : 'lazy'}
-                fetchPriority={isActive ? 'high' : 'auto'}
+                fill
+                sizes="(max-width: 620px) 76vw, (max-width: 1023px) 330px, (max-width: 1439px) 340px, 360px"
+                priority={index === 0}
+                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
                 draggable={false}
               />
               <div className="portrait-carousel__shade" />
