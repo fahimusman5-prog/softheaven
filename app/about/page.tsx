@@ -1,2 +1,16 @@
-import Link from 'next/link';
-export default function AboutPage() { return <div className="simple-page"><span className="eyebrow">The SoftHaven atelier</span><h1>Objects of comfort,<br/><em>made to be kept.</em></h1><p>ANTZ SoftHaven creates premium plush companions and sensory gifts for the moments that deserve to feel a little softer.</p><div className="simple-grid"><div><b>01</b><h2>Curated, never crowded</h2><p>A small edit of considered companions, chosen for their character, materiality, and ability to make a room feel warmer.</p></div><div><b>02</b><h2>Designed for feeling</h2><p>From weighted cores to hand-finished details, every object is designed to be experienced in the hand, not just seen on a screen.</p></div><div><b>03</b><h2>Gifting with intention</h2><p>Beautiful presentation, personal inscriptions, and global delivery make thoughtful gifting feel effortless.</p></div></div><Link className="primary-button" href="/shop">Meet the companions →</Link></div>; }
+import type { Metadata } from 'next';
+import { AboutPage as AboutExperience } from '@/components/about-page';
+
+export const metadata: Metadata = {
+  title: 'About SoftHaven',
+  description: 'Meet ANTZ SoftHaven: plush companions, thoughtful gifts, and a softer way to shop.',
+  openGraph: {
+    title: 'About SoftHaven',
+    description: 'Plush companions and thoughtful gifts for a softer everyday.',
+    type: 'website',
+  },
+};
+
+export default function AboutPage() {
+  return <AboutExperience />;
+}
