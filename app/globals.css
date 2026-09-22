@@ -242,13 +242,14 @@ html,body{overflow-x:clip}
   .sfh-mobile-panel{padding-left:18px}
   .sfh-brand--mobile{flex:0 0 122px;width:122px;height:54px}
   .sfh-brand--mobile img{width:116px;height:52px}
+  .sfh-mobile-action{width:44px;height:44px}
 }
 
 @media(max-width:560px){
   .sfh-mobile-panel{padding-left:14px}
   .sfh-brand--mobile{flex-basis:112px;width:112px;height:52px}
   .sfh-brand--mobile img{width:108px;height:50px}
-  .sfh-mobile-action{width:42px;height:42px;border-radius:13px}
+  .sfh-mobile-action{width:44px;height:44px;border-radius:13px}
   .sfh-mobile-action svg{width:19px;height:19px}
 }
 
