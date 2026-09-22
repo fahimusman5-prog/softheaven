@@ -30,7 +30,7 @@ function HeaderIcon({ name }: { name: IconName }) {
 }
 
 function BrandMark({ compact = false }: { compact?: boolean }) {
-  return <Link className={`sh-brand-mark ${compact ? 'is-compact' : ''}`} href="/" aria-label="SoftHaven Sri Lanka home"><svg className="sh-brand-mark__bear" viewBox="0 0 64 55" aria-hidden="true"><circle cx="14" cy="12" r="8"/><circle cx="50" cy="12" r="8"/><path d="M51 27c0 13-8.5 22-19 22S13 40 13 27 21.5 7 32 7s19 7 19 20Z"/><circle cx="25" cy="27" r="2.4" className="sh-brand-mark__eye"/><circle cx="39" cy="27" r="2.4" className="sh-brand-mark__eye"/><ellipse cx="32" cy="36" rx="9.5" ry="7" className="sh-brand-mark__muzzle"/><path d="M29 34c1.5-1.5 4.5-1.5 6 0-.2 2.4-1.3 3.6-3 3.6S29.2 36.4 29 34Z" className="sh-brand-mark__nose"/><path d="M32 37.5v3m0 0c-2.5 2.2-5 1.6-6.3-.1m6.3.1c2.5 2.2 5 1.6 6.3-.1" className="sh-brand-mark__smile"/></svg><span className="sh-brand-mark__copy"><span className="sh-brand-mark__name"><b>Soft</b>Haven</span><span className="sh-brand-mark__country">Sri Lanka</span></span></Link>;
+  return <Link className={`sh-brand-mark ${compact ? 'is-compact' : ''}`} href="/" aria-label="SoftHaven Sri Lanka home"><img className="sh-brand-mark__image" src="/assets/soft-haven-logo.png" alt="SoftHaven Sri Lanka" /></Link>;
 }
 
 function BearButtonIcon() {
