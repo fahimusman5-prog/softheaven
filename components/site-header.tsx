@@ -17,7 +17,7 @@ const navigation: Array<{ href: string; label: string; icon: IconName }> = [
 ];
 
 function HeaderIcon({ name }: { name: IconName }) {
-  const shared = { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.7, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true };
+  const shared = { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.75, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true };
   if (name === 'home') return <svg {...shared}><path d="m3.5 10.6 8.5-7 8.5 7"/><path d="M5.7 9.1v10.2h12.6V9.1M9.2 19.3v-6.1h5.6v6.1"/></svg>;
   if (name === 'bag') return <svg {...shared}><path d="M5.2 8.2h13.6l1 12H4.2l1-12Z"/><path d="M8.5 9V6.5a3.5 3.5 0 0 1 7 0V9"/></svg>;
   if (name === 'heart') return <svg {...shared}><path d="M20.8 4.8a5.1 5.1 0 0 0-7.2 0L12 6.4l-1.6-1.6a5.1 5.1 0 1 0-7.2 7.2L12 20.8l8.8-8.8a5.1 5.1 0 0 0 0-7.2Z"/></svg>;
@@ -29,33 +29,71 @@ function HeaderIcon({ name }: { name: IconName }) {
   return <svg {...shared}><path d="m6 6 12 12M18 6 6 18"/></svg>;
 }
 
-function BrandMark({ compact = false }: { compact?: boolean }) {
-  return <Link className={`sh-brand-mark ${compact ? 'is-compact' : ''}`} href="/" aria-label="SoftHaven Sri Lanka home"><img className="sh-brand-mark__image" src="/assets/soft-haven-logo.png" alt="SoftHaven Sri Lanka" /></Link>;
+function BearFaceIcon() {
+  return <svg className="shp-bear-face" viewBox="0 0 48 48" aria-hidden="true"><circle cx="13" cy="13" r="7"/><circle cx="35" cy="13" r="7"/><circle cx="24" cy="25" r="17"/><circle cx="18" cy="23" r="2" className="shp-bear-face__eye"/><circle cx="30" cy="23" r="2" className="shp-bear-face__eye"/><ellipse cx="24" cy="31" rx="8" ry="6" className="shp-bear-face__muzzle"/><path d="M21 29.5c1.5-1.2 4.5-1.2 6 0-.3 2-1.3 3-3 3s-2.7-1-3-3Z" className="shp-bear-face__nose"/></svg>;
 }
 
-function BearButtonIcon() {
-  return <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="13" cy="13" r="7"/><circle cx="35" cy="13" r="7"/><circle cx="24" cy="25" r="17"/><circle cx="18" cy="23" r="2" className="sh-bear-icon__eye"/><circle cx="30" cy="23" r="2" className="sh-bear-icon__eye"/><ellipse cx="24" cy="31" rx="8" ry="6" className="sh-bear-icon__muzzle"/><path d="M21 29.5c1.5-1.2 4.5-1.2 6 0-.3 2-1.3 3-3 3s-2.7-1-3-3Z" className="sh-bear-icon__nose"/></svg>;
+function isCurrent(pathname: string, href: string) {
+  return href === '/' ? pathname === '/' : !href.includes('#') && pathname === href;
 }
 
-function isCurrent(pathname: string, href: string) { return href === '/' ? pathname === '/' : !href.includes('#') && pathname === href; }
+function BrandBadge({ compact = false }: { compact?: boolean }) {
+  return <Link className={`shp-brand__link ${compact ? 'is-compact' : ''}`} href="/" aria-label="SoftHaven Sri Lanka home"><img className="shp-brand__logo" src="/assets/soft-haven-logo.png" alt="SoftHaven Sri Lanka" /></Link>;
+}
 
-function BrandPod() { return <div className="sh-brand-pod"><div className="sh-brand-pod__teddy" aria-hidden="true"/><span className="sh-brand-pod__heart" aria-hidden="true">♡</span><BrandMark/></div>; }
+function BrandPod() {
+  return <div className="shp-brand"><div className="shp-brand__teddy" aria-hidden="true"/><span className="shp-brand__heart" aria-hidden="true">♥</span><span className="shp-brand__sprig" aria-hidden="true"><i/><i/><i/></span><BrandBadge/></div>;
+}
 
-function DesktopNavigation({ pathname }: { pathname: string }) { return <nav className="sh-nav-cluster" aria-label="Main navigation">{navigation.map((item, index) => { const active = isCurrent(pathname, item.href); return <Link className={`sh-nav-item ${active ? 'is-active' : ''}`} href={item.href} key={item.label} data-order={index} aria-current={active ? 'page' : undefined}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>; })}</nav>; }
+function BearNavItem({ href, label, icon, active, order }: { href: string; label: string; icon: IconName; active: boolean; order: number }) {
+  return <Link className={`shp-bear-control ${active ? 'is-active' : ''}`} href={href} data-order={order} aria-current={active ? 'page' : undefined}><i className="shp-bear-control__ear shp-bear-control__ear--left" aria-hidden="true"/><i className="shp-bear-control__ear shp-bear-control__ear--right" aria-hidden="true"/><span className="shp-bear-control__face"><HeaderIcon name={icon}/><span>{label}</span></span></Link>;
+}
 
-function HeaderSearch({ query, setQuery, submitSearch }: { query: string; setQuery: (value: string) => void; submitSearch: (event: FormEvent<HTMLFormElement>) => void }) { return <form className="sh-search" role="search" onSubmit={submitSearch}><label htmlFor="header-product-search" className="sr-only">Search for soft toys</label><HeaderIcon name="search"/><input id="header-product-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys…" autoComplete="off"/><button className="sh-search__bear" type="submit" aria-label="Submit product search"><BearButtonIcon/></button></form>; }
+function DesktopNavigation({ pathname }: { pathname: string }) {
+  return <nav className="shp-nav" aria-label="Main navigation">{navigation.map((item, index) => <BearNavItem key={item.label} {...item} active={isCurrent(pathname, item.href)} order={index} />)}</nav>;
+}
 
-function HeaderActions({ count, setNotice }: { count: number; setNotice: (notice: Notice) => void }) { return <div className="sh-actions" aria-label="Account actions"><button className="sh-action" type="button" aria-label="Account" onClick={() => setNotice('account')}><HeaderIcon name="user"/></button><button className="sh-action" type="button" aria-label="Wishlist, 0 items" onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sh-action__badge">0</span></button><Link className="sh-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sh-action__badge">{count}</span></Link></div>; }
+function HeaderSearch({ query, setQuery, submitSearch }: { query: string; setQuery: (value: string) => void; submitSearch: (event: FormEvent<HTMLFormElement>) => void }) {
+  return <form className="shp-search" role="search" onSubmit={submitSearch}><label htmlFor="header-product-search" className="sr-only">Search for soft toys</label><HeaderIcon name="search"/><input id="header-product-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..." autoComplete="off"/><button className="shp-search__bear" type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>;
+}
 
-function TeddyAccent() { return <div className="sh-right-accent" aria-hidden="true"><div className="sh-right-accent__note"><span>More</span><span>Than Toys</span><span>More Love ♡</span></div><div className="sh-right-accent__teddy"/><span className="sh-right-accent__heart">♡</span></div>; }
+function HeaderActions({ count, setNotice }: { count: number; setNotice: (notice: Notice) => void }) {
+  return <div className="shp-actions" aria-label="Account actions"><button className="shp-bear-control shp-action-control" type="button" aria-label="Account" onClick={() => setNotice('account')}><i className="shp-bear-control__ear shp-bear-control__ear--left" aria-hidden="true"/><i className="shp-bear-control__ear shp-bear-control__ear--right" aria-hidden="true"/><span className="shp-bear-control__face"><HeaderIcon name="user"/></span></button><button className="shp-bear-control shp-action-control" type="button" aria-label="Wishlist, 0 items" onClick={() => setNotice('wishlist')}><i className="shp-bear-control__ear shp-bear-control__ear--left" aria-hidden="true"/><i className="shp-bear-control__ear shp-bear-control__ear--right" aria-hidden="true"/><span className="shp-bear-control__face"><HeaderIcon name="heart"/></span><span className="shp-count">0</span></button><Link className="shp-bear-control shp-action-control" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><i className="shp-bear-control__ear shp-bear-control__ear--left" aria-hidden="true"/><i className="shp-bear-control__ear shp-bear-control__ear--right" aria-hidden="true"/><span className="shp-bear-control__face"><HeaderIcon name="cart"/></span><span className="shp-count">{count}</span></Link></div>;
+}
 
-function MobileHeader({ count, menuOpen, searchOpen, setMenuOpen, setNotice, setSearchOpen }: { count: number; menuOpen: boolean; searchOpen: boolean; setMenuOpen: (value: boolean) => void; setNotice: (notice: Notice) => void; setSearchOpen: (value: boolean) => void }) { return <div className="sh-mobile-bar"><div className="sh-mobile-bar__teddy" aria-hidden="true"/><BrandMark compact/><div className="sh-mobile-bar__actions"><button className="sh-action" type="button" aria-label="Open search" aria-expanded={searchOpen} onClick={() => { setSearchOpen(!searchOpen); setMenuOpen(false); }}><HeaderIcon name="search"/></button><button className="sh-action" type="button" aria-label="Wishlist, 0 items" onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sh-action__badge">0</span></button><Link className="sh-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sh-action__badge">{count}</span></Link><button className="sh-action" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="sh-mobile-menu" onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false); }}><HeaderIcon name={menuOpen ? 'close' : 'menu'}/></button></div></div>; }
+function RightTeddy() {
+  return <div className="shp-right-accent" aria-hidden="true"><div className="shp-right-accent__cloud"><span>More</span><span>Than Toys</span><span>More Love ♡</span></div><div className="shp-right-accent__teddy"/><span className="shp-right-accent__heart">♡</span><span className="shp-right-accent__sprig"><i/><i/><i/></span></div>;
+}
+
+function MobileHeader({ count, menuOpen, searchOpen, setMenuOpen, setNotice, setSearchOpen }: { count: number; menuOpen: boolean; searchOpen: boolean; setMenuOpen: (value: boolean) => void; setNotice: (notice: Notice) => void; setSearchOpen: (value: boolean) => void }) {
+  return <div className="shp-mobile"><div className="shp-mobile__teddy" aria-hidden="true"/><BrandBadge compact/><div className="shp-mobile__actions"><button className="shp-mobile__icon" type="button" aria-label="Open search" aria-expanded={searchOpen} onClick={() => { setSearchOpen(!searchOpen); setMenuOpen(false); }}><HeaderIcon name="search"/></button><button className="shp-mobile__icon" type="button" aria-label="Wishlist, 0 items" onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="shp-count">0</span></button><Link className="shp-mobile__icon" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="shp-count">{count}</span></Link><button className="shp-mobile__icon" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="shp-mobile-menu" onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false); }}><HeaderIcon name={menuOpen ? 'close' : 'menu'}/></button></div></div>;
+}
 
 export function SiteHeader() {
-  const { count } = useCart(); const pathname = usePathname(); const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false); const [searchOpen, setSearchOpen] = useState(false); const [query, setQuery] = useState(''); const [notice, setNotice] = useState<Notice>(null); const [scrolled, setScrolled] = useState(false);
-  useEffect(() => { const onScroll = () => setScrolled(window.scrollY > 120); onScroll(); window.addEventListener('scroll', onScroll, { passive: true }); return () => window.removeEventListener('scroll', onScroll); }, []);
+  const { count } = useCart();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [notice, setNotice] = useState<Notice>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 120);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   useEffect(() => { setMenuOpen(false); setSearchOpen(false); setNotice(null); }, [pathname]);
-  function submitSearch(event: FormEvent<HTMLFormElement>) { event.preventDefault(); const search = query.trim(); router.push(search ? `/shop?search=${encodeURIComponent(search)}` : '/shop'); setSearchOpen(false); }
-  return <header className={`sh-header ${scrolled ? 'is-compact' : ''}`}><div className="sh-header__ambient" aria-hidden="true"/><div className="sh-desktop-composition"><BrandPod/><div className="sh-nav-glass"><DesktopNavigation pathname={pathname}/></div><div className="sh-tools-glass"><HeaderSearch query={query} setQuery={setQuery} submitSearch={submitSearch}/><span className="sh-tools-glass__divider" aria-hidden="true"/><HeaderActions count={count} setNotice={setNotice}/><TeddyAccent/></div></div><MobileHeader count={count} menuOpen={menuOpen} searchOpen={searchOpen} setMenuOpen={setMenuOpen} setNotice={setNotice} setSearchOpen={setSearchOpen}/>{searchOpen && <form className="sh-mobile-search" role="search" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="mobile-product-search" className="sr-only">Search for soft toys</label><input id="mobile-product-search" autoFocus type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys…"/><button type="submit" aria-label="Submit product search"><BearButtonIcon/></button></form>}<nav id="sh-mobile-menu" className={`sh-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen}>{navigation.map((item) => <Link className={isCurrent(pathname, item.href) ? 'is-active' : ''} href={item.href} key={item.label} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}<button type="button" tabIndex={menuOpen ? 0 : -1} onClick={() => setNotice('account')}><HeaderIcon name="user"/><span>Account</span></button></nav>{notice && <div className="sh-header-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Wishlist saving will be available with customer accounts.'}</span><button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}</header>;
+
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const search = query.trim();
+    router.push(search ? `/shop?search=${encodeURIComponent(search)}` : '/shop');
+    setSearchOpen(false);
+  }
+
+  return <header className={`shp-header ${scrolled ? 'is-compact' : ''}`}><div className="shp-header__atmosphere" aria-hidden="true"/><div className="shp-desktop-stage"><div className="shp-rail"><div className="shp-rail__highlight"/><div className="shp-rail__content"><DesktopNavigation pathname={pathname}/><span className="shp-divider" aria-hidden="true"/><HeaderSearch query={query} setQuery={setQuery} submitSearch={submitSearch}/><HeaderActions count={count} setNotice={setNotice}/><span className="shp-rail__paw shp-rail__paw--one" aria-hidden="true">•</span><span className="shp-rail__paw shp-rail__paw--two" aria-hidden="true">•</span></div></div><BrandPod/><RightTeddy/></div><MobileHeader count={count} menuOpen={menuOpen} searchOpen={searchOpen} setMenuOpen={setMenuOpen} setNotice={setNotice} setSearchOpen={setSearchOpen}/>{searchOpen && <form className="shp-mobile-search" role="search" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="mobile-product-search" className="sr-only">Search for soft toys</label><input id="mobile-product-search" autoFocus type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..."/><button type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>}<nav id="shp-mobile-menu" className={`shp-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen}>{navigation.map((item, index) => <BearNavItem {...item} key={item.label} order={index} active={isCurrent(pathname, item.href)}/>)}<button className="shp-mobile-menu__account" type="button" tabIndex={menuOpen ? 0 : -1} onClick={() => setNotice('account')}><HeaderIcon name="user"/><span>Account</span></button></nav>{notice && <div className="shp-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Wishlist saving will be available with customer accounts.'}</span><button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}</header>;
 }
