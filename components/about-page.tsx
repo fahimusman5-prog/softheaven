@@ -93,10 +93,10 @@ function PromiseSection() {
 
 type SocialKey = 'whatsapp' | 'instagram' | 'tiktok' | 'email';
 const socialDetails: Array<{ key: SocialKey; label: string; icon: IconName; href: string | null; detail: string }> = [
-  { key: 'whatsapp', label: 'WhatsApp', icon: 'message', href: siteConfig.social.whatsapp, detail: siteConfig.social.whatsapp ? 'Chat with SoftHaven' : 'Use the contact form' },
-  { key: 'instagram', label: 'Instagram', icon: 'instagram', href: siteConfig.social.instagram, detail: siteConfig.social.instagram ? 'Follow the soft side' : 'Details coming soon' },
-  { key: 'tiktok', label: 'TikTok', icon: 'tiktok', href: siteConfig.social.tiktok, detail: siteConfig.social.tiktok ? 'See the companions in motion' : 'Details coming soon' },
-  { key: 'email', label: 'Email', icon: 'mail', href: siteConfig.contact.email ? `mailto:${siteConfig.contact.email}` : null, detail: siteConfig.contact.email ?? 'Use the contact form' },
+  { key: 'whatsapp', label: 'WhatsApp', icon: 'message', href: siteConfig.social.whatsapp, detail: siteConfig.social.whatsapp ? 'Chat with SoftHaven' : 'Not configured yet' },
+  { key: 'instagram', label: 'Instagram', icon: 'instagram', href: siteConfig.social.instagram, detail: siteConfig.social.instagram ? 'Follow the soft side' : 'Not configured yet' },
+  { key: 'tiktok', label: 'TikTok', icon: 'tiktok', href: siteConfig.social.tiktok, detail: siteConfig.social.tiktok ? 'See the companions in motion' : 'Not configured yet' },
+  { key: 'email', label: 'Email', icon: 'mail', href: siteConfig.contact.email ? `mailto:${siteConfig.contact.email}` : null, detail: siteConfig.contact.email ?? 'Not configured yet' },
 ];
 
 function SocialLink({ item }: { item: typeof socialDetails[number] }) {
