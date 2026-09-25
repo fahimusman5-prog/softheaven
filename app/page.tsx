@@ -23,10 +23,14 @@ function BenefitIcon({ type }: { type: 'quality' | 'selected' | 'gift' | 'delive
 }
 
 function CloudMoment({ variant }: { variant: 'hero' | 'favourites' | 'community' }) {
+  const asset = variant === 'hero' || variant === 'community'
+    ? '/assets/clouds/cloud-bank.webp'
+    : '/assets/clouds/cloud-cluster.webp';
+
   return <span className={`soft-sky__moment soft-sky__moment--${variant}`} aria-hidden="true">
     <span className="soft-sky__moment-scroll" data-sky-transition-scroll>
       <span className="soft-sky__moment-drift" data-sky-transition-drift data-drift-x={variant === 'favourites' ? -24 : 20}>
-        <span className="soft-sky__moment-cloud" />
+        <img className="soft-sky__moment-cloud" src={asset} alt="" width="900" height="460" decoding="async" loading={variant === 'hero' ? 'eager' : 'lazy'} />
       </span>
     </span>
   </span>;

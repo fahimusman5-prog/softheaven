@@ -68,6 +68,7 @@ export function SoftHavenCloudBackground() {
           const mobile = Boolean(match.conditions?.mobile);
 
           Array.from(sky.querySelectorAll<HTMLElement>('[data-cloud-drift]')).forEach((cloud) => {
+            if (getComputedStyle(cloud).display === 'none') return;
             const distance = Number(cloud.dataset.driftX) * (mobile ? 0.42 : 1);
             const vertical = Number(cloud.dataset.driftY) * (mobile ? 0.45 : 1);
             const tween = gsap.to(cloud, {
@@ -82,6 +83,7 @@ export function SoftHavenCloudBackground() {
           });
 
           Array.from(sky.querySelectorAll<HTMLElement>('[data-sky-light]')).forEach((light, index) => {
+            if (getComputedStyle(light).display === 'none') return;
             const tween = gsap.to(light, {
               x: index % 2 ? -11 : 13,
               y: index % 2 ? 8 : -9,
