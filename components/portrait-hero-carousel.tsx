@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import Image from 'next/image';
+import { ProductMedia } from './product-media';
 import { useSyncExternalStore } from 'react';
 
 export type PortraitHeroSlide = {
@@ -165,15 +165,14 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
               aria-label={`${slide.name}, slide ${index + 1} of ${slides.length}`}
               aria-roledescription="slide"
             >
-              <Image
+              <ProductMedia
                 src={slide.image}
                 alt={isActive ? slide.name : ''}
                 fill
+                fit="cover"
                 sizes="(max-width: 620px) 76vw, (max-width: 1023px) 330px, (max-width: 1439px) 340px, 360px"
                 priority={index === 0}
                 loading={index === 0 ? 'eager' : 'lazy'}
-                fetchPriority={index === 0 ? 'high' : 'auto'}
-                draggable={false}
               />
               <div className="portrait-carousel__shade" />
               <div className="portrait-carousel__caption">

@@ -20,6 +20,8 @@ export type Product = {
   color: string;
   description: string;
   image: string;
+  images?: string[];
+  gallery?: string[];
   details: string[];
   variants?: ProductVariant[];
 };

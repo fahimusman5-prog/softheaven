@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { products } from '@/lib/data';
 import { ProductCard } from '@/components/product-card';
 import { SectionReveal } from '@/components/section-reveal';
+import { ProductMedia } from '@/components/product-media';
 
 export const metadata: Metadata = {
   title: 'Collections',
@@ -39,13 +39,13 @@ export default function CollectionsPage() {
           <Link className="primary-button" href="#collection-edits">Explore the collections →</Link>
         </div>
         <div className="collections-hero__art" aria-label="SoftHaven collection highlights">
-          {heroProducts.map((product) => <Image key={product.id} src={product.image} alt={product.name} fill priority={product.id === heroProducts[0]?.id} sizes="(max-width: 767px) 80vw, 38vw" />)}
+          {heroProducts.map((product) => <ProductMedia key={product.id} product={product} alt={product.name} fill priority={product.id === heroProducts[0]?.id} fit="contain" sizes="(max-width: 767px) 80vw, 38vw" />)}
         </div>
       </section>
 
       <SectionReveal>
         <section id="collection-edits" className="collection-editorial" aria-labelledby="featured-collection-title">
-          <div className="collection-editorial__image"><Image src={featured.lead.image} alt={featured.lead.name} fill sizes="(max-width: 767px) 92vw, 48vw" data-sky-editorial-image /></div>
+          <div className="collection-editorial__image"><ProductMedia product={featured.lead} alt={featured.lead.name} fill fit="contain" sizes="(max-width: 767px) 92vw, 48vw" /></div>
           <div className="collection-editorial__copy"><span>01 / Featured collection</span><h2 id="featured-collection-title">{featured.name}</h2><p>{featured.lead.description}</p><Link className="primary-button" href={collectionHref(featured.name)}>Explore this collection →</Link></div>
         </section>
       </SectionReveal>
@@ -55,7 +55,7 @@ export default function CollectionsPage() {
       {secondary.map((collection, index) => (
         <SectionReveal key={collection.name}>
           <section className={`collection-editorial${index % 2 === 0 ? ' collection-editorial--reverse' : ''}`} aria-labelledby={`collection-${index}-title`}>
-            <div className="collection-editorial__image"><Image src={collection.lead.image} alt={collection.lead.name} fill sizes="(max-width: 767px) 92vw, 48vw" data-sky-editorial-image /></div>
+            <div className="collection-editorial__image"><ProductMedia product={collection.lead} alt={collection.lead.name} fill fit="contain" sizes="(max-width: 767px) 92vw, 48vw" /></div>
             <div className="collection-editorial__copy"><span>{String(index + 2).padStart(2, '0')} / Collection edit</span><h2 id={`collection-${index}-title`}>{collection.name}</h2><p>{collection.lead.description}</p><Link className="primary-button" href={collectionHref(collection.name)}>Explore this collection →</Link></div>
           </section>
         </SectionReveal>

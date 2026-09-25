@@ -637,3 +637,23 @@ body{background-color:#fffafc;background-image:radial-gradient(ellipse 76vw 68vh
 @media(max-width:767px){body{background-size:180% 180%;animation-duration:46s}.soft-sky__cloud--mobile-hidden{display:none}.soft-sky__layer--far{opacity:.43}.soft-sky__layer--middle{opacity:.52}.soft-sky__layer--near{opacity:.62}.soft-sky__cloud--far-left,.soft-sky__cloud--far-right{width:clamp(300px,88vw,440px);height:clamp(125px,40vw,190px);top:2%}.soft-sky__cloud--far-center,.soft-sky__cloud--middle-top,.soft-sky__cloud--middle-lower,.soft-sky__cloud--near-bank{display:none}.soft-sky__cloud--middle-left,.soft-sky__cloud--middle-right{width:clamp(280px,76vw,380px);height:clamp(130px,37vw,185px);top:38%}.soft-sky__cloud--middle-left{left:-43%}.soft-sky__cloud--middle-right{right:-44%}.soft-sky__cloud--near-left,.soft-sky__cloud--near-right{width:clamp(260px,72vw,360px);height:clamp(120px,34vw,175px);bottom:-6%}.soft-sky__cloud--near-left{left:-39%}.soft-sky__cloud--near-right{right:-40%}.soft-sky__cloud-mass img{filter:drop-shadow(0 10px 14px rgba(147,159,196,.1))}.collections-hero{grid-template-columns:1fr;gap:14px;min-height:auto;padding:40px 0 25px;text-align:center}.collections-hero__copy{margin:auto}.collections-hero__copy>p{margin:18px auto 0}.collections-hero__art{min-height:320px;width:100%}.collections-hero__art img:nth-child(1){left:24%;height:100%}.collections-editorial,.collection-editorial,.collection-editorial--reverse{grid-template-columns:1fr;gap:18px;margin:25px 0 55px}.collection-editorial--reverse .collection-editorial__image{order:0}.collection-editorial__image,.collection-editorial__image img{min-height:320px}.collection-editorial__copy{padding:5px}.collections-intro{display:block}.collections-intro p{margin-top:10px}.collections-discovery__items{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.contact-page--enhanced{grid-template-columns:1fr;gap:22px;padding-inline:6vw}.contact-page--enhanced .page-intro{padding:42px 0 0}.contact-information{padding:0}.contact-channel-list{grid-template-columns:repeat(2,minmax(0,1fr))}.contact-channel{padding:12px}.contact-form{padding:20px}.collection-quick-links{margin-bottom:52px}}
 @media(max-width:420px){.collections-hero h1{font-size:52px}.collections-hero__art{min-height:270px}.collections-discovery__items{grid-template-columns:1fr}.contact-channel-list{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){body{animation:none;background-position:50% 50%}.soft-sky__cloud,.soft-sky__layer,.soft-sky__light{transform:none!important}.reveal,.reveal.about-section{opacity:1!important;visibility:visible!important;transform:none!important}}
+
+/* Product imagery fallback and restrained Dream Sky depth refinements. */
+.soft-sky__cloud-drift{position:absolute;inset:0;display:block;will-change:transform}
+.soft-sky__layer--far{opacity:.48}
+.soft-sky__layer--middle{opacity:.54}
+.soft-sky__layer--near{opacity:.58}
+.product-media-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;overflow:hidden;padding:16px;background:radial-gradient(ellipse at 50% 35%,rgba(255,255,255,.96),rgba(249,241,250,.88) 62%,rgba(232,242,253,.72));color:#756779;text-align:center}
+.product-media-fallback__mark{width:min(56%,190px);max-height:58px;opacity:.58}
+.product-media-fallback__mark img{width:100%;height:100%;object-fit:contain}
+.product-media-fallback__copy{display:grid;gap:4px;max-width:100%}
+.product-media-fallback__copy strong{font-size:12px;line-height:1.35}
+.product-media-fallback__copy small{font-size:10px;color:#8b8192}
+@media(max-width:767px){
+  .soft-sky__layer--near{display:none}
+  .soft-sky__cloud--far-right{display:none}
+  .soft-sky__cloud-drift{will-change:auto}
+  .soft-sky__cloud-mass img{filter:none}
+  body{animation:none;background-size:cover}
+}
+@media(prefers-reduced-motion:reduce){.soft-sky__cloud-drift{transform:none!important}}

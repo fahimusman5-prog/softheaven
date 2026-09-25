@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { products, type Product } from '@/lib/data';
 import { formatPrice } from '@/lib/format';
+import { ProductMedia } from './product-media';
 
 type DiscoveryIcon = 'bear' | 'sparkle' | 'heart' | 'hug' | 'tiny' | 'all';
 type MatchOption = { key: string; label: string; descriptor: string; category?: string; icon: DiscoveryIcon; tone: string };
@@ -59,7 +60,7 @@ export function PerfectMatch() {
       </div>
       <div className="perfect-match-products">
         {previewProducts.map((product) => <Link className="perfect-match-product" href={`/product/${product.slug}`} key={product.id}>
-          <img src={product.image} alt={product.name}/>
+          <ProductMedia product={product} alt={product.name} fit="contain" />
           <span><small>{product.category}</small><strong>{product.name}</strong><b>{formatPrice(product.price)}</b></span>
         </Link>)}
       </div>

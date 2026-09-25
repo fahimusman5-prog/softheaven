@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { ProductMedia } from './product-media';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { images, products } from '@/lib/data';
@@ -18,7 +18,7 @@ function Icon({ name }: { name: IconName }) {
 }
 
 function ImageFrame({ src, alt, className = '', priority = false }: { src: string; alt: string; className?: string; priority?: boolean }) {
-  return <div className={`about-image-frame ${className}`}><Image src={src} alt={alt} fill priority={priority} sizes="(max-width: 720px) 90vw, (max-width: 1100px) 46vw, 560px" /></div>;
+  return <div className={`about-image-frame ${className}`}><ProductMedia src={src} alt={alt} fill priority={priority} fit="contain" sizes="(max-width: 720px) 90vw, (max-width: 1100px) 46vw, 560px" /></div>;
 }
 
 function SectionLabel({ index, children }: { index: string; children: ReactNode }) {
@@ -79,7 +79,7 @@ function CollectionSection() {
   const collections = Array.from(new Map(products.map((product) => [product.category, product])).values());
   return <section className="about-collections about-section" id="collections" aria-labelledby="collections-title">
     <div className="about-section-heading"><div><SectionLabel index="04">Find your soft side</SectionLabel><h2 id="collections-title">A companion for <em>every feeling.</em></h2></div><Link href="/shop" className="about-inline-link">View all <Icon name="arrow" /></Link></div>
-    <div className="about-collection-grid">{collections.map((product, index) => <Link href={`/shop?category=${encodeURIComponent(product.category)}`} className={`about-collection about-collection--${categoryColors[index % categoryColors.length]}`} key={product.category}><div className="about-collection__image"><Image src={product.image} alt={product.name} fill sizes="(max-width: 720px) 82vw, 30vw" /></div><div className="about-collection__copy"><span>{product.category}</span><h3>{product.name.replace(/^The /, '')}</h3><p>{product.description}</p><strong>Explore <Icon name="arrow" /></strong></div></Link>)}</div>
+    <div className="about-collection-grid">{collections.map((product, index) => <Link href={`/shop?category=${encodeURIComponent(product.category)}`} className={`about-collection about-collection--${categoryColors[index % categoryColors.length]}`} key={product.category}><div className="about-collection__image"><ProductMedia product={product} alt={product.name} fill sizes="(max-width: 720px) 82vw, 30vw" fit="contain" /></div><div className="about-collection__copy"><span>{product.category}</span><h3>{product.name.replace(/^The /, '')}</h3><p>{product.description}</p><strong>Explore <Icon name="arrow" /></strong></div></Link>)}</div>
   </section>;
 }
 
@@ -110,7 +110,7 @@ function ConnectSection() {
 }
 
 function FinalCta() {
-  return <section className="about-final-cta" aria-labelledby="final-cta-title"><div className="about-final-cta__image"><Image src={images.heart} alt="Heart-shaped plush gift from SoftHaven" fill sizes="(max-width: 720px) 90vw, 420px" /></div><div><p className="about-kicker">Ready when you are</p><h2 id="final-cta-title">Bring home a little <em>more love.</em></h2><p>Meet the current SoftHaven companions and choose the one that feels like yours.</p><div className="about-actions"><Link href="/shop" className="about-button about-button--primary">Explore the collection <Icon name="arrow" /></Link><Link href="/contact" className="about-text-link">Ask a question <Icon name="arrow" /></Link></div></div></section>;
+  return <section className="about-final-cta" aria-labelledby="final-cta-title"><div className="about-final-cta__image"><ProductMedia src={images.heart} alt="Heart-shaped plush gift from SoftHaven" fill sizes="(max-width: 720px) 90vw, 420px" fit="contain" /></div><div><p className="about-kicker">Ready when you are</p><h2 id="final-cta-title">Bring home a little <em>more love.</em></h2><p>Meet the current SoftHaven companions and choose the one that feels like yours.</p><div className="about-actions"><Link href="/shop" className="about-button about-button--primary">Explore the collection <Icon name="arrow" /></Link><Link href="/contact" className="about-text-link">Ask a question <Icon name="arrow" /></Link></div></div></section>;
 }
 
 export function AboutPage() {

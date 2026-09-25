@@ -6,6 +6,7 @@ import { getProductVariants } from '@/lib/data';
 import { formatPrice } from '@/lib/format';
 import { ProductCard } from '@/components/product-card';
 import { getCartLineId, useCart } from '@/components/cart-provider';
+import { ProductMedia } from '@/components/product-media';
 
 type ProductDetailProps = {
   product: Product;
@@ -87,7 +88,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
         <div className="product-detail-gallery">
           <div className="product-detail-main-media">
             <button className="product-detail-image-button" type="button" onClick={() => setLightboxOpen(true)} aria-label={`Open larger image of ${product.name}`}>
-              <img src={selectedImage} alt={`${product.name} in ${selectedVariant?.color ?? product.color}`} />
+              <ProductMedia product={product} src={selectedImage} alt={`${product.name} in ${selectedVariant?.color ?? product.color}`} className="product-detail-main-image" fit="contain" priority />
             </button>
             <button className="product-detail-zoom" type="button" onClick={() => setLightboxOpen(true)} aria-label="View product image larger"><ZoomIcon /></button>
           </div>
@@ -95,7 +96,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
           <div className="product-detail-thumbs" aria-label="Product images">
             {gallery.map((image, index) => (
               <button className={image === selectedImage ? 'product-detail-thumb is-selected' : 'product-detail-thumb'} key={`${image}-${index}`} type="button" onClick={() => setSelectedImage(image)} aria-label={`View image ${index + 1}`} aria-pressed={image === selectedImage}>
-                <img src={image} alt="" />
+                <ProductMedia product={product} src={image} alt="" className="product-detail-thumb-image" fit="contain" />
               </button>
             ))}
           </div>
@@ -167,7 +168,7 @@ export function ProductDetail({ product, relatedProducts }: ProductDetailProps) 
 
       {lightboxOpen && <div className="product-detail-lightbox" role="dialog" aria-modal="true" aria-label={`${product.name} image`} onClick={() => setLightboxOpen(false)}>
         <button className="product-detail-lightbox-close" type="button" onClick={() => setLightboxOpen(false)} aria-label="Close image viewer"><CloseIcon /></button>
-        <img src={selectedImage} alt={`${product.name} in ${selectedVariant?.color ?? product.color}`} onClick={(event) => event.stopPropagation()} />
+        <span onClick={(event) => event.stopPropagation()}><ProductMedia product={product} src={selectedImage} alt={`${product.name} in ${selectedVariant?.color ?? product.color}`} className="product-detail-lightbox-image" fit="contain" priority /></span>
       </div>}
     </main>
   );
