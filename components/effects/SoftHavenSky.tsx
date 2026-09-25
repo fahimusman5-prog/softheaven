@@ -93,23 +93,24 @@ export function SoftHavenCloudBackground() {
             animations.push(tween);
           });
 
-          const parallaxDistance = mobile ? { far: -12, middle: -22, near: -30 } : { far: -26, middle: -42, near: -58 };
-          (['far', 'middle', 'near'] as const).forEach((depth) => {
+          const parallaxDistance = mobile ? { far: 14, middle: 34, near: 58 } : { far: 36, middle: 112, near: 188 };
+          const layerSetters = (['far', 'middle', 'near'] as const).flatMap((depth) => {
             const layer = sky.querySelector<HTMLElement>(`.soft-sky__layer--${depth}`);
-            if (!layer) return;
-            const tween = gsap.to(layer, {
-              y: parallaxDistance[depth],
-              ease: 'none',
-              scrollTrigger: {
-                trigger: document.documentElement,
-                start: 'top top',
-                end: 'bottom bottom',
-                scrub: 0.8,
-                invalidateOnRefresh: true,
-              },
-            });
-            animations.push(tween);
+            return layer ? [{ setY: gsap.quickSetter(layer, 'y', 'px'), distance: parallaxDistance[depth] }] : [];
           });
+          let parallaxFrame = 0;
+          const updateParallax = () => {
+            parallaxFrame = 0;
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            const progress = gsap.utils.clamp(0, 1, window.scrollY / maxScroll);
+            layerSetters.forEach(({ setY, distance }) => setY(-distance * progress));
+          };
+          const requestParallaxUpdate = () => {
+            if (!parallaxFrame) parallaxFrame = window.requestAnimationFrame(updateParallax);
+          };
+          window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
+          window.addEventListener('resize', requestParallaxUpdate, { passive: true });
+          updateParallax();
 
           if (pathname === '/' && !document.hidden) {
             const introTargets = Array.from(document.querySelectorAll<HTMLElement>('.hero-portrait__copy > *, .portrait-carousel'));
@@ -124,6 +125,9 @@ export function SoftHavenCloudBackground() {
           }
 
           return () => {
+            window.removeEventListener('scroll', requestParallaxUpdate);
+            window.removeEventListener('resize', requestParallaxUpdate);
+            if (parallaxFrame) window.cancelAnimationFrame(parallaxFrame);
             animations.splice(0).forEach((animation) => animation.kill());
           };
         },

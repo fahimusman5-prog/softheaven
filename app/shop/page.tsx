@@ -2,6 +2,7 @@
 
 import { use, useEffect, useMemo, useState } from 'react';
 import { ProductCard } from '@/components/product-card';
+import { SectionReveal } from '@/components/section-reveal';
 import { products } from '@/lib/data';
 
 const categories = ['All', 'Teddy Bear Collection', 'Love & Gifting', 'Soft Animal Friends'];
@@ -40,7 +41,7 @@ export default function ShopPage({ searchParams }: { searchParams: Promise<ShopS
           <select aria-label="Sort products" value={sort} onChange={(event) => setSort(event.target.value)}><option>Featured</option><option>Price: low to high</option><option>Price: high to low</option></select>
         </div>
       </div>
-      <div className="shop-grid">{visible.map((product) => <ProductCard key={product.id} product={product}/>)}</div>
+      <SectionReveal><div className="shop-grid">{visible.map((product) => <ProductCard key={product.id} product={product}/>)}</div></SectionReveal>
       {visible.length === 0 && <div className="empty-state"><h2>No soft companions found</h2><p>Try another search or browse the full collection.</p><button className="text-button" onClick={() => { setQuery(''); setCategory('All'); }}>Reset filters →</button></div>}
     </div>
   );
