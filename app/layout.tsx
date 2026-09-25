@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { CartProvider } from '@/components/cart-provider';
+import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
-import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
 
 export const metadata: Metadata = {
   title: { default: 'ANTZ SoftHaven | The softer side of luxury', template: '%s | ANTZ SoftHaven' },
