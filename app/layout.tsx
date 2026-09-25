@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './cloud-navbar.css';
+import './soft-haven-premium.css';
 import { CartProvider } from '@/components/cart-provider';
 import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
 import { SiteHeader } from '@/components/site-header';

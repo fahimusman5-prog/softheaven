@@ -1,24 +1,21 @@
 'use client';
 
-import { use, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { products } from '@/lib/data';
+import { SectionReveal } from '@/components/section-reveal';
 
 const categories = ['All', 'Teddy Bear Collection', 'Love & Gifting', 'Soft Animal Friends'];
-type ShopSearchParams = { search?: string | string[]; category?: string | string[] };
 
-export default function ShopPage({ searchParams }: { searchParams: Promise<ShopSearchParams> }) {
-  const params = use(searchParams);
-  const searchValue = Array.isArray(params.search) ? params.search[0] : params.search;
-  const requestedCategory = Array.isArray(params.category) ? params.category[0] : params.category;
-  const [category, setCategory] = useState(() => requestedCategory && categories.includes(requestedCategory) ? requestedCategory : 'All');
-  const [query, setQuery] = useState(searchValue ?? '');
+export default function ShopPage() {
+  const [category, setCategory] = useState('All');
+  const [query, setQuery] = useState('');
   const [sort, setSort] = useState('Featured');
 
   useEffect(() => {
-    if (searchValue !== undefined) setQuery(searchValue);
-    if (requestedCategory && categories.includes(requestedCategory)) setCategory(requestedCategory);
-  }, [requestedCategory, searchValue]);
+    const search = new URLSearchParams(window.location.search).get('search');
+    if (search) setQuery(search);
+  }, []);
 
   const visible = useMemo(() => products
     .filter((product) => (category === 'All' || product.category === category) && product.name.toLowerCase().includes(query.toLowerCase()))
@@ -40,7 +37,7 @@ export default function ShopPage({ searchParams }: { searchParams: Promise<ShopS
           <select aria-label="Sort products" value={sort} onChange={(event) => setSort(event.target.value)}><option>Featured</option><option>Price: low to high</option><option>Price: high to low</option></select>
         </div>
       </div>
-      <div className="shop-grid">{visible.map((product) => <ProductCard key={product.id} product={product}/>)}</div>
+      <SectionReveal><div className="shop-grid">{visible.map((product) => <ProductCard key={product.id} product={product}/>)}</div></SectionReveal>
       {visible.length === 0 && <div className="empty-state"><h2>No soft companions found</h2><p>Try another search or browse the full collection.</p><button className="text-button" onClick={() => { setQuery(''); setCategory('All'); }}>Reset filters →</button></div>}
     </div>
   );
