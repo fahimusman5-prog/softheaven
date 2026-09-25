@@ -25,19 +25,19 @@ export function SectionReveal({ children, className = '' }: { children: React.Re
           const section = node.firstElementChild;
           const cards = node.querySelectorAll<HTMLElement>('.product-grid .product-card, .shop-grid .product-card');
           const heading = node.querySelector<HTMLElement>('.section-heading, .page-intro');
-          const tweenConfig = { autoAlpha: 1, y: 0, duration: match.conditions?.mobile ? 0.56 : 0.72, ease: 'power2.out', clearProps: 'transform,opacity,visibility' };
+          const tweenConfig = { y: 0, duration: match.conditions?.mobile ? 0.56 : 0.72, ease: 'power2.out', clearProps: 'transform' };
 
           if (cards.length) {
             const reveal = gsap.timeline({
               scrollTrigger: { trigger: node, start: 'top 84%', once: true },
             });
-            if (heading) reveal.fromTo(heading, { autoAlpha: 0, y: 28 }, { ...tweenConfig, duration: 0.62 });
-            reveal.fromTo(cards, { autoAlpha: 0, y: 22, scale: 0.99 }, { ...tweenConfig, stagger: match.conditions?.mobile ? 0.035 : 0.06 }, heading ? '-=0.2' : 0);
+            if (heading) reveal.fromTo(heading, { y: 14 }, { ...tweenConfig, duration: 0.62 });
+            reveal.fromTo(cards, { y: 12, scale: 0.99 }, { ...tweenConfig, stagger: match.conditions?.mobile ? 0.035 : 0.06 }, heading ? '-=0.2' : 0);
             return () => reveal.kill();
           }
 
           if (!section) return;
-          const reveal = gsap.fromTo(section, { autoAlpha: 0, y: 30 }, {
+          const reveal = gsap.fromTo(section, { y: 16 }, {
             ...tweenConfig,
             scrollTrigger: { trigger: node, start: 'top 84%', once: true },
           });

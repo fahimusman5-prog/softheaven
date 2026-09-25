@@ -11,7 +11,7 @@ type Notice = 'account' | 'wishlist' | null;
 const navigation: Array<{ href: string; label: string; icon: IconName }> = [
   { href: '/', label: 'Home', icon: 'home' },
   { href: '/shop', label: 'Shop', icon: 'bag' },
-  { href: '/shop#collections', label: 'Collections', icon: 'heart' },
+  { href: '/collections', label: 'Collections', icon: 'heart' },
   { href: '/about', label: 'About', icon: 'user' },
   { href: '/contact', label: 'Contact', icon: 'mail' },
 ];
