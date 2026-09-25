@@ -3,7 +3,7 @@ import './globals.css';
 import { CartProvider } from '@/components/cart-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
-import { AuroraBackground } from '@/components/aurora-background';
+import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
 
 export const metadata: Metadata = {
   title: { default: 'ANTZ SoftHaven | The softer side of luxury', template: '%s | ANTZ SoftHaven' },
@@ -16,12 +16,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body>
-        <AuroraBackground />
-        <CartProvider>
-          <SiteHeader />
-          <main>{children}</main>
-          <SiteFooter />
-        </CartProvider>
+        <div className="softhaven-app">
+          <SoftHavenCloudBackground />
+          <CartProvider>
+            <SiteHeader />
+            <main>{children}</main>
+            <SiteFooter />
+          </CartProvider>
+        </div>
       </body>
     </html>
   );
