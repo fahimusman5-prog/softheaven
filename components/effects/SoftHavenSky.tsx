@@ -112,6 +112,21 @@ export function SoftHavenCloudBackground() {
           window.addEventListener('resize', requestParallaxUpdate, { passive: true });
           updateParallax();
 
+          const editorialImage = document.querySelector<HTMLElement>('[data-sky-editorial-image]');
+          if (editorialImage) {
+            const imageParallax = gsap.to(editorialImage, {
+              y: mobile ? 10 : 26,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: editorialImage.parentElement,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1.2,
+              },
+            });
+            animations.push(imageParallax);
+          }
+
           if (pathname === '/' && !document.hidden) {
             const introTargets = Array.from(document.querySelectorAll<HTMLElement>('.hero-portrait__copy > *, .portrait-carousel'));
             if (introTargets.length) {
