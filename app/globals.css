@@ -657,3 +657,85 @@ body{background-color:#fffafc;background-image:radial-gradient(ellipse 76vw 68vh
   body{animation:none;background-size:cover}
 }
 @media(prefers-reduced-motion:reduce){.soft-sky__cloud-drift{transform:none!important}}
+
+/* SoftHaven pastel atmosphere: static light fields, with motion reserved for clouds. */
+body{background-color:#fffcfa;background-image:
+  radial-gradient(ellipse 70vw 62vh at 3% 2%,rgba(252,231,243,.56),transparent 74%),
+  radial-gradient(ellipse 68vw 58vh at 100% 8%,rgba(221,238,255,.52),transparent 75%),
+  radial-gradient(ellipse 68vw 64vh at 22% 51%,rgba(237,228,255,.42),transparent 76%),
+  radial-gradient(ellipse 58vw 56vh at 94% 74%,rgba(229,247,239,.3),transparent 76%),
+  radial-gradient(ellipse 52vw 42vh at 40% 100%,rgba(255,232,220,.31),transparent 76%),
+  linear-gradient(155deg,#fff8fb 0%,#fffdfb 48%,#faf8ff 100%);
+  background-size:cover;background-position:center;background-attachment:fixed;animation:none}
+body:before{animation:none;transform:translateZ(0)}
+.soft-sky__base{background:linear-gradient(180deg,rgba(255,249,252,.02),rgba(255,252,250,.04) 50%,rgba(248,245,255,.08))}
+.soft-sky__light{opacity:.54}
+.soft-sky__light--blush{opacity:.76;background:radial-gradient(ellipse,rgba(249,212,232,.74),rgba(251,221,235,.28) 42%,transparent 74%)}
+.soft-sky__light--blue{opacity:.66;background:radial-gradient(ellipse,rgba(217,240,255,.72),rgba(221,238,255,.26) 43%,transparent 75%)}
+.soft-sky__light--lilac{opacity:.52;background:radial-gradient(ellipse,rgba(229,226,255,.52),rgba(237,228,255,.22) 48%,transparent 75%)}
+.soft-sky__light--peach{opacity:.4}
+.soft-sky__light--mint{opacity:.3}
+.soft-sky__layer--far{opacity:.44}
+.soft-sky__layer--middle{opacity:.56}
+.soft-sky__layer--near{opacity:.62}
+.soft-sky__cloud{will-change:auto}
+.soft-sky__cloud-drift{position:absolute;inset:0;display:block}
+.soft-sky__cloud-mass,.soft-sky__cloud-mass picture{position:absolute;inset:0;display:block;width:100%;height:100%}
+.soft-sky__cloud-mass img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 14px 22px rgba(106,96,144,.12))}
+.soft-sky__cloud--far-left{top:1%;left:-6%;width:clamp(280px,33vw,500px);height:clamp(105px,12vw,180px);--cloud-opacity:.48}
+.soft-sky__cloud--far-right{top:12%;right:-8%;width:clamp(280px,32vw,480px);height:clamp(110px,12vw,175px);--cloud-opacity:.43}
+.soft-sky__cloud--middle-left{top:34%;left:-8%;width:clamp(280px,31vw,465px);height:clamp(190px,22vw,300px);--cloud-opacity:.56}
+.soft-sky__cloud--near-bank{bottom:-5%;left:20%;width:clamp(440px,53vw,760px);height:clamp(135px,18vw,250px);--cloud-opacity:.62}
+.soft-sky[data-mode="shop"] .soft-sky__layer--near,
+.soft-sky[data-mode="product"] .soft-sky__layer--near,
+.soft-sky[data-mode="contact"] .soft-sky__layer--near,
+.soft-sky[data-mode="minimal"] .soft-sky__layer--middle,
+.soft-sky[data-mode="minimal"] .soft-sky__layer--near,
+.soft-sky[data-mode="quiet"] .soft-sky__layer--middle,
+.soft-sky[data-mode="quiet"] .soft-sky__layer--near{display:none}
+.soft-sky[data-mode="shop"] .soft-sky__layer--middle,
+.soft-sky[data-mode="product"] .soft-sky__layer--middle{opacity:.32}
+.soft-sky[data-mode="contact"] .soft-sky__layer--middle{opacity:.4}
+
+@media(min-width:768px) and (prefers-reduced-motion:no-preference){.soft-sky__cloud-drift{will-change:transform}}
+@media(max-width:767px){
+  body{background-image:
+    radial-gradient(ellipse 112vw 43vh at 0% 0%,rgba(252,231,243,.55),transparent 76%),
+    radial-gradient(ellipse 112vw 43vh at 100% 9%,rgba(221,238,255,.49),transparent 77%),
+    radial-gradient(ellipse 108vw 48vh at 25% 55%,rgba(237,228,255,.39),transparent 78%),
+    radial-gradient(ellipse 92vw 44vh at 92% 90%,rgba(255,232,220,.26),transparent 78%),
+    linear-gradient(155deg,#fff8fb 0%,#fffdfb 54%,#faf8ff 100%);background-size:auto;background-position:center;background-attachment:scroll}
+  .soft-sky__layer--far{opacity:.38}
+  .soft-sky__layer--middle{opacity:.46}
+  .soft-sky__layer--near,.soft-sky__cloud--far-right{display:none}
+  .soft-sky__cloud--far-left{top:3%;left:-19%;width:clamp(280px,82vw,370px);height:clamp(104px,30vw,145px);--cloud-opacity:.42}
+  .soft-sky__cloud--middle-left{top:35%;left:-25%;width:clamp(280px,82vw,365px);height:clamp(185px,54vw,245px);--cloud-opacity:.49}
+  .soft-sky__cloud-mass img{filter:drop-shadow(0 8px 12px rgba(106,96,144,.08))}
+  .sfh-panel,.sfh-mobile-panel{backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}
+  .shop-toolbar,.contact-form{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+}
+
+/* One restrained SoftHaven liquid-glass vocabulary for floating controls. */
+.sfh-panel,.sfh-mobile-panel{background:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.58);box-shadow:inset 0 1px 0 rgba(255,255,255,.92),inset 0 -8px 20px rgba(192,160,208,.055),0 12px 40px rgba(90,70,120,.08);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%)}
+.sfh-panel:before{background:linear-gradient(112deg,rgba(255,224,239,.13),transparent 34%,rgba(222,235,255,.16) 82%,rgba(238,228,255,.14))}
+.sfh-panel:after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),rgba(237,228,255,.24),transparent)}
+.sfh-header.is-compact .sfh-panel{background:rgba(255,255,255,.79);border-color:rgba(255,255,255,.72);box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 12px 38px rgba(90,70,120,.1)}
+.sfh-nav-item__face,.sfh-action,.sfh-mobile-action{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.68),0 4px 12px rgba(106,91,140,.045)}
+.sfh-nav-item.is-active .sfh-nav-item__face,.sfh-mobile-menu__link.is-active{border:1px solid rgba(255,255,255,.66);background:linear-gradient(140deg,rgba(249,212,232,.9),rgba(229,226,255,.86) 55%,rgba(221,238,255,.88));box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 16px rgba(147,120,172,.12)}
+.sfh-nav-item.is-active{color:#5a4d68}
+.sfh-nav-item:hover .sfh-nav-item__face,.sfh-action:hover,.sfh-mobile-action:hover{background:rgba(255,255,255,.43)}
+.sfh-search{border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.36);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 4px 12px rgba(106,91,140,.035)}
+.sfh-search:focus-within{background:rgba(255,255,255,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 0 0 3px rgba(221,200,237,.24),0 6px 14px rgba(106,91,140,.07)}
+.sfh-search__bear,.sfh-mobile-search button{background:linear-gradient(145deg,rgba(249,212,232,.96),rgba(222,216,255,.96) 65%,rgba(217,240,255,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 4px 10px rgba(134,112,161,.11)}
+.sfh-count{color:#594d68;background:linear-gradient(110deg,#f7d8eb,#dce7ff);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 2px 6px rgba(135,119,178,.1)}
+
+.shop-toolbar{border:1px solid rgba(255,255,255,.72);border-radius:22px;background:rgba(255,255,255,.54);box-shadow:inset 0 1px 0 rgba(255,255,255,.86),0 8px 24px rgba(111,92,141,.045);backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}
+.filter-pill,.category-tabs button,.shop-controls select{background:rgba(255,255,255,.46);transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.filter-pill:hover,.category-tabs button:hover{transform:translateY(-1px);background:rgba(255,255,255,.68)}
+.product-card{background:rgba(255,255,255,.86);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 14px 30px rgba(90,70,120,.045)}
+.product-card:hover .product-image img{transform:scale(1.02)}
+.product-detail-color-option,.product-detail-quantity,.product-detail-thumb,.product-detail-zoom{background-color:rgba(255,255,255,.66);box-shadow:inset 0 1px 0 rgba(255,255,255,.88),0 5px 13px rgba(106,91,140,.055)}
+.contact-form{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+@media(max-width:767px){.shop-toolbar{backdrop-filter:none;-webkit-backdrop-filter:none}.sfh-panel:after{display:none}}
+@media(prefers-reduced-motion:reduce){body:before{animation:none}.soft-sky__cloud-drift{transform:none!important}.product-card:hover .product-image img,.filter-pill:hover,.category-tabs button:hover{transform:none}}
+@media(max-width:767px){.sfh-panel,.sfh-mobile-panel{backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}.sfh-mobile-search,.sfh-mobile-menu{backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}}
