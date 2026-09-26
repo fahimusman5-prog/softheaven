@@ -944,3 +944,93 @@ body:before{animation:none}
   .soft-sky__ambient-fog-layer{animation:none!important;transform:none!important}
   .soft-sky__cloud,.soft-sky__layer,.soft-sky__wisp{transform:none!important;will-change:auto}
 }
+
+/* Full-document travel: the ScrollTrigger controller owns cloud X/Y only. */
+body{background-image:
+  radial-gradient(ellipse 76vw 72vh at 8% 10%,rgba(243,184,212,.59),transparent 76%),
+  radial-gradient(ellipse 70vw 68vh at 36% 7%,rgba(217,205,245,.49),transparent 77%),
+  radial-gradient(ellipse 72vw 65vh at 82% 11%,rgba(198,222,245,.55),transparent 77%),
+  radial-gradient(ellipse 67vw 63vh at 61% 13%,rgba(249,213,196,.33),transparent 78%),
+  radial-gradient(ellipse 73vw 68vh at 12% 47%,rgba(198,222,245,.37),transparent 78%),
+  radial-gradient(ellipse 77vw 70vh at 48% 48%,rgba(247,201,224,.49),transparent 79%),
+  radial-gradient(ellipse 70vw 65vh at 86% 50%,rgba(225,212,250,.48),transparent 78%),
+  radial-gradient(ellipse 75vw 69vh at 18% 87%,rgba(210,234,221,.36),transparent 78%),
+  radial-gradient(ellipse 72vw 65vh at 53% 91%,rgba(249,213,196,.38),transparent 79%),
+  radial-gradient(ellipse 76vw 68vh at 88% 87%,rgba(189,217,242,.4),transparent 78%),
+  linear-gradient(155deg,#fff8f4 0%,#fff8f6 48%,#faf8ff 100%)}
+.soft-sky__center-light{background:
+  radial-gradient(ellipse 58% 40% at 42% 34%,rgba(247,201,224,.25),transparent 81%),
+  radial-gradient(ellipse 57% 43% at 68% 43%,rgba(225,212,250,.26),transparent 82%),
+  radial-gradient(ellipse 54% 38% at 46% 66%,rgba(198,222,245,.2),transparent 82%),
+  radial-gradient(ellipse 53% 39% at 70% 70%,rgba(249,213,196,.19),transparent 82%),
+  radial-gradient(ellipse 60% 54% at 52% 48%,rgba(255,250,247,.2),transparent 86%)}
+.hero-portrait{background:
+  radial-gradient(ellipse 42% 43% at 20% 27%,rgba(217,205,245,.27),transparent 82%),
+  radial-gradient(ellipse 47% 45% at 76% 26%,rgba(249,213,196,.25),transparent 83%),
+  radial-gradient(ellipse 50% 48% at 33% 72%,rgba(198,222,245,.23),transparent 83%),
+  radial-gradient(ellipse 46% 47% at 76% 73%,rgba(210,234,221,.19),transparent 84%),
+  radial-gradient(ellipse 38% 37% at 50% 45%,rgba(255,249,247,.26),transparent 85%)}
+
+/* Two repeating mist tiles travel right continuously with no reset frame. */
+.soft-sky__layer--far{z-index:2}
+.soft-sky__layer--middle{z-index:3}
+.soft-sky__layer--near{z-index:4}
+.soft-sky__center-light{z-index:0}
+.soft-sky__ambient-fog{z-index:1}
+.soft-sky__ambient-fog-layer{inset:0 auto 0 0;width:200%;height:100%;background-repeat:repeat-x;background-size:50% 100%;will-change:transform;animation-timing-function:linear!important;animation-iteration-count:infinite!important;animation-direction:normal!important}
+.soft-sky__ambient-fog-layer--far{opacity:.13;animation-name:soft-sky-fog-far;animation-duration:58s!important;background-image:
+  radial-gradient(ellipse 38% 22% at 6% 18%,rgba(255,255,255,.8),transparent 80%),
+  radial-gradient(ellipse 31% 18% at 27% 32%,rgba(217,205,245,.46),transparent 82%),
+  radial-gradient(ellipse 37% 19% at 48% 20%,rgba(198,222,245,.5),transparent 81%),
+  radial-gradient(ellipse 34% 18% at 69% 34%,rgba(247,201,224,.4),transparent 82%),
+  radial-gradient(ellipse 40% 20% at 91% 16%,rgba(255,255,255,.75),transparent 81%)}
+.soft-sky__ambient-fog-layer--middle{opacity:.16;animation-name:soft-sky-fog-middle;animation-duration:38s!important;background-image:
+  radial-gradient(ellipse 26% 16% at 8% 58%,rgba(255,255,255,.78),transparent 81%),
+  radial-gradient(ellipse 31% 17% at 30% 70%,rgba(225,212,250,.43),transparent 82%),
+  radial-gradient(ellipse 28% 15% at 51% 58%,rgba(198,222,245,.4),transparent 82%),
+  radial-gradient(ellipse 33% 18% at 72% 73%,rgba(243,184,212,.4),transparent 82%),
+  radial-gradient(ellipse 29% 16% at 93% 61%,rgba(255,255,255,.72),transparent 82%)}
+@keyframes soft-sky-fog-far{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+@keyframes soft-sky-fog-middle{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+
+/* Four small edge wisps add scale cues without crowding the hero or products. */
+.soft-sky__wisp--small-upper-left{top:23%;left:5%;width:clamp(70px,8vw,126px);height:clamp(28px,2.8vw,44px);opacity:.34}
+.soft-sky__wisp--small-upper-right{top:21%;right:8%;width:clamp(78px,9vw,140px);height:clamp(30px,3vw,48px);opacity:.32}
+.soft-sky__wisp--small-mid-right{top:56%;right:2%;width:clamp(90px,11vw,164px);height:clamp(32px,3.2vw,52px);opacity:.4}
+.soft-sky__wisp--small-lower-right{right:15%;bottom:12%;width:clamp(70px,8vw,132px);height:clamp(28px,2.8vw,46px);opacity:.34}
+.soft-sky__wisp--small-upper-left,.soft-sky__wisp--small-lower-right{background-image:
+  radial-gradient(ellipse 22% 53% at 18% 66%,rgba(255,255,255,.86),transparent 83%),
+  radial-gradient(ellipse 27% 69% at 42% 53%,rgba(255,255,255,.8),transparent 83%),
+  radial-gradient(ellipse 22% 53% at 68% 64%,rgba(255,255,255,.82),transparent 83%),
+  radial-gradient(ellipse 60% 29% at 52% 78%,rgba(243,184,212,.43),transparent 84%),
+  radial-gradient(ellipse 42% 22% at 80% 67%,rgba(217,205,245,.34),transparent 84%)}
+.soft-sky__wisp--small-upper-right,.soft-sky__wisp--small-mid-right{background-image:
+  radial-gradient(ellipse 21% 52% at 17% 66%,rgba(255,255,255,.86),transparent 83%),
+  radial-gradient(ellipse 27% 71% at 41% 52%,rgba(255,255,255,.8),transparent 83%),
+  radial-gradient(ellipse 23% 53% at 67% 64%,rgba(255,255,255,.83),transparent 83%),
+  radial-gradient(ellipse 59% 29% at 53% 78%,rgba(198,222,245,.45),transparent 84%),
+  radial-gradient(ellipse 42% 23% at 25% 68%,rgba(225,212,250,.36),transparent 84%)}
+
+@media(max-width:767px){
+  body{background-image:
+    radial-gradient(ellipse 112vw 72vh at 9% 8%,rgba(243,184,212,.48),transparent 78%),
+    radial-gradient(ellipse 115vw 70vh at 52% 8%,rgba(217,205,245,.44),transparent 79%),
+    radial-gradient(ellipse 110vw 68vh at 91% 13%,rgba(198,222,245,.48),transparent 79%),
+    radial-gradient(ellipse 112vw 70vh at 48% 37%,rgba(249,213,196,.3),transparent 80%),
+    radial-gradient(ellipse 110vw 72vh at 14% 59%,rgba(198,222,245,.33),transparent 80%),
+    radial-gradient(ellipse 115vw 73vh at 66% 57%,rgba(225,212,250,.42),transparent 80%),
+    radial-gradient(ellipse 110vw 68vh at 12% 87%,rgba(210,234,221,.33),transparent 79%),
+    radial-gradient(ellipse 112vw 72vh at 83% 88%,rgba(247,201,224,.37),transparent 80%),
+    linear-gradient(160deg,#fff8f4 0%,#fff8f6 52%,#faf8ff 100%)}
+  .soft-sky__ambient-fog-layer--far{opacity:.14;animation-duration:62s!important}
+  .soft-sky__ambient-fog-layer--middle{display:none}
+  .soft-sky__wisp--small-upper-left,.soft-sky__wisp--small-upper-right,.soft-sky__wisp--small-mid-right,.soft-sky__wisp--small-lower-right{display:none}
+  .soft-sky__center-light{background:
+    radial-gradient(ellipse 81% 36% at 42% 31%,rgba(247,201,224,.22),transparent 82%),
+    radial-gradient(ellipse 78% 40% at 66% 53%,rgba(225,212,250,.22),transparent 83%),
+    radial-gradient(ellipse 75% 36% at 39% 72%,rgba(198,222,245,.17),transparent 84%),
+    radial-gradient(ellipse 70% 35% at 69% 78%,rgba(249,213,196,.15),transparent 84%)}
+}
+@media(prefers-reduced-motion:reduce){
+  .soft-sky__ambient-fog-layer{animation:none!important;transform:none!important;will-change:auto}
+}
