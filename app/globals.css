@@ -751,3 +751,65 @@ body:before{animation:none;transform:translateZ(0)}
   radial-gradient(ellipse 74% 22% at 100% 90%,rgba(255,255,255,.78),transparent 80%),
   linear-gradient(180deg,transparent 42%,rgba(255,255,255,.2) 62%,rgba(255,255,255,.72) 100%)}}
 @media(prefers-reduced-motion:reduce){.soft-sky__fog{display:none}}
+
+/* Scroll-owned transforms: GSAP drives cloud X and depth-layer Y; CSS owns only artwork. */
+body{background-color:#fff9fb;background-image:
+  radial-gradient(ellipse 70vw 66vh at 4% 3%,rgba(247,207,228,.78),transparent 73%),
+  radial-gradient(ellipse 66vw 62vh at 100% 7%,rgba(207,229,250,.78),transparent 74%),
+  radial-gradient(ellipse 66vw 62vh at 8% 58%,rgba(221,210,250,.58),transparent 77%),
+  radial-gradient(ellipse 62vw 54vh at 96% 72%,rgba(213,233,250,.52),transparent 77%),
+  radial-gradient(ellipse 52vw 48vh at 41% 97%,rgba(250,219,203,.43),transparent 78%),
+  linear-gradient(155deg,#fff8f4 0%,#fff9fb 46%,#faf8ff 100%);background-size:cover;background-position:center;background-attachment:fixed;animation:none}
+body:before{animation:none;transform:translateZ(0)}
+.soft-sky__base{background:linear-gradient(180deg,rgba(255,248,244,.01),rgba(255,251,248,.02) 50%,rgba(243,238,255,.08))}
+.soft-sky__light--blush{opacity:.92;background:radial-gradient(ellipse,rgba(247,207,228,.86),rgba(245,190,218,.34) 43%,transparent 75%)}
+.soft-sky__light--blue{opacity:.84;background:radial-gradient(ellipse,rgba(207,229,250,.82),rgba(196,221,245,.34) 44%,transparent 75%)}
+.soft-sky__light--lilac{opacity:.68;background:radial-gradient(ellipse,rgba(221,210,250,.68),rgba(215,203,244,.28) 48%,transparent 76%)}
+.soft-sky__light--peach{opacity:.48;background:radial-gradient(ellipse,rgba(250,219,203,.53),transparent 75%)}
+.soft-sky__light--mint{opacity:.38;background:radial-gradient(ellipse,rgba(215,238,229,.46),transparent 76%)}
+.soft-sky__cloud{transform:translate3d(0,0,0);transition:none!important;will-change:transform}
+.soft-sky__cloud-mass{transform:scale(var(--cloud-scale,1))}
+.soft-sky__cloud--far-right .soft-sky__cloud-mass{transform:scaleX(-1) scale(var(--cloud-scale,1))}
+.soft-sky__cloud-drift{position:static;inset:auto;will-change:auto}
+.soft-sky__cloud--far-left{top:2%;left:-7%;width:clamp(280px,31vw,470px);height:clamp(110px,13vw,190px);--cloud-opacity:.62}
+.soft-sky__cloud--far-right{top:10%;right:-5%;width:clamp(270px,28vw,425px);height:clamp(108px,12vw,178px);--cloud-opacity:.57}
+.soft-sky__cloud--middle-left{top:36%;left:-8%;width:clamp(300px,31vw,470px);height:clamp(155px,20vw,300px);--cloud-opacity:.66}
+.soft-sky__cloud--middle-right{display:block;top:40%;right:-7%;width:clamp(285px,28vw,430px);height:clamp(145px,18vw,270px);--cloud-opacity:.64}
+.soft-sky__cloud--near-bank{top:auto;bottom:-7%;left:28%;width:clamp(400px,45vw,690px);height:clamp(140px,18vw,270px);--cloud-opacity:.68}
+.soft-sky__center-light{background:radial-gradient(ellipse 54% 45% at 50% 43%,rgba(255,251,250,.3),rgba(255,251,250,.12) 54%,transparent 84%)}
+.hero-portrait{background:
+  radial-gradient(ellipse 44% 44% at 4% 40%,rgba(247,207,228,.38),transparent 78%),
+  radial-gradient(ellipse 42% 42% at 96% 44%,rgba(207,229,250,.38),transparent 78%),
+  radial-gradient(ellipse 50% 42% at 50% 42%,rgba(255,248,244,.68),transparent 82%)}
+.soft-sky__fog{inset:22% -10% 13%;background:
+  radial-gradient(ellipse 27% 32% at 13% 70%,rgba(255,255,255,.9),transparent 76%),
+  radial-gradient(ellipse 32% 38% at 48% 55%,rgba(255,251,255,.82),transparent 77%),
+  radial-gradient(ellipse 27% 34% at 86% 63%,rgba(255,255,255,.88),transparent 76%),
+  linear-gradient(180deg,transparent 34%,rgba(255,255,255,.12) 55%,rgba(255,255,255,.26) 79%,transparent 100%)}
+.soft-sky[data-mode="shop"] .soft-sky__fog{opacity:.8}
+.soft-sky[data-mode="product"] .soft-sky__fog,.soft-sky[data-mode="contact"] .soft-sky__fog,.soft-sky[data-mode="minimal"] .soft-sky__fog,.soft-sky[data-mode="quiet"] .soft-sky__fog{display:none}
+.soft-sky[data-mode="shop"] .soft-sky__layer--near,.soft-sky[data-mode="product"] .soft-sky__layer--near,.soft-sky[data-mode="contact"] .soft-sky__layer--near,.soft-sky[data-mode="minimal"] .soft-sky__layer--middle,.soft-sky[data-mode="minimal"] .soft-sky__layer--near,.soft-sky[data-mode="quiet"] .soft-sky__layer--middle,.soft-sky[data-mode="quiet"] .soft-sky__layer--near{display:none}
+.soft-sky[data-mode="shop"] .soft-sky__layer--middle,.soft-sky[data-mode="product"] .soft-sky__layer--middle{opacity:.4}
+@media(max-width:767px){
+  body{background-image:
+    radial-gradient(ellipse 112vw 49vh at 0% 2%,rgba(247,207,228,.76),transparent 77%),
+    radial-gradient(ellipse 108vw 48vh at 100% 11%,rgba(207,229,250,.68),transparent 78%),
+    radial-gradient(ellipse 112vw 52vh at 14% 59%,rgba(221,210,250,.53),transparent 78%),
+    radial-gradient(ellipse 98vw 46vh at 96% 89%,rgba(250,219,203,.35),transparent 79%),
+    linear-gradient(155deg,#fff8f4 0%,#fff9fb 56%,#faf8ff 100%);background-attachment:scroll}
+  .soft-sky__light--peach,.soft-sky__light--mint{display:none}
+  .soft-sky__cloud--far-left{top:3%;left:-25%;width:clamp(280px,78vw,355px);height:clamp(105px,29vw,136px);--cloud-opacity:.54}
+  .soft-sky__cloud--far-right,.soft-sky__cloud--middle-left{display:none}
+  .soft-sky__cloud--middle-right{display:block;top:39%;right:-34%;width:clamp(270px,75vw,350px);height:clamp(125px,35vw,170px);--cloud-opacity:.52}
+  .soft-sky__layer--far{opacity:.64}.soft-sky__layer--middle{opacity:.7}
+  .soft-sky__layer--near{display:block;opacity:.52}
+  .soft-sky__cloud--near-bank{top:auto;right:-44%;bottom:-7%;left:auto;width:clamp(300px,82vw,390px);height:clamp(112px,31vw,148px);--cloud-opacity:.5}
+  .soft-sky__fog{inset:28% -16% 13%;background:
+    radial-gradient(ellipse 34% 36% at 8% 68%,rgba(255,255,255,.9),transparent 77%),
+    radial-gradient(ellipse 38% 38% at 54% 56%,rgba(255,251,255,.82),transparent 78%),
+    radial-gradient(ellipse 34% 36% at 97% 64%,rgba(255,255,255,.88),transparent 77%)}
+  .soft-sky[data-mode="hero"] .soft-sky__cloud--near-bank{display:block}
+  .sfh-panel,.sfh-mobile-panel{backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}
+  .soft-sky__cloud-mass img{filter:none}
+}
+@media(prefers-reduced-motion:reduce){.soft-sky__cloud,.soft-sky__layer,.soft-sky__fog{transform:none!important;opacity:initial!important;will-change:auto}.soft-sky__fog{display:none}}

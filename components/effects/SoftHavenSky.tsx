@@ -11,17 +11,17 @@ type CloudDefinition = {
   id: string;
   depth: CloudDepth;
   className: string;
-  driftDistance: number;
-  driftLeftDuration: number;
-  driftReturnDuration: number;
+  scrollX: number;
+  mobileScrollX: number;
   asset: string;
 };
 
 const clouds: CloudDefinition[] = [
-  { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', driftDistance: 7, driftLeftDuration: 88, driftReturnDuration: 150, asset: '/assets/clouds/soft-cloud-distant.webp' },
-  { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', driftDistance: 9, driftLeftDuration: 96, driftReturnDuration: 164, asset: '/assets/clouds/soft-cloud-bank.webp' },
-  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', driftDistance: 13, driftLeftDuration: 58, driftReturnDuration: 102, asset: '/assets/clouds/soft-cloud-cluster.webp' },
-  { id: 'near-bank', depth: 'near', className: 'soft-sky__cloud--near-bank', driftDistance: 18, driftLeftDuration: 43, driftReturnDuration: 78, asset: '/assets/clouds/soft-cloud-bank.webp' },
+  { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', scrollX: 76, mobileScrollX: 28, asset: '/assets/clouds/soft-cloud-distant.webp' },
+  { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', scrollX: 84, mobileScrollX: 32, asset: '/assets/clouds/soft-cloud-bank.webp' },
+  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', scrollX: 142, mobileScrollX: 58, asset: '/assets/clouds/soft-cloud-cluster.webp' },
+  { id: 'middle-right', depth: 'middle', className: 'soft-sky__cloud--middle-right', scrollX: 156, mobileScrollX: 66, asset: '/assets/clouds/soft-cloud-bank.webp' },
+  { id: 'near-bank', depth: 'near', className: 'soft-sky__cloud--near-bank', scrollX: 246, mobileScrollX: 94, asset: '/assets/clouds/soft-cloud-bank.webp' },
 ];
 
 function getAtmosphereMode(pathname: string) {
@@ -47,8 +47,6 @@ export function SoftHavenCloudBackground() {
     if (!sky) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const animations: gsap.core.Animation[] = [];
-    const scrollTriggers: ScrollTrigger[] = [];
     let media: ReturnType<typeof gsap.matchMedia> | undefined;
     const context = gsap.context(() => {
       media = gsap.matchMedia(sky);
@@ -61,111 +59,84 @@ export function SoftHavenCloudBackground() {
         (match) => {
           if (match.conditions?.reduce) return;
           const mobile = Boolean(match.conditions?.mobile);
+          const page = sky.closest<HTMLElement>('.softhaven-app');
+          const motion = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: page ?? document.documentElement,
+              start: 'top top',
+              end: 'bottom bottom',
+              scrub: mobile ? 0.3 : 0.45,
+              invalidateOnRefresh: true,
+            },
+          });
+
+          const yDistance = mobile ? { far: 14, middle: 28, near: 44 } : { far: 48, middle: 104, near: 172 };
+          (['far', 'middle', 'near'] as const).forEach((depth) => {
+            const layer = sky.querySelector<HTMLElement>(`[data-parallax-layer="${depth}"]`);
+            if (layer && getComputedStyle(layer).display !== 'none') {
+              motion.to(layer, { y: -yDistance[depth], duration: 1 }, 0);
+            }
+          });
+
+          clouds.forEach((cloud) => {
+            const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
+            if (element && getComputedStyle(element).display !== 'none') {
+              motion.to(element, { x: mobile ? cloud.mobileScrollX : cloud.scrollX, duration: 1 }, 0);
+            }
+          });
 
           const fog = sky.querySelector<HTMLElement>('.soft-sky__fog');
-          const fogDistance = mobile ? 560 : 780;
-          const fogTravel = mobile ? 24 : 38;
-          const setFogY = fog ? gsap.quickSetter(fog, 'yPercent') : null;
-          const setFogOpacity = fog ? gsap.quickSetter(fog, 'opacity') : null;
-
-          Array.from(sky.querySelectorAll<HTMLElement>('[data-cloud-drift]')).forEach((cloud) => {
-            if (mobile || getComputedStyle(cloud).display === 'none') return;
-            const distance = Number(cloud.dataset.driftDistance);
-            const drift = gsap.timeline({ repeat: -1, defaults: { ease: 'none' } });
-            drift.to(cloud, { x: -distance, duration: Number(cloud.dataset.driftLeftDuration) });
-            drift.to(cloud, { x: 0, duration: Number(cloud.dataset.driftReturnDuration) });
-            animations.push(drift);
+          const fogMoments = mode === 'hero' ? [0.08, 0.34, 0.62, 0.86]
+            : mode === 'collections' || mode === 'story' ? [0.28, 0.72]
+              : mode === 'shop' ? [0.08] : [];
+          fogMoments.forEach((moment, index) => {
+            if (!fog || (mobile && index > (mode === 'hero' ? 1 : 0))) return;
+            motion.fromTo(
+              fog,
+              { xPercent: -27, yPercent: 16, opacity: 0 },
+              { xPercent: mobile ? 15 : 24, yPercent: mobile ? -8 : -14, opacity: mobile ? 0.32 : 0.44, duration: 0.07, immediateRender: false },
+              moment,
+            );
+            motion.to(fog, { xPercent: mobile ? 34 : 48, yPercent: mobile ? -17 : -26, opacity: 0, duration: 0.09 }, moment + 0.07);
           });
-
-          const parallaxDistance = mobile ? { far: 20, middle: 40, near: 58 } : { far: 68, middle: 150, near: 250 };
-          const parallaxLayers = (['far', 'middle', 'near'] as const).flatMap((depth) => {
-            const layer = sky.querySelector<HTMLElement>(`[data-parallax-layer="${depth}"]`);
-            return layer ? [{ layer, distance: parallaxDistance[depth], setY: gsap.quickSetter(layer, 'y', 'px') }] : [];
-          });
-          let frame = 0;
-          const updateParallax = () => {
-            if (frame) return;
-            frame = window.requestAnimationFrame(() => {
-              frame = 0;
-              const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-              const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-              parallaxLayers.forEach(({ distance, setY }) => setY(-distance * progress));
-              if (setFogY && setFogOpacity) {
-                const fogProgress = Math.min(1, Math.max(0, window.scrollY / fogDistance));
-                setFogY(-fogTravel * fogProgress);
-                setFogOpacity(0.72 * (1 - fogProgress));
-              }
-            });
-          };
-          window.addEventListener('scroll', updateParallax, { passive: true });
-          window.addEventListener('resize', updateParallax, { passive: true });
-          ScrollTrigger.addEventListener('refresh', updateParallax);
-          if (fog) {
-            scrollTriggers.push(ScrollTrigger.create({
-              start: 0,
-              end: fogDistance,
-              onUpdate: updateParallax,
-              onRefresh: updateParallax,
-            }));
-          }
-          updateParallax();
 
           const editorialImage = mobile ? null : document.querySelector<HTMLElement>('[data-sky-editorial-image]');
           if (editorialImage) {
-            const imageParallax = gsap.to(editorialImage, {
-              y: mobile ? 10 : 26,
+            gsap.to(editorialImage, {
+              y: 26,
               ease: 'none',
               scrollTrigger: {
                 trigger: editorialImage.parentElement,
                 start: 'top bottom',
                 end: 'bottom top',
-                scrub: 1.2,
+                scrub: 0.6,
               },
             });
-            animations.push(imageParallax);
           }
 
           if (pathname === '/' && !document.hidden) {
             const introTargets = Array.from(document.querySelectorAll<HTMLElement>('.hero-portrait__copy > *, .portrait-carousel'));
             if (introTargets.length) {
-              const intro = gsap.fromTo(
+              gsap.fromTo(
                 introTargets,
                 { y: 14 },
                 { y: 0, duration: 0.68, stagger: 0.09, ease: 'power2.out', clearProps: 'transform', delay: 0.08 },
               );
-              animations.push(intro);
             }
           }
 
-          return () => {
-            window.removeEventListener('scroll', updateParallax);
-            window.removeEventListener('resize', updateParallax);
-            ScrollTrigger.removeEventListener('refresh', updateParallax);
-            if (frame) window.cancelAnimationFrame(frame);
-            animations.splice(0).forEach((animation) => animation.kill());
-            scrollTriggers.splice(0).forEach((trigger) => trigger.kill());
-            parallaxLayers.forEach(({ layer }) => gsap.set(layer, { clearProps: 'transform' }));
-            if (fog) gsap.set(fog, { clearProps: 'transform,opacity' });
-          };
+          return () => motion.kill();
         },
         sky,
       );
     }, sky);
 
-    const pauseWhenHidden = () => {
-      animations.forEach((animation) => animation.paused(document.hidden));
-    };
-    document.addEventListener('visibilitychange', pauseWhenHidden);
-    pauseWhenHidden();
-
     return () => {
-      document.removeEventListener('visibilitychange', pauseWhenHidden);
       media?.revert();
       context.revert();
-      animations.length = 0;
-      scrollTriggers.splice(0).forEach((trigger) => trigger.kill());
     };
-  }, [pathname]);
+  }, [pathname, mode]);
 
   if (pathname.startsWith('/admin')) return null;
 
@@ -182,15 +153,14 @@ export function SoftHavenCloudBackground() {
           {clouds.filter((cloud) => cloud.depth === depth).map((cloud) => (
             <span
               key={cloud.id}
+              id={cloud.id}
               className={`soft-sky__cloud ${cloud.className}`}
             >
-              <span className="soft-sky__cloud-drift" data-cloud-drift data-drift-distance={cloud.driftDistance} data-drift-left-duration={cloud.driftLeftDuration} data-drift-return-duration={cloud.driftReturnDuration}>
-                <span className="soft-sky__cloud-mass">
-                  <picture>
-                    <source media="(max-width: 767px)" srcSet={cloud.asset.replace('.webp', '-mobile.webp')} />
-                    <img src={cloud.asset} alt="" loading="lazy" decoding="async" />
-                  </picture>
-                </span>
+              <span className="soft-sky__cloud-mass">
+                <picture>
+                  <source media="(max-width: 767px)" srcSet={cloud.asset.replace('.webp', '-mobile.webp')} />
+                  <img src={cloud.asset} alt="" loading="lazy" decoding="async" />
+                </picture>
               </span>
             </span>
           ))}
