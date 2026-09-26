@@ -739,3 +739,15 @@ body:before{animation:none;transform:translateZ(0)}
 @media(max-width:767px){.shop-toolbar{backdrop-filter:none;-webkit-backdrop-filter:none}.sfh-panel:after{display:none}}
 @media(prefers-reduced-motion:reduce){body:before{animation:none}.soft-sky__cloud-drift{transform:none!important}.product-card:hover .product-image img,.filter-pill:hover,.category-tabs button:hover{transform:none}}
 @media(max-width:767px){.sfh-panel,.sfh-mobile-panel{backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}.sfh-mobile-search,.sfh-mobile-menu{backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%)}}
+
+/* A single feather-light fog veil reveals the sky as the visitor scrolls. */
+.soft-sky__fog{position:absolute;z-index:4;inset:-8% 0 -8%;pointer-events:none;opacity:0;background:
+  radial-gradient(ellipse 58% 25% at 8% 77%,rgba(255,255,255,.86),transparent 78%),
+  radial-gradient(ellipse 54% 26% at 94% 84%,rgba(255,255,255,.82),transparent 78%),
+  radial-gradient(ellipse 66% 24% at 52% 70%,rgba(248,248,255,.7),transparent 80%),
+  linear-gradient(180deg,transparent 34%,rgba(255,255,255,.18) 51%,rgba(255,255,255,.6) 73%,rgba(255,255,255,.82) 100%)}
+@media(max-width:767px){.soft-sky__fog{inset:0 0 -4%;background:
+  radial-gradient(ellipse 78% 20% at 4% 82%,rgba(255,255,255,.82),transparent 80%),
+  radial-gradient(ellipse 74% 22% at 100% 90%,rgba(255,255,255,.78),transparent 80%),
+  linear-gradient(180deg,transparent 42%,rgba(255,255,255,.2) 62%,rgba(255,255,255,.72) 100%)}}
+@media(prefers-reduced-motion:reduce){.soft-sky__fog{display:none}}

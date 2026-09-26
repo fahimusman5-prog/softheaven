@@ -48,6 +48,7 @@ export function SoftHavenCloudBackground() {
 
     gsap.registerPlugin(ScrollTrigger);
     const animations: gsap.core.Animation[] = [];
+    const scrollTriggers: ScrollTrigger[] = [];
     let media: ReturnType<typeof gsap.matchMedia> | undefined;
     const context = gsap.context(() => {
       media = gsap.matchMedia(sky);
@@ -60,6 +61,12 @@ export function SoftHavenCloudBackground() {
         (match) => {
           if (match.conditions?.reduce) return;
           const mobile = Boolean(match.conditions?.mobile);
+
+          const fog = sky.querySelector<HTMLElement>('.soft-sky__fog');
+          const fogDistance = mobile ? 560 : 780;
+          const fogTravel = mobile ? 24 : 38;
+          const setFogY = fog ? gsap.quickSetter(fog, 'yPercent') : null;
+          const setFogOpacity = fog ? gsap.quickSetter(fog, 'opacity') : null;
 
           Array.from(sky.querySelectorAll<HTMLElement>('[data-cloud-drift]')).forEach((cloud) => {
             if (mobile || getComputedStyle(cloud).display === 'none') return;
@@ -83,11 +90,24 @@ export function SoftHavenCloudBackground() {
               const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
               const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
               parallaxLayers.forEach(({ distance, setY }) => setY(-distance * progress));
+              if (setFogY && setFogOpacity) {
+                const fogProgress = Math.min(1, Math.max(0, window.scrollY / fogDistance));
+                setFogY(-fogTravel * fogProgress);
+                setFogOpacity(0.72 * (1 - fogProgress));
+              }
             });
           };
           window.addEventListener('scroll', updateParallax, { passive: true });
           window.addEventListener('resize', updateParallax, { passive: true });
           ScrollTrigger.addEventListener('refresh', updateParallax);
+          if (fog) {
+            scrollTriggers.push(ScrollTrigger.create({
+              start: 0,
+              end: fogDistance,
+              onUpdate: updateParallax,
+              onRefresh: updateParallax,
+            }));
+          }
           updateParallax();
 
           const editorialImage = mobile ? null : document.querySelector<HTMLElement>('[data-sky-editorial-image]');
@@ -123,7 +143,9 @@ export function SoftHavenCloudBackground() {
             ScrollTrigger.removeEventListener('refresh', updateParallax);
             if (frame) window.cancelAnimationFrame(frame);
             animations.splice(0).forEach((animation) => animation.kill());
+            scrollTriggers.splice(0).forEach((trigger) => trigger.kill());
             parallaxLayers.forEach(({ layer }) => gsap.set(layer, { clearProps: 'transform' }));
+            if (fog) gsap.set(fog, { clearProps: 'transform,opacity' });
           };
         },
         sky,
@@ -141,6 +163,7 @@ export function SoftHavenCloudBackground() {
       media?.revert();
       context.revert();
       animations.length = 0;
+      scrollTriggers.splice(0).forEach((trigger) => trigger.kill());
     };
   }, [pathname]);
 
@@ -173,6 +196,7 @@ export function SoftHavenCloudBackground() {
           ))}
         </div>
       ))}
+      <div className="soft-sky__fog" />
       <div className="soft-sky__center-light" />
     </div>
   );
