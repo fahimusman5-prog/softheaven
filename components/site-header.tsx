@@ -12,7 +12,7 @@ type Notice = 'account' | 'wishlist' | null;
 const navigation: Array<{ href: string; label: string; icon: IconName }> = [
   { href: '/', label: 'Home', icon: 'home' },
   { href: '/shop', label: 'Shop', icon: 'bag' },
-  { href: '/shop#collections', label: 'Collections', icon: 'heart' },
+  { href: '/collections', label: 'Collections', icon: 'heart' },
   { href: '/about', label: 'About', icon: 'bear' },
   { href: '/contact', label: 'Contact', icon: 'mail' },
 ];
@@ -57,7 +57,9 @@ function CloudLobes() {
 }
 
 function isCurrent(pathname: string, href: string) {
-  return href === '/' ? pathname === '/' : !href.includes('#') && pathname === href;
+  if (href === '/') return pathname === '/';
+  if (href === '/shop') return pathname.startsWith('/shop') || pathname.startsWith('/product/');
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function SiteHeader() {
@@ -68,14 +70,6 @@ export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState<Notice>(null);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 72);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   useEffect(() => { setMenuOpen(false); setSearchOpen(false); setNotice(null); }, [pathname]);
 
@@ -88,7 +82,7 @@ export function SiteHeader() {
 
   const setToggleNotice = (next: Notice) => setNotice(notice === next ? null : next);
 
-  return <header className={`cloud-header ${scrolled ? 'is-scrolled' : ''}`}>
+  return <header className="cloud-header">
     <div className="cloud-header__desktop">
       <div className="cloud-nav" aria-label="SoftHaven navigation">
         <div className="cloud-nav__ribbon" aria-hidden="true"/>
@@ -125,7 +119,7 @@ export function SiteHeader() {
 
     {searchOpen && <form className="cloud-mobile-search" role="search" action="/shop" method="get" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="cloud-mobile-product-search" className="sr-only">Search for soft toys</label><input id="cloud-mobile-product-search" name="search" autoFocus type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..."/><button type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>}
     <nav id="cloud-mobile-menu" className={`cloud-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen}>
-      {navigation.map((item) => <Link className={isCurrent(pathname, item.href) ? 'is-active' : ''} href={item.href} key={item.label} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}
+      {navigation.map((item) => <Link className={isCurrent(pathname, item.href) ? 'is-active' : ''} href={item.href} key={item.label} aria-current={isCurrent(pathname, item.href) ? 'page' : undefined} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}
       <button type="button" tabIndex={menuOpen ? 0 : -1} onClick={() => setToggleNotice('account')}><HeaderIcon name="user"/><span>Account</span></button>
     </nav>
     {notice && <div className="cloud-header-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Wishlist saving will be available with customer accounts.'}</span><button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}
