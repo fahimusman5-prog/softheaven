@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { images } from '@/lib/data';
 import { ProductMedia } from './product-media';
 import { AboutPrinciples } from './about-principles';
 import styles from '@/app/about/about.module.css';
@@ -73,10 +72,10 @@ function AboutHero() {
 function MomentCollage() {
   return (
     <div className={styles.collage} aria-label="A few SoftHaven companions for meaningful moments">
-      <ProductImage src={images.sloth} alt="Several soft plush companions nestled on a blanket" className={`${styles.collageImage} ${styles.collageMain}`} fit="cover" />
-      <ProductImage src={images.bear} alt="A teddy bear companion from SoftHaven" className={`${styles.collageImage} ${styles.collageTop}`} fit="cover" />
+      <ProductImage src="/images/about/about-every-moment-main.webp" alt="Pastel plush companions gathered together on a soft blanket" className={`${styles.collageImage} ${styles.collageMain}`} fit="cover" />
+      <ProductImage src="/images/about/about-soft-companion.webp" alt="Two soft plush companions sitting together" className={`${styles.collageImage} ${styles.collageTop}`} fit="cover" />
       <ProductImage
-        src="/images/about/softheaven-gifting-moment.webp"
+        src="/images/about/about-gifting-moment.webp"
         alt="Three plush companions gathered in a pastel gift box"
         className={`${styles.collageImage} ${styles.collageBottom}`}
         fit="cover"
