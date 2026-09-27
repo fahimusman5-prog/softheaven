@@ -12,6 +12,7 @@ type CloudDefinition = {
   depth: CloudDepth;
   className: string;
   asset: string;
+  travel: number;
 };
 
 type WispDefinition = {
@@ -21,9 +22,9 @@ type WispDefinition = {
 };
 
 const depthTravel = {
-  far: { ratio: 0.22, min: 250, max: 400, mobileRatio: 0.34, mobileMin: 100, mobileMax: 160 },
-  middle: { ratio: 0.42, min: 450, max: 700, mobileRatio: 0.55, mobileMin: 180, mobileMax: 280 },
-  near: { ratio: 0.58, min: 700, max: 1000, mobileRatio: 0.75, mobileMin: 280, mobileMax: 420 },
+  far: { ratio: 0.2, min: 180, max: 320, mobileRatio: 0.28, mobileMin: 60, mobileMax: 120 },
+  middle: { ratio: 0.38, min: 350, max: 600, mobileRatio: 0.44, mobileMin: 120, mobileMax: 220 },
+  near: { ratio: 0.52, min: 550, max: 900, mobileRatio: 0.64, mobileMin: 180, mobileMax: 320 },
 } satisfies Record<CloudDepth, { ratio: number; min: number; max: number; mobileRatio: number; mobileMin: number; mobileMax: number }>;
 
 function getTravel(depth: CloudDepth, mobile: boolean) {
@@ -36,21 +37,23 @@ function getTravel(depth: CloudDepth, mobile: boolean) {
 }
 
 const clouds: CloudDefinition[] = [
-  { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/soft-cloud-distant.webp' },
-  { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/soft-cloud-bank.webp' },
-  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', asset: '/assets/clouds/soft-cloud-cluster.webp' },
-  { id: 'middle-right', depth: 'middle', className: 'soft-sky__cloud--middle-right', asset: '/assets/clouds/soft-cloud-bank.webp' },
-  { id: 'near-bank', depth: 'near', className: 'soft-sky__cloud--near-bank', asset: '/assets/clouds/soft-cloud-bank.webp' },
+  { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 0.82 },
+  { id: 'far-center', depth: 'far', className: 'soft-sky__cloud--far-center', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 1.08 },
+  { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/generated/dream-cloud-06.webp', travel: 0.94 },
+  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 0.9 },
+  { id: 'middle-center', depth: 'middle', className: 'soft-sky__cloud--middle-center', asset: '/assets/clouds/generated/dream-cloud-05.webp', travel: 1.12 },
+  { id: 'middle-right', depth: 'middle', className: 'soft-sky__cloud--middle-right', asset: '/assets/clouds/generated/dream-cloud-03.webp', travel: 1.04 },
+  { id: 'near-left', depth: 'near', className: 'soft-sky__cloud--near-left', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 0.9 },
+  { id: 'near-right', depth: 'near', className: 'soft-sky__cloud--near-right', asset: '/assets/clouds/generated/dream-cloud-08.webp', travel: 1.08 },
 ];
 
 const wisps: WispDefinition[] = [
-  { id: 'wisp-upper-left', depth: 'far', className: 'soft-sky__wisp--upper-left' },
   { id: 'wisp-upper-center', depth: 'far', className: 'soft-sky__wisp--upper-center soft-sky__wisp--mobile' },
   { id: 'wisp-upper-right', depth: 'far', className: 'soft-sky__wisp--upper-right' },
+  { id: 'wisp-middle-center', depth: 'middle', className: 'soft-sky__wisp--middle-center' },
   { id: 'wisp-middle-right', depth: 'middle', className: 'soft-sky__wisp--middle-right soft-sky__wisp--mobile' },
-  { id: 'wisp-lower-left', depth: 'near', className: 'soft-sky__wisp--lower-left' },
   { id: 'wisp-lower-center', depth: 'near', className: 'soft-sky__wisp--lower-center' },
-  { id: 'wisp-small-mid-right', depth: 'middle', className: 'soft-sky__wisp--small-mid-right' },
+  { id: 'wisp-mid-slide', depth: 'middle', className: 'soft-sky__wisp--mid-slide' },
 ];
 
 function getAtmosphereMode(pathname: string) {
@@ -108,34 +111,40 @@ export function SoftHavenCloudBackground() {
         (match) => {
           if (match.conditions?.reduce) return;
           const mobile = Boolean(match.conditions?.mobile);
+          const motion = gsap.timeline({
+            defaults: { ease: 'none' },
+            scrollTrigger: {
+              trigger: document.documentElement,
+              start: 'top top',
+              end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+          });
+
           (['far', 'middle', 'near'] as const).forEach((depth) => {
             const layer = sky.querySelector<HTMLElement>(`[data-parallax-layer="${depth}"]`);
             if (!layer || getComputedStyle(layer).display === 'none') return;
 
-            const motion = gsap.timeline({
-              defaults: { ease: 'none' },
-              scrollTrigger: {
-                trigger: document.documentElement,
-                start: 'top top',
-                end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
-                scrub: true,
-                invalidateOnRefresh: true,
-              },
-            });
             const travel = getTravel(depth, mobile);
-            motion.to(layer, { y: mobile ? -Math.min(24, travel * 0.08) : -Math.min(64, travel * 0.08), duration: 1 }, 0);
+            const verticalTravel = mobile
+              ? { far: 10, middle: 18, near: 28 }[depth]
+              : { far: 20, middle: 38, near: 58 }[depth];
+            motion.to(layer, { y: -verticalTravel, duration: 1 }, 0);
 
             clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
               if (element && getComputedStyle(element).display !== 'none') {
-                motion.to(element, { x: travel, duration: 1 }, 0);
+                motion.to(element, { x: travel * cloud.travel, duration: 1 }, 0);
               }
             });
             wisps.filter((wisp) => wisp.depth === depth).forEach((wisp) => {
               const element = sky.querySelector<HTMLElement>(`#${wisp.id}`);
-              if (element && getComputedStyle(element).display !== 'none') {
-                motion.to(element, { x: getTravel(wisp.depth, mobile), duration: 1 }, 0);
-              }
+              if (!element || getComputedStyle(element).display === 'none') return;
+              const accentTravel = wisp.id === 'wisp-mid-slide'
+                ? gsap.utils.clamp(mobile ? 240 : 700, mobile ? 350 : 1000, window.innerWidth * (mobile ? 0.82 : 0.62))
+                : travel * 0.88;
+              motion.to(element, { x: accentTravel, duration: 1 }, 0);
             });
           });
 

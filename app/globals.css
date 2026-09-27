@@ -792,245 +792,222 @@ body:before{animation:none;transform:translateZ(0)}
 }
 @media(prefers-reduced-motion:reduce){.soft-sky__cloud,.soft-sky__layer{transform:none!important;opacity:initial!important;will-change:auto}}
 
-/* Dream-sky refinement: blended pastel light, independent ambient fog, and small edge wisps. */
-body{background-color:#fff8f4;background-image:
-  radial-gradient(ellipse 76vw 72vh at 8% 10%,rgba(243,184,212,.52),transparent 76%),
-  radial-gradient(ellipse 70vw 68vh at 36% 7%,rgba(217,205,245,.43),transparent 77%),
-  radial-gradient(ellipse 72vw 65vh at 82% 11%,rgba(198,222,245,.48),transparent 77%),
-  radial-gradient(ellipse 67vw 63vh at 61% 13%,rgba(249,213,196,.3),transparent 78%),
-  radial-gradient(ellipse 73vw 68vh at 12% 47%,rgba(198,222,245,.32),transparent 78%),
-  radial-gradient(ellipse 77vw 70vh at 48% 48%,rgba(247,201,224,.43),transparent 79%),
-  radial-gradient(ellipse 70vw 65vh at 86% 50%,rgba(225,212,250,.42),transparent 78%),
-  radial-gradient(ellipse 75vw 69vh at 18% 87%,rgba(210,234,221,.33),transparent 78%),
-  radial-gradient(ellipse 72vw 65vh at 53% 91%,rgba(249,213,196,.34),transparent 79%),
-  radial-gradient(ellipse 76vw 68vh at 88% 87%,rgba(189,217,242,.35),transparent 78%),
-  linear-gradient(155deg,#fff8f4 0%,#fff8f6 48%,#faf8ff 100%);background-size:cover;background-position:center;background-attachment:fixed;animation:none}
-body:before{animation:none}
-.soft-sky__base{background:linear-gradient(180deg,rgba(255,248,244,.015),rgba(255,251,248,.015) 52%,rgba(243,238,255,.035))}
-.soft-sky__light{width:clamp(420px,68vw,1120px);height:clamp(320px,55vw,850px);opacity:.47}
-.soft-sky__light--blush{top:-22%;left:-9%;background:radial-gradient(ellipse,rgba(243,184,212,.55),rgba(247,201,224,.2) 48%,transparent 78%)}
-.soft-sky__light--blue{top:-16%;right:-14%;background:radial-gradient(ellipse,rgba(198,222,245,.54),rgba(210,231,250,.2) 47%,transparent 78%)}
-.soft-sky__light--lilac{top:24%;left:16%;width:clamp(480px,72vw,1160px);height:clamp(370px,57vw,880px);opacity:.42;background:radial-gradient(ellipse,rgba(217,205,245,.44),rgba(225,212,250,.17) 50%,transparent 78%)}
-.soft-sky__light--peach{top:37%;right:-9%;bottom:auto;left:auto;background:radial-gradient(ellipse,rgba(249,213,196,.36),transparent 76%)}
-.soft-sky__light--mint{right:auto;bottom:-24%;left:3%;background:radial-gradient(ellipse,rgba(210,234,221,.34),transparent 77%)}
-.soft-sky__center-light{background:
-  radial-gradient(ellipse 58% 40% at 42% 34%,rgba(247,201,224,.21),transparent 81%),
-  radial-gradient(ellipse 57% 43% at 68% 43%,rgba(225,212,250,.22),transparent 82%),
-  radial-gradient(ellipse 54% 38% at 46% 66%,rgba(198,222,245,.17),transparent 82%),
-  radial-gradient(ellipse 53% 39% at 70% 70%,rgba(249,213,196,.17),transparent 82%),
-  radial-gradient(ellipse 60% 54% at 52% 48%,rgba(255,250,247,.24),transparent 86%)}
-.hero-portrait{background:
-  radial-gradient(ellipse 42% 43% at 20% 27%,rgba(217,205,245,.23),transparent 82%),
-  radial-gradient(ellipse 47% 45% at 76% 26%,rgba(249,213,196,.23),transparent 83%),
-  radial-gradient(ellipse 50% 48% at 33% 72%,rgba(198,222,245,.2),transparent 83%),
-  radial-gradient(ellipse 46% 47% at 76% 73%,rgba(210,234,221,.17),transparent 84%),
-  radial-gradient(ellipse 38% 37% at 50% 45%,rgba(255,249,247,.3),transparent 85%)}
+/* SoftHaven Dream Sky — one static color field, three scroll planes, and two independent fog loops. */
+body{
+  background-color:#fff9f6;
+  background-image:
+    radial-gradient(ellipse 68vw 72vh at 8% 7%,rgba(243,184,212,.25),transparent 77%),
+    radial-gradient(ellipse 62vw 68vh at 35% 3%,rgba(203,185,238,.28),transparent 78%),
+    radial-gradient(ellipse 68vw 70vh at 78% 9%,rgba(183,214,242,.25),transparent 78%),
+    radial-gradient(ellipse 66vw 68vh at 57% 18%,rgba(246,205,189,.25),transparent 79%),
+    radial-gradient(ellipse 70vw 66vh at 75% 5%,rgba(242,182,211,.2),transparent 79%),
+    radial-gradient(ellipse 68vw 65vh at 19% 13%,rgba(183,214,242,.2),transparent 79%),
+    radial-gradient(ellipse 69vw 66vh at 58% 7%,rgba(203,185,238,.2),transparent 79%),
+    radial-gradient(ellipse 67vw 72vh at 9% 39%,rgba(199,225,246,.34),transparent 79%),
+    radial-gradient(ellipse 70vw 70vh at 45% 40%,rgba(245,194,219,.43),transparent 79%),
+    radial-gradient(ellipse 66vw 70vh at 85% 44%,rgba(213,199,242,.42),transparent 79%),
+    radial-gradient(ellipse 69vw 72vh at 20% 71%,rgba(210,233,223,.29),transparent 79%),
+    radial-gradient(ellipse 68vw 70vh at 57% 72%,rgba(249,219,205,.34),transparent 80%),
+    radial-gradient(ellipse 66vw 72vh at 88% 78%,rgba(199,225,246,.36),transparent 80%),
+    linear-gradient(155deg,#fff9f5 0%,#fff8fb 53%,#fbf9ff 100%);
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  background-attachment:scroll;
+  animation:none;
+}
+body:before{background:none!important;filter:none!important;animation:none!important}
+.soft-sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none;contain:strict}
+.soft-sky__base,.soft-sky__center-light{position:absolute;inset:0;pointer-events:none}
+.soft-sky__base{background:
+  radial-gradient(ellipse 70% 68% at 13% 24%,rgba(242,182,211,.28),transparent 84%),
+  radial-gradient(ellipse 70% 70% at 38% 28%,rgba(203,185,238,.22),transparent 84%),
+  radial-gradient(ellipse 70% 70% at 79% 24%,rgba(183,214,242,.26),transparent 84%),
+  radial-gradient(ellipse 72% 69% at 57% 39%,rgba(246,205,189,.2),transparent 84%),
+  radial-gradient(ellipse 72% 72% at 17% 61%,rgba(183,214,242,.22),transparent 85%),
+  radial-gradient(ellipse 73% 72% at 48% 63%,rgba(242,182,211,.21),transparent 85%),
+  radial-gradient(ellipse 72% 72% at 84% 63%,rgba(203,185,238,.23),transparent 85%),
+  radial-gradient(ellipse 72% 68% at 35% 86%,rgba(210,233,223,.17),transparent 86%),
+  radial-gradient(ellipse 72% 68% at 70% 84%,rgba(249,219,205,.2),transparent 86%),
+  radial-gradient(ellipse 58% 57% at 2% 12%,rgba(183,214,242,.23),transparent 84%),
+  radial-gradient(ellipse 56% 55% at 24% 8%,rgba(203,185,238,.22),transparent 84%),
+  radial-gradient(ellipse 58% 57% at 64% 11%,rgba(242,182,211,.2),transparent 84%),
+  radial-gradient(ellipse 58% 56% at 97% 17%,rgba(203,185,238,.23),transparent 84%),
+  radial-gradient(ellipse 60% 56% at 10% 43%,rgba(203,185,238,.18),transparent 85%),
+  radial-gradient(ellipse 61% 57% at 42% 43%,rgba(183,214,242,.17),transparent 85%),
+  radial-gradient(ellipse 60% 56% at 91% 42%,rgba(242,182,211,.17),transparent 85%),
+  radial-gradient(ellipse 61% 58% at 4% 76%,rgba(242,182,211,.17),transparent 85%),
+  radial-gradient(ellipse 61% 58% at 94% 78%,rgba(183,214,242,.17),transparent 85%),
+  linear-gradient(180deg,rgba(255,249,246,.01),rgba(255,251,249,.005) 52%,rgba(247,244,255,.02))}
+.soft-sky__light{display:none;position:absolute;width:clamp(360px,60vw,920px);height:clamp(280px,55vw,740px);border-radius:50%;pointer-events:none}
+.soft-sky__light--blush{top:-20%;left:8%;width:76vw;opacity:.36;background:
+  radial-gradient(ellipse 46% 45% at 27% 50%,rgba(242,182,211,.28),transparent 80%),
+  radial-gradient(ellipse 49% 48% at 71% 49%,rgba(203,185,238,.19),transparent 81%),
+  radial-gradient(ellipse 44% 44% at 52% 72%,rgba(183,214,242,.13),transparent 82%)}
+.soft-sky__light--blue{top:-17%;right:7%;width:78vw;opacity:.34;background:
+  radial-gradient(ellipse 45% 46% at 71% 48%,rgba(183,214,242,.28),transparent 81%),
+  radial-gradient(ellipse 47% 44% at 26% 51%,rgba(242,182,211,.17),transparent 81%),
+  radial-gradient(ellipse 45% 44% at 47% 72%,rgba(203,185,238,.15),transparent 82%)}
+.soft-sky__light--lilac{top:12%;left:2%;width:96vw;height:clamp(350px,57vw,850px);opacity:.3;background:
+  radial-gradient(ellipse 36% 46% at 18% 48%,rgba(203,185,238,.2),transparent 82%),
+  radial-gradient(ellipse 38% 47% at 51% 48%,rgba(246,205,189,.13),transparent 82%),
+  radial-gradient(ellipse 37% 47% at 84% 48%,rgba(203,185,238,.19),transparent 82%),
+  radial-gradient(ellipse 37% 42% at 52% 72%,rgba(242,182,211,.1),transparent 82%)}
+.soft-sky__light--peach{top:27%;right:9%;left:9%;width:82vw;opacity:.24;background:
+  radial-gradient(ellipse 38% 47% at 20% 48%,rgba(183,214,242,.13),transparent 82%),
+  radial-gradient(ellipse 41% 48% at 50% 45%,rgba(246,205,189,.22),transparent 82%),
+  radial-gradient(ellipse 38% 46% at 81% 52%,rgba(242,182,211,.13),transparent 82%)}
+.soft-sky__light--mint{right:4%;bottom:-26%;left:4%;width:92vw;opacity:.19;background:
+  radial-gradient(ellipse 38% 46% at 20% 48%,rgba(210,233,223,.16),transparent 82%),
+  radial-gradient(ellipse 39% 47% at 52% 44%,rgba(203,185,238,.12),transparent 82%),
+  radial-gradient(ellipse 39% 46% at 82% 48%,rgba(249,219,205,.14),transparent 82%)}
+.soft-sky__layer{position:absolute;inset:0;pointer-events:none}
+.soft-sky__layer--far{z-index:2;opacity:.68}
+.soft-sky__layer--middle{z-index:3;opacity:.82}
+.soft-sky__layer--near{z-index:4;opacity:.88}
+.soft-sky__cloud{position:absolute;display:block;height:auto;pointer-events:none;will-change:transform}
+.soft-sky__cloud-mass{position:absolute;inset:0;display:block;transform:scale(var(--cloud-scale,1));transform-origin:center;animation:soft-sky-cloud-drift var(--cloud-duration,32s) ease-in-out infinite}
+.soft-sky__cloud picture,.soft-sky__cloud img{position:absolute;inset:0;display:block;width:100%;height:100%}
+.soft-sky__cloud img{object-fit:contain;filter:drop-shadow(0 5px 9px rgba(95,105,145,.07))}
+.soft-sky__cloud--far-left{top:13%;left:4%;width:clamp(150px,15vw,250px);aspect-ratio:4.65;opacity:.44;--cloud-duration:37s;--cloud-scale:.98}
+.soft-sky__cloud--far-center{top:25%;left:43%;width:clamp(84px,8vw,145px);aspect-ratio:1.77;opacity:.31;--cloud-duration:43s;--cloud-scale:.96}
+.soft-sky__cloud--far-right{top:8%;right:8%;width:clamp(145px,14vw,235px);aspect-ratio:3.5;opacity:.42;--cloud-duration:34s}
+.soft-sky__cloud--middle-left{top:39%;left:5%;width:clamp(190px,20vw,330px);aspect-ratio:1.64;opacity:.57;--cloud-duration:29s}
+.soft-sky__cloud--middle-center{top:53%;left:43%;width:clamp(125px,13vw,215px);aspect-ratio:2.76;opacity:.37;--cloud-duration:41s;--cloud-scale:.96}
+.soft-sky__cloud--middle-right{top:43%;right:4%;width:clamp(190px,21vw,350px);aspect-ratio:3.12;opacity:.56;--cloud-duration:33s}
+.soft-sky__cloud--near-left{bottom:10%;left:7%;width:clamp(230px,27vw,430px);aspect-ratio:2.75;opacity:.68;--cloud-duration:27s}
+.soft-sky__cloud--near-right{right:6%;bottom:11%;width:clamp(190px,23vw,370px);aspect-ratio:2.21;opacity:.63;--cloud-duration:39s;--cloud-scale:1.02}
+@keyframes soft-sky-cloud-drift{
+  0%,100%{transform:translate3d(0,0,0) scale(var(--cloud-scale,1))}
+  50%{transform:translate3d(7px,-4px,0) scale(var(--cloud-scale,1.015))}
+}
+.soft-sky__center-light{z-index:0;background:
+  radial-gradient(ellipse 47% 42% at 43% 35%,rgba(255,250,248,.23),transparent 83%),
+  radial-gradient(ellipse 48% 46% at 66% 48%,rgba(242,182,211,.12),transparent 84%),
+  radial-gradient(ellipse 46% 43% at 37% 66%,rgba(203,185,238,.11),transparent 84%),
+  radial-gradient(ellipse 45% 41% at 68% 72%,rgba(183,214,242,.1),transparent 84%)}
 
-/* Three independent transform-only veils drift continuously behind the cloud art. */
-.soft-sky__ambient-fog{position:absolute;z-index:0;inset:-8% -7%;overflow:hidden;pointer-events:none;user-select:none;contain:paint;}
-.soft-sky__ambient-fog-layer{position:absolute;inset:-4%;display:block;pointer-events:none;transform:translate3d(0,0,0);}
-.soft-sky__ambient-fog-layer--far{inset:-8%;opacity:.25;background:
-  radial-gradient(ellipse 45% 32% at 8% 12%,rgba(255,255,255,.8),transparent 78%),
-  radial-gradient(ellipse 44% 36% at 34% 5%,rgba(217,205,245,.46),transparent 79%),
-  radial-gradient(ellipse 45% 34% at 84% 10%,rgba(198,222,245,.48),transparent 79%),
-  radial-gradient(ellipse 49% 38% at 56% 42%,rgba(247,201,224,.35),transparent 80%),
-  radial-gradient(ellipse 42% 34% at 12% 78%,rgba(210,234,221,.35),transparent 79%),
-  radial-gradient(ellipse 45% 34% at 88% 81%,rgba(249,213,196,.34),transparent 80%);
-  animation:soft-sky-fog-far 48s ease-in-out infinite alternate}
-.soft-sky__ambient-fog-layer--middle{inset:2% -6%;opacity:.21;background:
-  radial-gradient(ellipse 36% 28% at 17% 23%,rgba(255,255,255,.74),transparent 79%),
-  radial-gradient(ellipse 42% 34% at 53% 36%,rgba(217,205,245,.42),transparent 80%),
-  radial-gradient(ellipse 39% 32% at 88% 29%,rgba(198,222,245,.4),transparent 80%),
-  radial-gradient(ellipse 42% 31% at 28% 77%,rgba(243,184,212,.35),transparent 80%),
-  radial-gradient(ellipse 44% 32% at 78% 81%,rgba(210,234,221,.3),transparent 80%);
-  animation:soft-sky-fog-middle 37s ease-in-out infinite alternate}
-.soft-sky__ambient-fog-layer--accent{inset:8% -8%;opacity:.16;background:
-  radial-gradient(ellipse 34% 25% at 8% 43%,rgba(198,222,245,.5),transparent 80%),
-  radial-gradient(ellipse 39% 28% at 58% 18%,rgba(249,213,196,.46),transparent 80%),
-  radial-gradient(ellipse 34% 27% at 92% 58%,rgba(217,205,245,.5),transparent 80%),
-  radial-gradient(ellipse 40% 29% at 49% 87%,rgba(243,184,212,.38),transparent 80%);
-  animation:soft-sky-fog-accent 31s ease-in-out infinite alternate}
-@keyframes soft-sky-fog-far{from{transform:translate3d(-4.5%,1%,0)}to{transform:translate3d(4.5%,-1%,0)}}
-@keyframes soft-sky-fog-middle{from{transform:translate3d(5.5%,-1.2%,0)}to{transform:translate3d(-5.5%,1.2%,0)}}
-@keyframes soft-sky-fog-accent{from{transform:translate3d(-4%,1.4%,0)}to{transform:translate3d(4%,-1.4%,0)}}
+/* Translucent repeating tiles meet seamlessly at each half-track; only these two tracks drift while idle. */
+.soft-sky__ambient-fog{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;user-select:none;contain:paint}
+.soft-sky__ambient-fog-layer{position:absolute;inset:0 auto 0 0;width:200%;height:100%;display:block;transform:translate3d(-50%,0,0);background-repeat:repeat-x;background-size:50% 100%;will-change:transform;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:normal}
+.soft-sky__ambient-fog-layer--far{opacity:.19;animation-name:soft-sky-fog-right;animation-duration:30s;background-image:
+  radial-gradient(ellipse 38% 19% at 6% 17%,rgba(255,255,255,.67),transparent 81%),
+  radial-gradient(ellipse 30% 17% at 27% 33%,rgba(203,185,238,.35),transparent 82%),
+  radial-gradient(ellipse 36% 18% at 48% 20%,rgba(183,214,242,.38),transparent 81%),
+  radial-gradient(ellipse 33% 17% at 69% 35%,rgba(242,182,211,.32),transparent 82%),
+  radial-gradient(ellipse 40% 18% at 91% 16%,rgba(255,241,232,.57),transparent 82%)}
+.soft-sky__ambient-fog-layer--middle{opacity:.14;animation-name:soft-sky-fog-right;animation-duration:41s;background-image:
+  radial-gradient(ellipse 25% 15% at 8% 58%,rgba(255,255,255,.63),transparent 81%),
+  radial-gradient(ellipse 30% 16% at 30% 70%,rgba(213,199,242,.32),transparent 82%),
+  radial-gradient(ellipse 28% 15% at 51% 58%,rgba(183,214,242,.32),transparent 82%),
+  radial-gradient(ellipse 31% 17% at 72% 72%,rgba(242,182,211,.3),transparent 82%),
+  radial-gradient(ellipse 29% 15% at 93% 61%,rgba(255,241,232,.55),transparent 82%)}
+@keyframes soft-sky-fog-right{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
 .soft-sky.is-page-hidden .soft-sky__ambient-fog-layer{animation-play-state:paused}
 
-/* Small mist-built wisps add scale cues without loading extra image assets. */
-.soft-sky__wisp{position:absolute;display:block;width:clamp(72px,9vw,152px);height:clamp(30px,3.2vw,56px);pointer-events:none;opacity:.58;background:
-  radial-gradient(ellipse 18% 44% at 15% 68%,rgba(255,255,255,.83),transparent 82%),
-  radial-gradient(ellipse 24% 71% at 34% 55%,rgba(255,255,255,.78),transparent 82%),
-  radial-gradient(ellipse 19% 54% at 55% 64%,rgba(255,255,255,.8),transparent 82%),
-  radial-gradient(ellipse 24% 72% at 73% 51%,rgba(255,255,255,.79),transparent 83%),
-  radial-gradient(ellipse 17% 46% at 89% 68%,rgba(255,255,255,.75),transparent 82%),
-  radial-gradient(ellipse 62% 32% at 53% 77%,rgba(217,205,245,.34),transparent 84%)}
-.soft-sky__wisp--upper-left{top:8%;left:10%;--wisp-light:rgba(243,184,212,.2)}
-.soft-sky__wisp--upper-center{top:6%;left:43%;opacity:.48}
-.soft-sky__wisp--upper-right{top:15%;right:12%;opacity:.54}
-.soft-sky__wisp--middle-left{top:42%;left:3%;opacity:.46}
-.soft-sky__wisp--middle-right{top:47%;right:5%;width:clamp(88px,11vw,178px);opacity:.62}
-.soft-sky__wisp--right-low{top:70%;right:13%;width:clamp(68px,8vw,136px);height:clamp(28px,2.8vw,48px);opacity:.49}
-.soft-sky__wisp--lower-left{bottom:10%;left:12%;opacity:.48}
-.soft-sky__wisp--lower-center{right:34%;bottom:6%;width:clamp(90px,12vw,188px);opacity:.52}
-.soft-sky__wisp--upper-left,.soft-sky__wisp--middle-left,.soft-sky__wisp--lower-left{background-color:transparent}
-.soft-sky__wisp--upper-left{background-image:
-  radial-gradient(ellipse 22% 54% at 18% 66%,rgba(255,255,255,.86),transparent 83%),radial-gradient(ellipse 28% 70% at 41% 54%,rgba(255,255,255,.8),transparent 83%),radial-gradient(ellipse 22% 52% at 66% 64%,rgba(255,255,255,.82),transparent 83%),radial-gradient(ellipse 59% 30% at 53% 78%,rgba(243,184,212,.46),transparent 84%),radial-gradient(ellipse 43% 24% at 77% 68%,rgba(217,205,245,.32),transparent 84%)}
-.soft-sky__wisp--upper-right{background-image:
-  radial-gradient(ellipse 20% 48% at 15% 66%,rgba(255,255,255,.86),transparent 82%),radial-gradient(ellipse 25% 72% at 37% 52%,rgba(255,255,255,.8),transparent 83%),radial-gradient(ellipse 24% 57% at 64% 62%,rgba(255,255,255,.84),transparent 83%),radial-gradient(ellipse 56% 29% at 55% 78%,rgba(198,222,245,.46),transparent 83%),radial-gradient(ellipse 43% 24% at 27% 68%,rgba(210,234,221,.34),transparent 84%)}
-.soft-sky__wisp--middle-left,.soft-sky__wisp--right-low{background-image:
-  radial-gradient(ellipse 19% 46% at 13% 67%,rgba(255,255,255,.86),transparent 82%),radial-gradient(ellipse 25% 70% at 35% 52%,rgba(255,255,255,.8),transparent 83%),radial-gradient(ellipse 22% 55% at 60% 62%,rgba(255,255,255,.82),transparent 83%),radial-gradient(ellipse 61% 31% at 50% 78%,rgba(225,212,250,.43),transparent 84%),radial-gradient(ellipse 38% 22% at 82% 67%,rgba(249,213,196,.34),transparent 84%)}
-.soft-sky__wisp--lower-left,.soft-sky__wisp--right-low{background-image:
-  radial-gradient(ellipse 20% 48% at 13% 67%,rgba(255,255,255,.88),transparent 82%),radial-gradient(ellipse 25% 70% at 35% 52%,rgba(255,255,255,.8),transparent 83%),radial-gradient(ellipse 22% 55% at 61% 62%,rgba(255,255,255,.82),transparent 83%),radial-gradient(ellipse 61% 31% at 50% 78%,rgba(210,234,221,.42),transparent 84%),radial-gradient(ellipse 39% 23% at 81% 67%,rgba(217,205,245,.34),transparent 84%)}
-.soft-sky__wisp--upper-center,.soft-sky__wisp--middle-right,.soft-sky__wisp--lower-center{background-image:
-  radial-gradient(ellipse 19% 48% at 13% 66%,rgba(255,255,255,.88),transparent 82%),
-  radial-gradient(ellipse 24% 74% at 35% 50%,rgba(255,255,255,.8),transparent 82%),
-  radial-gradient(ellipse 21% 56% at 57% 63%,rgba(255,255,255,.84),transparent 82%),
-  radial-gradient(ellipse 25% 70% at 78% 51%,rgba(255,255,255,.82),transparent 83%),
-  radial-gradient(ellipse 16% 42% at 92% 68%,rgba(255,255,255,.78),transparent 82%),
-  radial-gradient(ellipse 60% 30% at 48% 77%,rgba(198,222,245,.4),transparent 83%)}
+/* Small soft formations add scale and depth without becoming a decorative border. */
+.soft-sky__wisp{position:absolute;display:block;width:clamp(72px,8vw,138px);height:clamp(28px,3vw,48px);pointer-events:none;opacity:.44;background:
+  radial-gradient(ellipse 18% 45% at 15% 68%,rgba(255,255,255,.78),transparent 82%),
+  radial-gradient(ellipse 24% 69% at 35% 54%,rgba(255,255,255,.72),transparent 82%),
+  radial-gradient(ellipse 20% 52% at 57% 64%,rgba(255,255,255,.75),transparent 82%),
+  radial-gradient(ellipse 24% 69% at 77% 52%,rgba(255,255,255,.71),transparent 83%),
+  radial-gradient(ellipse 61% 30% at 52% 78%,rgba(203,185,238,.29),transparent 84%)}
+.soft-sky__wisp--upper-center{top:18%;left:59%;opacity:.33}
+.soft-sky__wisp--upper-right{top:30%;right:24%;opacity:.31}
+.soft-sky__wisp--middle-center{top:48%;left:31%;width:clamp(90px,10vw,165px);opacity:.32}
+.soft-sky__wisp--middle-right{top:65%;right:6%;width:clamp(90px,11vw,178px);opacity:.4}
+.soft-sky__wisp--lower-center{right:42%;bottom:7%;width:clamp(95px,12vw,190px);opacity:.36}
+.soft-sky__wisp--mid-slide{top:58%;left:4%;width:clamp(96px,12vw,188px);height:clamp(30px,3.1vw,50px);opacity:.38;background-image:
+  radial-gradient(ellipse 20% 50% at 16% 66%,rgba(255,255,255,.82),transparent 83%),
+  radial-gradient(ellipse 27% 70% at 42% 52%,rgba(255,255,255,.76),transparent 83%),
+  radial-gradient(ellipse 22% 53% at 69% 65%,rgba(255,255,255,.78),transparent 83%),
+  radial-gradient(ellipse 60% 29% at 52% 78%,rgba(183,214,242,.34),transparent 84%),
+  radial-gradient(ellipse 42% 22% at 80% 67%,rgba(213,199,242,.3),transparent 84%)}
+
+.soft-sky[data-mode="story"] .soft-sky__layer{opacity:.92}
+.soft-sky[data-mode="shop"] .soft-sky__layer--near,
+.soft-sky[data-mode="product"] .soft-sky__layer--near,
+.soft-sky[data-mode="contact"] .soft-sky__layer--near,
+.soft-sky[data-mode="minimal"] .soft-sky__layer--middle,
+.soft-sky[data-mode="minimal"] .soft-sky__layer--near,
+.soft-sky[data-mode="quiet"] .soft-sky__layer--middle,
+.soft-sky[data-mode="quiet"] .soft-sky__layer--near{display:none}
+.soft-sky[data-mode="shop"] .soft-sky__layer--middle,
+.soft-sky[data-mode="product"] .soft-sky__layer--middle{opacity:.4}
+.soft-sky[data-mode="product"] .soft-sky__layer--far{opacity:.43}
+.soft-sky[data-mode="contact"] .soft-sky__layer--middle{opacity:.3}
+.soft-sky[data-mode="minimal"] .soft-sky__layer--far,
+.soft-sky[data-mode="quiet"] .soft-sky__layer--far{opacity:.3}
+.soft-sky[data-mode="shop"] .soft-sky__cloud--middle-left,
+.soft-sky[data-mode="shop"] .soft-sky__cloud--middle-center,
+.soft-sky[data-mode="product"] .soft-sky__cloud--middle-left,
+.soft-sky[data-mode="product"] .soft-sky__cloud--middle-center,
+.soft-sky[data-mode="contact"] .soft-sky__cloud--middle-left,
+.soft-sky[data-mode="contact"] .soft-sky__cloud--middle-center{display:none}
+.soft-sky[data-mode="product"] .soft-sky__wisp,
+.soft-sky[data-mode="contact"] .soft-sky__wisp,
+.soft-sky[data-mode="minimal"] .soft-sky__wisp,
+.soft-sky[data-mode="quiet"] .soft-sky__wisp{display:none}
+.soft-sky[data-mode="quiet"] .soft-sky__ambient-fog-layer--middle,
+.soft-sky[data-mode="minimal"] .soft-sky__ambient-fog-layer--middle,
+.soft-sky[data-mode="product"] .soft-sky__ambient-fog-layer--middle{display:none}
+.soft-glass-rail,.soft-mobile-header{background:rgba(255,255,255,.68);border-color:rgba(255,255,255,.62);box-shadow:0 12px 40px rgba(90,70,120,.08),inset 0 1px 0 rgba(255,255,255,.82);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%)}
+.soft-glass-rail:after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),rgba(237,228,255,.24),transparent)}
+.product-card{background:rgba(255,255,255,.76);border-color:rgba(255,255,255,.74);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 32px rgba(90,70,120,.055);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 
 @media(max-width:767px){
   body{background-image:
-    radial-gradient(ellipse 112vw 72vh at 9% 8%,rgba(243,184,212,.42),transparent 78%),
-    radial-gradient(ellipse 115vw 70vh at 52% 8%,rgba(217,205,245,.39),transparent 79%),
-    radial-gradient(ellipse 110vw 68vh at 91% 13%,rgba(198,222,245,.42),transparent 79%),
-    radial-gradient(ellipse 112vw 70vh at 48% 37%,rgba(249,213,196,.27),transparent 80%),
-    radial-gradient(ellipse 110vw 72vh at 14% 59%,rgba(198,222,245,.29),transparent 80%),
-    radial-gradient(ellipse 115vw 73vh at 66% 57%,rgba(225,212,250,.37),transparent 80%),
-    radial-gradient(ellipse 110vw 68vh at 12% 87%,rgba(210,234,221,.3),transparent 79%),
-    radial-gradient(ellipse 112vw 72vh at 83% 88%,rgba(247,201,224,.33),transparent 80%),
-    linear-gradient(160deg,#fff8f4 0%,#fff8f6 52%,#faf8ff 100%);background-size:auto;background-attachment:scroll}
-  .soft-sky__light--peach,.soft-sky__light--mint{display:block}
-  .soft-sky__light{width:clamp(300px,88vw,500px);height:clamp(240px,72vw,430px);opacity:.36}
-  .soft-sky__light--blush{top:-12%;left:-16%;opacity:.39}
-  .soft-sky__light--blue{top:2%;right:-20%;opacity:.36}
-  .soft-sky__light--lilac{top:31%;left:5%;width:90vw;height:65vw;opacity:.31}
-  .soft-sky__light--peach{top:51%;right:-20%;width:82vw;height:62vw;opacity:.23}
-  .soft-sky__light--mint{bottom:-13%;left:5%;width:78vw;height:54vw;opacity:.22}
-  .soft-sky__ambient-fog{inset:-4% -16%}
-  .soft-sky__ambient-fog-layer--far{inset:-4%;opacity:.19;animation-duration:52s}
-  .soft-sky__ambient-fog-layer--middle{inset:2% -5%;opacity:.15;animation-duration:44s}
-  .soft-sky__ambient-fog-layer--accent{display:none}
-  .soft-sky__wisp{width:clamp(68px,21vw,96px);height:clamp(26px,8vw,38px);opacity:.44}
+    radial-gradient(ellipse 115vw 76vh at 5% 8%,rgba(243,184,212,.34),transparent 79%),
+    radial-gradient(ellipse 112vw 72vh at 49% 9%,rgba(203,185,238,.34),transparent 80%),
+    radial-gradient(ellipse 116vw 74vh at 95% 12%,rgba(183,214,242,.34),transparent 80%),
+    radial-gradient(ellipse 114vw 74vh at 93% 6%,rgba(242,182,211,.21),transparent 80%),
+    radial-gradient(ellipse 113vw 74vh at 6% 12%,rgba(183,214,242,.2),transparent 80%),
+    radial-gradient(ellipse 111vw 72vh at 52% 10%,rgba(246,205,189,.16),transparent 80%),
+    radial-gradient(ellipse 114vw 75vh at 52% 42%,rgba(246,205,189,.28),transparent 81%),
+    radial-gradient(ellipse 116vw 78vh at 19% 73%,rgba(210,233,223,.27),transparent 81%),
+    radial-gradient(ellipse 114vw 74vh at 82% 78%,rgba(213,199,242,.37),transparent 81%),
+    linear-gradient(160deg,#fff9f5 0%,#fff8fb 54%,#fbf9ff 100%)}
+  .soft-sky__light{width:clamp(270px,84vw,450px);height:clamp(220px,68vw,370px);opacity:.31}
+  .soft-sky__light--blush{top:-12%;left:-16%;opacity:.36}
+  .soft-sky__light--blue{top:1%;right:-20%;opacity:.34}
+  .soft-sky__light--lilac{top:28%;left:5%;width:90vw;height:66vw;opacity:.27}
+  .soft-sky__light--peach,.soft-sky__light--mint{display:none}
+  .soft-sky__layer--far{opacity:.66}
+  .soft-sky__layer--middle{opacity:.65}
+  .soft-sky__layer--near{opacity:.58}
+  .soft-sky__cloud--far-center,
+  .soft-sky__cloud--middle-left,
+  .soft-sky__cloud--middle-center,
+  .soft-sky__cloud--near-right{display:none}
+  .soft-sky__cloud--far-left{top:12%;left:-6%;width:clamp(128px,39vw,174px)}
+  .soft-sky__cloud--far-right{top:25%;right:-8%;width:clamp(132px,40vw,176px)}
+  .soft-sky__cloud--middle-right{top:46%;right:-9%;width:clamp(178px,51vw,228px)}
+  .soft-sky__cloud--near-left{bottom:8%;left:-10%;width:clamp(190px,56vw,250px)}
+  .soft-sky__cloud-mass{animation-duration:52s}
+  .soft-sky__wisp{width:clamp(65px,20vw,90px);height:clamp(24px,7vw,33px);opacity:.31}
   .soft-sky__wisp:not(.soft-sky__wisp--mobile){display:none}
-  .soft-sky__wisp--upper-center{top:13%;left:62%}
-  .soft-sky__wisp--middle-right{top:63%;right:3%;width:clamp(76px,23vw,110px)}
-  .soft-sky__center-light{background:
-    radial-gradient(ellipse 81% 36% at 42% 31%,rgba(247,201,224,.19),transparent 82%),
-    radial-gradient(ellipse 78% 40% at 66% 53%,rgba(225,212,250,.19),transparent 83%),
-    radial-gradient(ellipse 75% 36% at 39% 72%,rgba(198,222,245,.14),transparent 84%),
-    radial-gradient(ellipse 70% 35% at 69% 78%,rgba(249,213,196,.13),transparent 84%)}
-  .hero-portrait{background:
-    radial-gradient(ellipse 58% 37% at 23% 23%,rgba(217,205,245,.2),transparent 84%),
-    radial-gradient(ellipse 66% 40% at 79% 35%,rgba(249,213,196,.19),transparent 84%),
-    radial-gradient(ellipse 67% 42% at 31% 76%,rgba(198,222,245,.17),transparent 84%),
-    radial-gradient(ellipse 60% 39% at 75% 73%,rgba(210,234,221,.14),transparent 84%)}
-}
-@media(max-width:767px){
-  .soft-sky[data-mode="product"] .soft-sky__ambient-fog-layer--middle,
-  .soft-sky[data-mode="minimal"] .soft-sky__ambient-fog-layer--middle,
-  .soft-sky[data-mode="quiet"] .soft-sky__ambient-fog-layer--middle{display:none}
-}
-@media(min-width:768px){
-  .soft-sky[data-mode="product"] .soft-sky__wisp,
-  .soft-sky[data-mode="contact"] .soft-sky__wisp,
-  .soft-sky[data-mode="minimal"] .soft-sky__wisp,
-  .soft-sky[data-mode="quiet"] .soft-sky__wisp{display:none}
-  .soft-sky[data-mode="shop"] .soft-sky__wisp--middle-left,
-  .soft-sky[data-mode="shop"] .soft-sky__wisp--right-low,
-  .soft-sky[data-mode="shop"] .soft-sky__wisp--lower-left,
-  .soft-sky[data-mode="shop"] .soft-sky__wisp--lower-center{display:none}
-}
-@media(prefers-reduced-motion:reduce){
-  .soft-sky__ambient-fog-layer{animation:none!important;transform:none!important}
-  .soft-sky__cloud,.soft-sky__layer,.soft-sky__wisp{transform:none!important;will-change:auto}
-}
-
-/* Full-document travel: the ScrollTrigger controller owns cloud X/Y only. */
-body{background-image:
-  radial-gradient(ellipse 76vw 72vh at 8% 10%,rgba(243,184,212,.59),transparent 76%),
-  radial-gradient(ellipse 70vw 68vh at 36% 7%,rgba(217,205,245,.49),transparent 77%),
-  radial-gradient(ellipse 72vw 65vh at 82% 11%,rgba(198,222,245,.55),transparent 77%),
-  radial-gradient(ellipse 67vw 63vh at 61% 13%,rgba(249,213,196,.33),transparent 78%),
-  radial-gradient(ellipse 73vw 68vh at 12% 47%,rgba(198,222,245,.37),transparent 78%),
-  radial-gradient(ellipse 77vw 70vh at 48% 48%,rgba(247,201,224,.49),transparent 79%),
-  radial-gradient(ellipse 70vw 65vh at 86% 50%,rgba(225,212,250,.48),transparent 78%),
-  radial-gradient(ellipse 75vw 69vh at 18% 87%,rgba(210,234,221,.36),transparent 78%),
-  radial-gradient(ellipse 72vw 65vh at 53% 91%,rgba(249,213,196,.38),transparent 79%),
-  radial-gradient(ellipse 76vw 68vh at 88% 87%,rgba(189,217,242,.4),transparent 78%),
-  linear-gradient(155deg,#fff8f4 0%,#fff8f6 48%,#faf8ff 100%)}
-.soft-sky__center-light{background:
-  radial-gradient(ellipse 58% 40% at 42% 34%,rgba(247,201,224,.25),transparent 81%),
-  radial-gradient(ellipse 57% 43% at 68% 43%,rgba(225,212,250,.26),transparent 82%),
-  radial-gradient(ellipse 54% 38% at 46% 66%,rgba(198,222,245,.2),transparent 82%),
-  radial-gradient(ellipse 53% 39% at 70% 70%,rgba(249,213,196,.19),transparent 82%),
-  radial-gradient(ellipse 60% 54% at 52% 48%,rgba(255,250,247,.2),transparent 86%)}
-.hero-portrait{background:
-  radial-gradient(ellipse 42% 43% at 20% 27%,rgba(217,205,245,.27),transparent 82%),
-  radial-gradient(ellipse 47% 45% at 76% 26%,rgba(249,213,196,.25),transparent 83%),
-  radial-gradient(ellipse 50% 48% at 33% 72%,rgba(198,222,245,.23),transparent 83%),
-  radial-gradient(ellipse 46% 47% at 76% 73%,rgba(210,234,221,.19),transparent 84%),
-  radial-gradient(ellipse 38% 37% at 50% 45%,rgba(255,249,247,.26),transparent 85%)}
-
-/* These two tiled tracks are the only autonomous atmosphere motion. Their transforms never share a node with ScrollTrigger. */
-.soft-sky__layer--far{z-index:2}
-.soft-sky__layer--middle{z-index:3}
-.soft-sky__layer--near{z-index:4}
-.soft-sky__center-light{z-index:0}
-.soft-sky__ambient-fog{z-index:1}
-.soft-sky__ambient-fog-layer{inset:0 auto 0 0;width:200%;height:100%;background-repeat:repeat-x;background-size:50% 100%;will-change:transform;animation-timing-function:linear!important;animation-iteration-count:infinite!important;animation-direction:normal!important}
-.soft-sky__ambient-fog-layer--far{opacity:.24;animation-name:soft-sky-fog-far;animation-duration:29s!important;background-image:
-  radial-gradient(ellipse 38% 22% at 6% 18%,rgba(255,255,255,.8),transparent 80%),
-  radial-gradient(ellipse 31% 18% at 27% 32%,rgba(217,205,245,.46),transparent 82%),
-  radial-gradient(ellipse 37% 19% at 48% 20%,rgba(198,222,245,.5),transparent 81%),
-  radial-gradient(ellipse 34% 18% at 69% 34%,rgba(247,201,224,.4),transparent 82%),
-  radial-gradient(ellipse 40% 20% at 91% 16%,rgba(255,255,255,.75),transparent 81%)}
-.soft-sky__ambient-fog-layer--middle{opacity:.2;animation-name:soft-sky-fog-middle;animation-duration:36s!important;background-image:
-  radial-gradient(ellipse 26% 16% at 8% 58%,rgba(255,255,255,.78),transparent 81%),
-  radial-gradient(ellipse 31% 17% at 30% 70%,rgba(225,212,250,.43),transparent 82%),
-  radial-gradient(ellipse 28% 15% at 51% 58%,rgba(198,222,245,.4),transparent 82%),
-  radial-gradient(ellipse 33% 18% at 72% 73%,rgba(243,184,212,.4),transparent 82%),
-  radial-gradient(ellipse 29% 16% at 93% 61%,rgba(255,255,255,.72),transparent 82%)}
-@keyframes soft-sky-fog-far{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
-@keyframes soft-sky-fog-middle{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
-
-/* Four small edge wisps add scale cues without crowding the hero or products. */
-.soft-sky__wisp--small-upper-left{top:23%;left:5%;width:clamp(70px,8vw,126px);height:clamp(28px,2.8vw,44px);opacity:.34}
-.soft-sky__wisp--small-upper-right{top:21%;right:8%;width:clamp(78px,9vw,140px);height:clamp(30px,3vw,48px);opacity:.32}
-.soft-sky__wisp--small-mid-right{top:56%;right:2%;width:clamp(90px,11vw,164px);height:clamp(32px,3.2vw,52px);opacity:.4}
-.soft-sky__wisp--small-lower-right{right:15%;bottom:12%;width:clamp(70px,8vw,132px);height:clamp(28px,2.8vw,46px);opacity:.34}
-.soft-sky__wisp--small-upper-left,.soft-sky__wisp--small-lower-right{background-image:
-  radial-gradient(ellipse 22% 53% at 18% 66%,rgba(255,255,255,.86),transparent 83%),
-  radial-gradient(ellipse 27% 69% at 42% 53%,rgba(255,255,255,.8),transparent 83%),
-  radial-gradient(ellipse 22% 53% at 68% 64%,rgba(255,255,255,.82),transparent 83%),
-  radial-gradient(ellipse 60% 29% at 52% 78%,rgba(243,184,212,.43),transparent 84%),
-  radial-gradient(ellipse 42% 22% at 80% 67%,rgba(217,205,245,.34),transparent 84%)}
-.soft-sky__wisp--small-upper-right,.soft-sky__wisp--small-mid-right{background-image:
-  radial-gradient(ellipse 21% 52% at 17% 66%,rgba(255,255,255,.86),transparent 83%),
-  radial-gradient(ellipse 27% 71% at 41% 52%,rgba(255,255,255,.8),transparent 83%),
-  radial-gradient(ellipse 23% 53% at 67% 64%,rgba(255,255,255,.83),transparent 83%),
-  radial-gradient(ellipse 59% 29% at 53% 78%,rgba(198,222,245,.45),transparent 84%),
-  radial-gradient(ellipse 42% 23% at 25% 68%,rgba(225,212,250,.36),transparent 84%)}
-
-@media(max-width:767px){
-  body{background-image:
-    radial-gradient(ellipse 112vw 72vh at 9% 8%,rgba(243,184,212,.48),transparent 78%),
-    radial-gradient(ellipse 115vw 70vh at 52% 8%,rgba(217,205,245,.44),transparent 79%),
-    radial-gradient(ellipse 110vw 68vh at 91% 13%,rgba(198,222,245,.48),transparent 79%),
-    radial-gradient(ellipse 112vw 70vh at 48% 37%,rgba(249,213,196,.3),transparent 80%),
-    radial-gradient(ellipse 110vw 72vh at 14% 59%,rgba(198,222,245,.33),transparent 80%),
-    radial-gradient(ellipse 115vw 73vh at 66% 57%,rgba(225,212,250,.42),transparent 80%),
-    radial-gradient(ellipse 110vw 68vh at 12% 87%,rgba(210,234,221,.33),transparent 79%),
-    radial-gradient(ellipse 112vw 72vh at 83% 88%,rgba(247,201,224,.37),transparent 80%),
-    linear-gradient(160deg,#fff8f4 0%,#fff8f6 52%,#faf8ff 100%)}
-  .soft-sky__ambient-fog-layer--far{opacity:.2;animation-duration:34s!important}
+  .soft-sky__wisp--upper-center{top:36%;left:65%}
+  .soft-sky__wisp--middle-right{top:69%;right:3%}
+  .soft-sky__wisp--mid-slide{display:none}
+  .soft-sky__ambient-fog-layer--far{opacity:.16;animation-duration:35s}
   .soft-sky__ambient-fog-layer--middle{display:none}
-  .soft-sky__wisp--small-upper-left,.soft-sky__wisp--small-upper-right,.soft-sky__wisp--small-mid-right,.soft-sky__wisp--small-lower-right{display:none}
   .soft-sky__center-light{background:
-    radial-gradient(ellipse 81% 36% at 42% 31%,rgba(247,201,224,.22),transparent 82%),
-    radial-gradient(ellipse 78% 40% at 66% 53%,rgba(225,212,250,.22),transparent 83%),
-    radial-gradient(ellipse 75% 36% at 39% 72%,rgba(198,222,245,.17),transparent 84%),
-    radial-gradient(ellipse 70% 35% at 69% 78%,rgba(249,213,196,.15),transparent 84%)}
+    radial-gradient(ellipse 80% 38% at 43% 32%,rgba(255,249,247,.17),transparent 84%),
+    radial-gradient(ellipse 78% 38% at 67% 56%,rgba(242,182,211,.09),transparent 85%),
+    radial-gradient(ellipse 72% 38% at 38% 76%,rgba(183,214,242,.09),transparent 85%)}
+  .hero-portrait{background:
+    radial-gradient(ellipse 55% 39% at 21% 25%,rgba(203,185,238,.2),transparent 84%),
+    radial-gradient(ellipse 58% 39% at 78% 26%,rgba(246,205,189,.21),transparent 84%),
+    radial-gradient(ellipse 60% 42% at 33% 76%,rgba(183,214,242,.18),transparent 84%),
+    radial-gradient(ellipse 59% 40% at 76% 73%,rgba(210,233,223,.15),transparent 85%),
+    radial-gradient(ellipse 39% 37% at 50% 45%,rgba(255,249,247,.32),transparent 85%)}
+  .soft-glass-rail,.soft-mobile-header{backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%)}
+  .product-card{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+}
+@media(min-width:768px) and (max-width:1023px){
+  .soft-sky__cloud--near-left,.soft-sky__cloud--near-right{opacity:.5}
+  .soft-sky__cloud--middle-center{opacity:.28}
 }
 @media(prefers-reduced-motion:reduce){
-  .soft-sky__ambient-fog-layer{animation:none!important;transform:none!important;will-change:auto}
+  .soft-sky__ambient-fog-layer,.soft-sky__cloud-mass{animation:none!important;transform:none!important;will-change:auto}
+  .soft-sky__cloud,.soft-sky__layer,.soft-sky__wisp{transform:none!important;will-change:auto}
 }
