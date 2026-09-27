@@ -30,3 +30,27 @@
  .portrait-hero-button{min-height:56px}
  .portrait-hero-note{margin-top:12px}
 }
+
+/* Share a balanced pastel sky across routes and keep the desktop hero's actions in view. */
+.softhaven-app>.sfh-header{z-index:80}
+@media(max-width:1100px){.sfh-mobile-menu{background:rgba(255,251,248,.985);backdrop-filter:blur(26px) saturate(1.08);-webkit-backdrop-filter:blur(26px) saturate(1.08)}}
+.soft-sky__base{background:
+ radial-gradient(ellipse 56% 52% at 15% 18%,rgba(238,168,203,.42),transparent 86%),
+ radial-gradient(ellipse 54% 50% at 86% 16%,rgba(159,200,242,.42),transparent 86%),
+ radial-gradient(ellipse 48% 48% at 25% 49%,rgba(195,175,233,.34),transparent 86%),
+ radial-gradient(ellipse 48% 48% at 74% 48%,rgba(248,205,191,.36),transparent 86%),
+ radial-gradient(ellipse 53% 51% at 48% 82%,rgba(195,175,233,.34),transparent 86%),
+ radial-gradient(ellipse 43% 42% at 91% 82%,rgba(159,200,242,.28),transparent 87%),
+ #f7f3f7}
+.soft-sky__center-light{background:
+ radial-gradient(ellipse 43% 38% at 22% 42%,rgba(238,168,203,.18),transparent 88%),
+ radial-gradient(ellipse 43% 39% at 78% 42%,rgba(159,200,242,.19),transparent 88%),
+ radial-gradient(ellipse 48% 42% at 52% 73%,rgba(248,205,191,.16),transparent 88%),
+ radial-gradient(ellipse 47% 42% at 50% 45%,rgba(195,175,233,.15),transparent 88%)}
+@media(min-width:901px){
+ .portrait-carousel__stage{height:clamp(340px,26vw,400px)}
+ .portrait-carousel__card{width:clamp(270px,23vw,330px);height:clamp(340px,26vw,400px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .sfh-mobile-menu{transition:none}
+}

@@ -17,8 +17,8 @@ export default function ShopPage({ searchParams }: { searchParams: Promise<ShopS
   const [sort, setSort] = useState('Featured');
 
   useEffect(() => {
-    if (searchValue !== undefined) setQuery(searchValue);
-    if (requestedCategory && categories.includes(requestedCategory)) setCategory(requestedCategory);
+    setQuery(searchValue ?? '');
+    setCategory(requestedCategory && categories.includes(requestedCategory) ? requestedCategory : 'All');
   }, [requestedCategory, searchValue]);
 
   const visible = useMemo(() => products

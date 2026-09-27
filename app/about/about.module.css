@@ -16,35 +16,6 @@
   text-transform: uppercase;
 }
 
-/* The About route keeps the shared header controls, with the slimmer glass rail from the reference. */
-:global(.sfh-header--about) { padding: 12px 0 4px; }
-:global(.sfh-header--about .sfh-stage) { width: min(1320px, calc(100% - 48px)); min-height: 70px; }
-:global(.sfh-header--about .sfh-panel) { min-height: 68px; height: 68px; justify-content: space-between; gap: 10px; padding: 5px 13px 5px 17px; border-radius: 36px; background: rgba(255,255,255,.69); box-shadow: inset 0 1px 0 rgba(255,255,255,.96), 0 12px 32px rgba(104,83,143,.09); }
-:global(.sfh-header--about .sfh-brand) { flex-basis: 160px; width: 160px; height: 54px; background: transparent; box-shadow: none; }
-:global(.sfh-header--about .sfh-brand img) { width: 150px; height: 62px; }
-:global(.sfh-header--about .sfh-nav) { gap: 9px; }
-:global(.sfh-header--about .sfh-nav-item) { width: 66px; height: 54px; color: #34314c; }
-:global(.sfh-header--about .sfh-nav-item:nth-child(3)) { width: 90px; }
-:global(.sfh-header--about .sfh-nav-item__ear) { display: none; }
-:global(.sfh-header--about .sfh-nav-item__face) { inset: 0; gap: 0; border-radius: 0; background: transparent; box-shadow: none; font-size: 12px; font-weight: 500; }
-:global(.sfh-header--about .sfh-nav-item__face svg) { display: none; }
-:global(.sfh-header--about .sfh-nav-item.is-active) { color: #a744dd; }
-:global(.sfh-header--about .sfh-nav-item.is-active .sfh-nav-item__face) { background: transparent; box-shadow: inset 0 -2px 0 #bb55e7; }
-:global(.sfh-header--about .sfh-divider) { display: none; }
-:global(.sfh-header--about .sfh-search) { flex-basis: 170px; width: 170px; height: 44px; background: rgba(250,247,255,.7); }
-:global(.sfh-header--about .sfh-search__bear) { width: 34px; height: 34px; }
-:global(.sfh-header--about .sfh-search__bear svg) { width: 23px; height: 23px; }
-:global(.sfh-header--about .sfh-action) { width: 42px; height: 42px; border-radius: 50%; background: transparent; box-shadow: none; }
-:global(.sfh-header--about .sfh-action svg) { width: 21px; height: 21px; }
-:global(.sfh-header--about.is-compact) { padding: 7px 0 5px; }
-:global(.sfh-header--about.is-compact .sfh-stage) { min-height: 62px; }
-:global(.sfh-header--about.is-compact .sfh-panel) { min-height: 62px; height: 62px; border-radius: 33px; }
-:global(.sfh-header--about.is-compact .sfh-brand) { flex-basis: 145px; width: 145px; height: 48px; }
-:global(.sfh-header--about.is-compact .sfh-brand img) { width: 138px; height: 56px; }
-:global(.sfh-header--about.is-compact .sfh-nav-item) { width: 62px; height: 48px; }
-:global(.sfh-header--about.is-compact .sfh-nav-item:nth-child(3)) { width: 84px; }
-:global(.sfh-header--about.is-compact .sfh-search) { width: 160px; height: 40px; flex-basis: 160px; }
-
 .hero {
   position: relative;
   display: grid;
@@ -215,7 +186,6 @@
 
 @media (max-width: 900px) {
   .aboutPage { width: min(760px,calc(100% - 40px)); padding-bottom: 62px; }
-  :global(.sfh-header--about) { padding: 10px 0 3px; }
   .hero { grid-template-columns: 1fr; gap: 0; min-height: 0; margin-inline: -20px; padding: 48px 8vw 20px; }
   .heroCopy { max-width: 650px; }
   .hero h1 { font-size: clamp(64px,10vw,84px); }
@@ -276,7 +246,6 @@
   .collage { min-height: 270px; grid-template-rows: repeat(2,minmax(116px,1fr)); }
   .collageMain { min-height: 270px; }
   .promiseVisual { min-height: 205px; }
-  :global(.sfh-header--about .sfh-mobile-panel) { width: calc(100% - 20px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
