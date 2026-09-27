@@ -56,9 +56,9 @@ function AboutHero() {
         <span className={`${styles.orbit} ${styles.orbitOne}`} aria-hidden="true" />
         <span className={styles.heroHeart} aria-hidden="true">♡</span>
         <span className={styles.sparkle} aria-hidden="true"><Icon name="sparkle" /></span>
-        <Image className={styles.heroTeddy} src="/assets/about/story-teddy.webp" alt="Cream teddy bear with a lavender bow, seated among pastel clouds" fill priority sizes="(max-width: 900px) 94vw, (max-width: 1500px) 55vw, 760px" />
-        <Image className={`${styles.heroCloud} ${styles.heroCloudBack}`} src="/assets/clouds/generated/dream-cloud-06.webp" alt="" aria-hidden="true" width={1280} height={640} sizes="(max-width: 900px) 100vw, 720px" />
-        <Image className={styles.heroCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" width={1400} height={340} sizes="(max-width: 900px) 100vw, 900px" />
+        <Image className={styles.heroTeddy} src="/assets/about/story-teddy.webp" alt="Cream teddy bear with a lavender bow, seated among pastel clouds" fill priority unoptimized sizes="(max-width: 900px) 94vw, (max-width: 1500px) 55vw, 760px" />
+        <Image className={`${styles.heroCloud} ${styles.heroCloudBack}`} src="/assets/clouds/generated/dream-cloud-06.webp" alt="" aria-hidden="true" unoptimized width={1280} height={640} sizes="(max-width: 900px) 100vw, 720px" />
+        <Image className={styles.heroCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" unoptimized width={1400} height={340} sizes="(max-width: 900px) 100vw, 900px" />
       </div>
     </section>
   );
@@ -109,8 +109,8 @@ function BrandPromise() {
   return (
     <section className={styles.promise} aria-labelledby="promise-title">
       <div className={styles.promiseVisual}>
-        <Image className={styles.promiseTeddies} src="/assets/about/plush-group.webp" alt="Three SoftHaven plush companions gathered together" fill sizes="(max-width: 620px) 88vw, (max-width: 1100px) 45vw, 650px" />
-        <Image className={styles.promiseCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" width={1400} height={340} sizes="(max-width: 620px) 100vw, 680px" />
+        <Image className={styles.promiseTeddies} src="/assets/about/plush-group.webp" alt="Three SoftHaven plush companions gathered together" fill unoptimized sizes="(max-width: 620px) 88vw, (max-width: 1100px) 45vw, 650px" />
+        <Image className={styles.promiseCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" unoptimized width={1400} height={340} sizes="(max-width: 620px) 100vw, 680px" />
       </div>
       <div className={styles.promiseCopy}>
         <p className={styles.eyebrow}>Our Promise</p>
