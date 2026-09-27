@@ -21,17 +21,28 @@ function Icon({ name }: { name: IconName }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path {...common} d="M3 8h18v13H3zM2 4h20v4H2zM12 4v17M12 4c-1-3-6-4-6-1 0 2 3 2 6 1Zm0 0c1-3 6-4 6-1 0 2-3 2-6 1Z" /></svg>;
 }
 
-function ProductImage({ src, alt, className, priority = false, fit = 'contain' }: { src: string; alt: string; className?: string; priority?: boolean; fit?: 'contain' | 'cover' }) {
+function ProductImage({ src, alt, className, priority = false, fit = 'contain', optimized = false, sizes }: { src: string; alt: string; className?: string; priority?: boolean; fit?: 'contain' | 'cover'; optimized?: boolean; sizes?: string }) {
   return (
     <div className={`${styles.productImage} ${className ?? ''}`}>
-      <ProductMedia
-        src={src}
-        alt={alt}
-        fill
-        priority={priority}
-        fit={fit}
-        sizes="(max-width: 700px) 90vw, (max-width: 1100px) 44vw, 620px"
-      />
+      {optimized ? (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          priority={priority}
+          sizes={sizes ?? '(max-width: 700px) 90vw, (max-width: 1100px) 44vw, 620px'}
+          className={styles.giftingImage}
+        />
+      ) : (
+        <ProductMedia
+          src={src}
+          alt={alt}
+          fill
+          priority={priority}
+          fit={fit}
+          sizes={sizes ?? '(max-width: 700px) 90vw, (max-width: 1100px) 44vw, 620px'}
+        />
+      )}
     </div>
   );
 }
@@ -86,7 +97,14 @@ function MomentCollage() {
     <div className={styles.collage} aria-label="A few SoftHaven companions for meaningful moments">
       <ProductImage src={images.sloth} alt="Several soft plush companions nestled on a blanket" className={`${styles.collageImage} ${styles.collageMain}`} fit="cover" />
       <ProductImage src={images.bear} alt="A teddy bear companion from SoftHaven" className={`${styles.collageImage} ${styles.collageTop}`} fit="cover" />
-      <ProductImage src={images.heart} alt="Amour Velvet Heart Bear from the SoftHaven collection" className={`${styles.collageImage} ${styles.collageBottom}`} fit="cover" />
+      <ProductImage
+        src="/images/about/softheaven-gifting-moment.webp"
+        alt="Three plush companions gathered in a pastel gift box"
+        className={`${styles.collageImage} ${styles.collageBottom}`}
+        fit="cover"
+        optimized
+        sizes="(max-width: 620px) 38vw, (max-width: 900px) 40vw, (max-width: 1100px) 27vw, (max-width: 1600px) 24vw, 400px"
+      />
     </div>
   );
 }
