@@ -792,218 +792,133 @@ body:before{animation:none;transform:translateZ(0)}
 }
 @media(prefers-reduced-motion:reduce){.soft-sky__cloud,.soft-sky__layer{transform:none!important;opacity:initial!important;will-change:auto}}
 
-/* SoftHaven Dream Sky — one static color field, three scroll planes, and two independent fog loops. */
-body{
-  background-color:#fbf9ff;
-  background-image:linear-gradient(155deg,#fffaf7 0%,#fff8fb 52%,#f9f8ff 100%);
-  background-repeat:no-repeat;
-  animation:none;
-}
+/* SoftHaven Dream Sky — static luminous fields beneath independently owned scroll and drift transforms. */
+body{background:#fffaf8}
 body:before{background:none!important;filter:none!important;animation:none!important}
 .soft-sky{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none;contain:strict}
 .soft-sky__base,.soft-sky__center-light{position:absolute;inset:0;pointer-events:none}
 .soft-sky__base{background:
-  radial-gradient(ellipse 60% 59% at 19% 20%,rgba(238,168,203,.40),transparent 86%),
-  radial-gradient(ellipse 59% 62% at 77% 17%,rgba(238,168,203,.30),transparent 87%),
-  radial-gradient(ellipse 51% 57% at 27% 20%,rgba(159,200,242,.32),transparent 87%),
-  radial-gradient(ellipse 51% 54% at 52% 39%,rgba(244,194,180,.40),transparent 87%),
-  radial-gradient(ellipse 45% 43% at 47% 36%,rgba(175,207,244,.24),transparent 88%),
-  radial-gradient(ellipse 47% 46% at 70% 34%,rgba(195,175,233,.23),transparent 88%),
-  radial-gradient(ellipse 58% 57% at 38% 48%,rgba(195,175,233,.31),transparent 87%),
-  radial-gradient(ellipse 58% 60% at 83% 53%,rgba(242,175,208,.31),transparent 88%),
-  radial-gradient(ellipse 57% 55% at 14% 67%,rgba(175,207,244,.36),transparent 88%),
-  radial-gradient(ellipse 51% 52% at 73% 73%,rgba(159,200,242,.28),transparent 88%),
-  radial-gradient(ellipse 54% 54% at 34% 77%,rgba(238,168,203,.25),transparent 88%),
-  radial-gradient(ellipse 61% 56% at 57% 83%,rgba(204,181,239,.33),transparent 87%),
-  radial-gradient(ellipse 53% 49% at 92% 87%,rgba(248,205,191,.33),transparent 88%),
-  radial-gradient(ellipse 37% 33% at 51% 28%,rgba(255,241,231,.34),transparent 88%),
-  #f7f3f7}
-.soft-sky__light{display:block;position:absolute;inset:0;width:100%;height:100%;border-radius:0;pointer-events:none}
-.soft-sky__light--blush{opacity:.68;background:
-  radial-gradient(ellipse 66% 63% at 21% 32%,rgba(238,168,203,.24),transparent 87%),
-  radial-gradient(ellipse 62% 60% at 71% 59%,rgba(195,175,233,.17),transparent 87%),
-  radial-gradient(ellipse 59% 58% at 48% 82%,rgba(244,194,180,.12),transparent 88%)}
-.soft-sky__light--blue{opacity:.64;background:
-  radial-gradient(ellipse 64% 61% at 76% 27%,rgba(159,200,242,.25),transparent 87%),
-  radial-gradient(ellipse 56% 59% at 28% 66%,rgba(242,175,208,.15),transparent 87%),
-  radial-gradient(ellipse 60% 56% at 52% 45%,rgba(195,175,233,.13),transparent 88%)}
-.soft-sky__light--lilac{opacity:.55;background:
-  radial-gradient(ellipse 59% 62% at 16% 51%,rgba(195,175,233,.19),transparent 88%),
-  radial-gradient(ellipse 63% 64% at 57% 54%,rgba(244,194,180,.16),transparent 88%),
-  radial-gradient(ellipse 62% 60% at 88% 47%,rgba(195,175,233,.19),transparent 88%),
-  radial-gradient(ellipse 60% 54% at 51% 86%,rgba(238,168,203,.12),transparent 88%)}
-.soft-sky__light--peach{opacity:.46;background:
-  radial-gradient(ellipse 53% 56% at 18% 41%,rgba(159,200,242,.12),transparent 88%),
-  radial-gradient(ellipse 60% 59% at 53% 43%,rgba(248,205,191,.22),transparent 88%),
-  radial-gradient(ellipse 57% 54% at 84% 54%,rgba(238,168,203,.14),transparent 88%)}
-.soft-sky__light--mint{opacity:.25;background:
-  radial-gradient(ellipse 51% 51% at 22% 52%,rgba(206,232,222,.1),transparent 88%),
-  radial-gradient(ellipse 56% 53% at 52% 53%,rgba(195,175,233,.1),transparent 88%),
-  radial-gradient(ellipse 54% 52% at 82% 49%,rgba(248,205,191,.12),transparent 88%)}
+  radial-gradient(ellipse 74% 82% at 0% 3%,rgba(246,190,220,.68),transparent 79%),
+  radial-gradient(ellipse 73% 78% at 100% 5%,rgba(173,211,246,.7),transparent 78%),
+  radial-gradient(ellipse 60% 72% at 50% 7%,rgba(255,229,171,.56),transparent 80%),
+  radial-gradient(ellipse 80% 83% at 50% 69%,rgba(206,194,245,.48),transparent 81%),
+  radial-gradient(ellipse 73% 65% at 8% 100%,rgba(251,210,197,.42),transparent 78%),
+  radial-gradient(ellipse 72% 67% at 95% 100%,rgba(249,205,223,.39),transparent 80%),
+  #fffcfa}
+.soft-sky__light{position:absolute;inset:0;pointer-events:none}
+.soft-sky__light--blush{background:radial-gradient(ellipse 68% 63% at 17% 32%,rgba(249,212,232,.26),transparent 76%)}
+.soft-sky__light--blue{background:radial-gradient(ellipse 65% 65% at 83% 32%,rgba(217,240,255,.27),transparent 78%)}
+.soft-sky__light--lilac{background:radial-gradient(ellipse 70% 63% at 52% 72%,rgba(229,226,255,.2),transparent 80%)}
+.soft-sky__light--peach{background:radial-gradient(ellipse 44% 50% at 54% 10%,rgba(255,232,185,.32),transparent 74%)}
+.soft-sky__light--mint{display:none}
 .soft-sky__layer{position:absolute;inset:0;pointer-events:none}
-.soft-sky__layer--far{z-index:2;opacity:.78}
-.soft-sky__layer--middle{z-index:3;opacity:.9}
-.soft-sky__layer--near{z-index:4;opacity:.94}
+.soft-sky__layer--far{z-index:2;opacity:.76}
+.soft-sky__layer--middle{z-index:3;opacity:.92}
+.soft-sky__layer--near{z-index:4;opacity:.84}
 .soft-sky__cloud{position:absolute;display:block;height:auto;pointer-events:none;will-change:transform}
-.soft-sky__cloud-mass{position:absolute;inset:0;display:block;transform:scale(var(--cloud-scale,1));transform-origin:center;animation:soft-sky-cloud-drift var(--cloud-duration,32s) ease-in-out infinite}
-.soft-sky__cloud picture,.soft-sky__cloud img{position:absolute;inset:0;display:block;width:100%;height:100%}
-.soft-sky__cloud img{object-fit:contain;filter:drop-shadow(0 9px 17px rgba(109,115,163,.12))}
-.soft-sky__cloud--far-left{top:13%;left:4%;width:clamp(150px,15vw,250px);aspect-ratio:4.65;opacity:.44;--cloud-duration:37s;--cloud-scale:.98}
-.soft-sky__cloud--far-center{top:34%;left:41%;width:clamp(84px,8vw,145px);aspect-ratio:1.77;opacity:.36;--cloud-duration:43s;--cloud-scale:.96}
-.soft-sky__cloud--far-right{top:8%;right:8%;width:clamp(145px,14vw,235px);aspect-ratio:3.5;opacity:.42;--cloud-duration:34s}
-.soft-sky__cloud--far-high-left{top:18%;left:25%;width:clamp(110px,11vw,178px);aspect-ratio:2.05;opacity:.36;--cloud-duration:53s;--cloud-scale:.94}
-.soft-sky__cloud--far-high-right{top:29%;right:18%;width:clamp(112px,10vw,170px);aspect-ratio:1.68;opacity:.34;--cloud-duration:47s;--cloud-scale:.93}
-.soft-sky__cloud--middle-left{top:39%;left:5%;width:clamp(190px,20vw,330px);aspect-ratio:1.64;opacity:.57;--cloud-duration:29s}
-.soft-sky__cloud--middle-center{top:53%;left:43%;width:clamp(125px,13vw,215px);aspect-ratio:2.76;opacity:.37;--cloud-duration:41s;--cloud-scale:.96}
-.soft-sky__cloud--middle-right{top:43%;right:4%;width:clamp(190px,21vw,350px);aspect-ratio:3.12;opacity:.56;--cloud-duration:33s}
-.soft-sky__cloud--middle-small-left{top:31%;left:-2%;width:clamp(160px,16vw,258px);aspect-ratio:3.12;opacity:.44;--cloud-duration:39s;--cloud-scale:.94}
-.soft-sky__cloud--middle-small-right{top:62%;right:-3%;width:clamp(158px,16vw,260px);aspect-ratio:2.75;opacity:.43;--cloud-duration:45s;--cloud-scale:.92}
-.soft-sky__cloud--near-left{bottom:10%;left:7%;width:clamp(230px,27vw,430px);aspect-ratio:2.75;opacity:.68;--cloud-duration:27s}
-.soft-sky__cloud--near-right{right:6%;bottom:11%;width:clamp(190px,23vw,370px);aspect-ratio:2.21;opacity:.63;--cloud-duration:39s;--cloud-scale:1.02}
-.soft-sky__cloud--near-small-left{bottom:34%;left:17%;width:clamp(110px,12vw,190px);aspect-ratio:3.12;opacity:.38;--cloud-duration:48s;--cloud-scale:.92}
-.soft-sky__cloud--near-small-center{right:22%;bottom:25%;width:clamp(118px,12vw,195px);aspect-ratio:4.65;opacity:.37;--cloud-duration:42s;--cloud-scale:.9}
-.soft-sky__cloud--near-small-left{display:none}
-@keyframes soft-sky-cloud-drift{
-  0%,100%{transform:translate3d(0,0,0) scale(var(--cloud-scale,1))}
-  50%{transform:translate3d(-12px,-5px,0) scale(var(--cloud-scale,1.015))}
-}
+.soft-sky__cloud-ambient{position:absolute;inset:0;display:block}
+.soft-sky__cloud-ambient picture,.soft-sky__cloud-ambient img{position:absolute;inset:0;display:block;width:100%;height:100%}
+.soft-sky__cloud-ambient img{object-fit:contain}
+.soft-sky__cloud-ambient--drift{animation:soft-sky-cloud-drift 38s cubic-bezier(.45,0,.55,1) infinite}
+.soft-sky__cloud--far-left{top:8%;left:-5%;width:clamp(180px,20vw,300px);aspect-ratio:4.65;opacity:.48}
+.soft-sky__cloud--far-right{top:18%;right:-3%;width:clamp(170px,19vw,285px);aspect-ratio:3.5;opacity:.48}
+.soft-sky__cloud--far-high-left{top:23%;left:24%;width:clamp(110px,12vw,180px);aspect-ratio:2.05;opacity:.45}
+.soft-sky__cloud--far-high-right{top:5%;right:26%;width:clamp(102px,11vw,165px);aspect-ratio:1.68;opacity:.43}
+.soft-sky__cloud--middle-left{top:40%;left:-4%;width:clamp(205px,22vw,335px);aspect-ratio:1.64;opacity:.7}
+.soft-sky__cloud--middle-right{top:47%;right:-5%;width:clamp(205px,22vw,340px);aspect-ratio:3.12;opacity:.68}
+.soft-sky__cloud--middle-small-left{top:31%;left:11%;width:clamp(140px,14vw,218px);aspect-ratio:3.12;opacity:.53}
+.soft-sky__cloud--middle-small-right{top:63%;right:13%;width:clamp(132px,13vw,205px);aspect-ratio:2.75;opacity:.52}
+.soft-sky__cloud--middle-warm{top:22%;left:51%;width:clamp(190px,20vw,305px);aspect-ratio:2;opacity:.58}
+.soft-sky__cloud--near-left{bottom:7%;left:-8%;width:clamp(250px,29vw,440px);aspect-ratio:2.75;opacity:.68}
+.soft-sky__cloud--near-right{right:-6%;bottom:13%;width:clamp(225px,25vw,380px);aspect-ratio:2.21;opacity:.65}
+.soft-sky__cloud--near-small-left{bottom:32%;left:27%;width:clamp(108px,11vw,170px);aspect-ratio:3.12;opacity:.43}
+.soft-sky__cloud--far-right img,.soft-sky__cloud--middle-right img{transform:scaleX(-1)}
+@keyframes soft-sky-cloud-drift{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(9px,0,0)}}
 .soft-sky__center-light{z-index:0;background:
-  radial-gradient(ellipse 43% 34% at 49% 37%,rgba(255,241,231,.28),rgba(249,205,216,.12) 56%,transparent 88%),
-  radial-gradient(ellipse 56% 40% at 25% 43%,rgba(238,168,203,.13),transparent 87%),
-  radial-gradient(ellipse 57% 42% at 77% 43%,rgba(159,200,242,.14),transparent 88%),
-  radial-gradient(ellipse 52% 39% at 59% 78%,rgba(195,175,233,.14),transparent 88%)}
-
-/* Translucent repeating tiles meet seamlessly at each half-track; only these two tracks drift while idle. */
+  radial-gradient(ellipse 45% 34% at 51% 31%,rgba(255,244,218,.4),rgba(255,250,242,.22) 58%,transparent 84%),
+  radial-gradient(ellipse 56% 40% at 48% 74%,rgba(255,250,252,.2),transparent 84%)}
 .soft-sky__ambient-fog{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;user-select:none;contain:paint}
-.soft-sky__ambient-fog-layer{position:absolute;inset:0 auto 0 0;width:200%;height:100%;display:block;transform:translate3d(-50%,0,0);background-repeat:repeat-x;background-size:50% 100%;will-change:transform;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:normal}
-.soft-sky__ambient-fog-layer--far{opacity:.23;animation-name:soft-sky-fog-right;animation-duration:35s;background-image:
-  radial-gradient(ellipse 38% 19% at 6% 17%,rgba(255,255,255,.67),transparent 81%),
-  radial-gradient(ellipse 30% 17% at 27% 33%,rgba(203,185,238,.35),transparent 82%),
-  radial-gradient(ellipse 36% 18% at 48% 20%,rgba(183,214,242,.38),transparent 81%),
-  radial-gradient(ellipse 33% 17% at 69% 35%,rgba(242,182,211,.32),transparent 82%),
-  radial-gradient(ellipse 40% 18% at 91% 16%,rgba(255,241,232,.57),transparent 82%)}
-.soft-sky__ambient-fog-layer--middle{opacity:.18;animation-name:soft-sky-fog-right;animation-duration:43s;background-image:
-  radial-gradient(ellipse 25% 15% at 8% 58%,rgba(255,255,255,.63),transparent 81%),
-  radial-gradient(ellipse 30% 16% at 30% 70%,rgba(213,199,242,.32),transparent 82%),
-  radial-gradient(ellipse 28% 15% at 51% 58%,rgba(183,214,242,.32),transparent 82%),
-  radial-gradient(ellipse 31% 17% at 72% 72%,rgba(242,182,211,.3),transparent 82%),
-  radial-gradient(ellipse 29% 15% at 93% 61%,rgba(255,241,232,.55),transparent 82%)}
-@keyframes soft-sky-fog-right{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
+.soft-sky__ambient-fog-layer{position:absolute;inset:0 auto 0 0;width:200%;height:100%;display:block;transform:translate3d(-50%,0,0);background-repeat:repeat-x;background-size:50% 100%;will-change:transform;animation:soft-sky-fog-drift 42s linear infinite}
+.soft-sky__ambient-fog-layer--far{opacity:.3;background-image:
+  radial-gradient(ellipse 30% 20% at 7% 15%,rgba(255,255,255,.78),transparent 82%),
+  radial-gradient(ellipse 30% 18% at 29% 37%,rgba(219,207,244,.42),transparent 83%),
+  radial-gradient(ellipse 31% 19% at 51% 18%,rgba(255,233,187,.56),transparent 82%),
+  radial-gradient(ellipse 30% 18% at 73% 37%,rgba(196,221,246,.48),transparent 83%),
+  radial-gradient(ellipse 32% 18% at 94% 15%,rgba(247,208,229,.49),transparent 82%)}
+.soft-sky__ambient-fog-layer--middle{opacity:.2;animation-duration:53s;background-image:
+  radial-gradient(ellipse 26% 15% at 7% 62%,rgba(255,255,255,.68),transparent 82%),
+  radial-gradient(ellipse 29% 17% at 29% 77%,rgba(245,213,222,.4),transparent 83%),
+  radial-gradient(ellipse 29% 16% at 51% 61%,rgba(255,237,196,.5),transparent 82%),
+  radial-gradient(ellipse 29% 17% at 73% 77%,rgba(205,194,240,.39),transparent 83%),
+  radial-gradient(ellipse 27% 15% at 94% 60%,rgba(208,231,246,.43),transparent 82%)}
+@keyframes soft-sky-fog-drift{from{transform:translate3d(-50%,0,0)}to{transform:translate3d(0,0,0)}}
 .soft-sky.is-page-hidden .soft-sky__ambient-fog-layer{animation-play-state:paused}
-
-/* Small soft formations add scale and depth without becoming a decorative border. */
-.soft-sky__wisp{position:absolute;display:block;width:clamp(72px,8vw,138px);height:clamp(28px,3vw,48px);pointer-events:none;opacity:.44;background:
-  radial-gradient(ellipse 18% 45% at 15% 68%,rgba(255,255,255,.78),transparent 82%),
-  radial-gradient(ellipse 24% 69% at 35% 54%,rgba(255,255,255,.72),transparent 82%),
-  radial-gradient(ellipse 20% 52% at 57% 64%,rgba(255,255,255,.75),transparent 82%),
-  radial-gradient(ellipse 24% 69% at 77% 52%,rgba(255,255,255,.71),transparent 83%),
-  radial-gradient(ellipse 61% 30% at 52% 78%,rgba(203,185,238,.29),transparent 84%)}
-.soft-sky__wisp--upper-center{top:18%;left:59%;opacity:.33}
-.soft-sky__wisp--upper-right{top:30%;right:24%;opacity:.31}
-.soft-sky__wisp--middle-center{top:48%;left:31%;width:clamp(90px,10vw,165px);opacity:.32}
-.soft-sky__wisp--middle-right{top:65%;right:6%;width:clamp(90px,11vw,178px);opacity:.4}
-.soft-sky__wisp--lower-center{right:42%;bottom:7%;width:clamp(95px,12vw,190px);opacity:.36}
-.soft-sky__wisp--mid-slide{top:58%;left:4%;width:clamp(96px,12vw,188px);height:clamp(30px,3.1vw,50px);opacity:.38;background-image:
-  radial-gradient(ellipse 20% 50% at 16% 66%,rgba(255,255,255,.82),transparent 83%),
-  radial-gradient(ellipse 27% 70% at 42% 52%,rgba(255,255,255,.76),transparent 83%),
-  radial-gradient(ellipse 22% 53% at 69% 65%,rgba(255,255,255,.78),transparent 83%),
-  radial-gradient(ellipse 60% 29% at 52% 78%,rgba(183,214,242,.34),transparent 84%),
-  radial-gradient(ellipse 42% 22% at 80% 67%,rgba(213,199,242,.3),transparent 84%)}
-
-.soft-sky[data-mode="story"] .soft-sky__layer{opacity:.92}
+.soft-sky__wisp{position:absolute;display:block;width:clamp(65px,7vw,108px);height:clamp(23px,2.6vw,40px);pointer-events:none;opacity:.4;background:
+  radial-gradient(ellipse 18% 45% at 15% 68%,rgba(255,255,255,.86),transparent 82%),
+  radial-gradient(ellipse 24% 69% at 35% 54%,rgba(255,252,241,.78),transparent 82%),
+  radial-gradient(ellipse 20% 52% at 57% 64%,rgba(255,255,255,.8),transparent 82%),
+  radial-gradient(ellipse 24% 69% at 77% 52%,rgba(255,255,255,.76),transparent 83%),
+  radial-gradient(ellipse 61% 30% at 52% 78%,rgba(193,208,239,.37),transparent 84%)}
+.soft-sky__wisp--upper-center{top:14%;left:62%;opacity:.35}
+.soft-sky__wisp--middle-right{top:59%;right:4%;width:clamp(83px,9vw,140px);opacity:.43}
+.soft-sky__wisp--lower-center{right:41%;bottom:6%;width:clamp(85px,10vw,155px);opacity:.4}
+.soft-sky[data-mode="story"] .soft-sky__layer{opacity:.88}
+.soft-sky[data-mode="collections"] .soft-sky__layer--far{opacity:.8}
+.soft-sky[data-mode="collections"] .soft-sky__layer--middle{opacity:.9}
+.soft-sky[data-mode="collections"] .soft-sky__layer--near{opacity:.72}
+.soft-sky[data-mode="shop"] .soft-sky__layer--far{opacity:.45}
+.soft-sky[data-mode="shop"] .soft-sky__layer--middle{opacity:.4}
 .soft-sky[data-mode="shop"] .soft-sky__layer--near,
+.soft-sky[data-mode="product"] .soft-sky__layer--middle,
 .soft-sky[data-mode="product"] .soft-sky__layer--near,
 .soft-sky[data-mode="contact"] .soft-sky__layer--near,
 .soft-sky[data-mode="minimal"] .soft-sky__layer--middle,
 .soft-sky[data-mode="minimal"] .soft-sky__layer--near,
 .soft-sky[data-mode="quiet"] .soft-sky__layer--middle,
 .soft-sky[data-mode="quiet"] .soft-sky__layer--near{display:none}
-.soft-sky[data-mode="shop"] .soft-sky__layer--middle,
-.soft-sky[data-mode="product"] .soft-sky__layer--middle{opacity:.4}
-.soft-sky[data-mode="product"] .soft-sky__layer--far{opacity:.43}
-.soft-sky[data-mode="contact"] .soft-sky__layer--middle{opacity:.3}
-.soft-sky[data-mode="minimal"] .soft-sky__layer--far,
-.soft-sky[data-mode="quiet"] .soft-sky__layer--far{opacity:.3}
-.soft-sky[data-mode="shop"] .soft-sky__cloud--middle-left,
-.soft-sky[data-mode="shop"] .soft-sky__cloud--middle-center,
-.soft-sky[data-mode="product"] .soft-sky__cloud--middle-left,
-.soft-sky[data-mode="product"] .soft-sky__cloud--middle-center,
-.soft-sky[data-mode="contact"] .soft-sky__cloud--middle-left,
-.soft-sky[data-mode="contact"] .soft-sky__cloud--middle-center{display:none}
-.soft-sky[data-mode="product"] .soft-sky__wisp,
-.soft-sky[data-mode="contact"] .soft-sky__wisp,
-.soft-sky[data-mode="minimal"] .soft-sky__wisp,
-.soft-sky[data-mode="quiet"] .soft-sky__wisp{display:none}
-.soft-sky[data-mode="quiet"] .soft-sky__ambient-fog-layer--middle,
-.soft-sky[data-mode="minimal"] .soft-sky__ambient-fog-layer--middle,
-.soft-sky[data-mode="product"] .soft-sky__ambient-fog-layer--middle{display:none}
+.soft-sky[data-mode="product"] .soft-sky__layer--far{opacity:.37}
+.soft-sky[data-mode="contact"] .soft-sky__layer--middle{opacity:.36}
+.soft-sky[data-mode="minimal"] .soft-sky__layer--far{opacity:.26}
+.soft-sky[data-mode="quiet"] .soft-sky__layer--far{opacity:.2}
 .soft-sky[data-mode="shop"] .soft-sky__cloud--accent,
 .soft-sky[data-mode="product"] .soft-sky__cloud--accent,
 .soft-sky[data-mode="contact"] .soft-sky__cloud--accent,
-.soft-sky[data-mode="minimal"] .soft-sky__cloud--accent,
-.soft-sky[data-mode="quiet"] .soft-sky__cloud--accent{display:none}
-.soft-glass-rail,.soft-mobile-header{background:rgba(255,255,255,.68);border-color:rgba(255,255,255,.62);box-shadow:0 12px 40px rgba(90,70,120,.08),inset 0 1px 0 rgba(255,255,255,.82);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%)}
-.soft-glass-rail:after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),rgba(237,228,255,.24),transparent)}
-.product-card{background:rgba(255,255,255,.76);border-color:rgba(255,255,255,.74);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 32px rgba(90,70,120,.055);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.soft-sky[data-mode="minimal"] .soft-sky__wisp,
+.soft-sky[data-mode="quiet"] .soft-sky__wisp{display:none}
+.soft-sky[data-mode="shop"] .soft-sky__ambient-fog-layer--middle,
+.soft-sky[data-mode="product"] .soft-sky__ambient-fog-layer--middle,
+.soft-sky[data-mode="minimal"] .soft-sky__ambient-fog-layer--middle,
+.soft-sky[data-mode="quiet"] .soft-sky__ambient-fog-layer--middle{display:none}
 
 @media(max-width:767px){
-  body{background-image:linear-gradient(145deg,#e7edf9 0%,#f8e5ed 47%,#f7e7df 100%)}
   .soft-sky__base{background:
-    radial-gradient(ellipse 90% 42% at 17% 12%,rgba(238,168,203,.34),transparent 88%),
-    radial-gradient(ellipse 92% 47% at 84% 18%,rgba(238,168,203,.23),transparent 88%),
-    radial-gradient(ellipse 85% 43% at 25% 23%,rgba(159,200,242,.29),transparent 88%),
-    radial-gradient(ellipse 91% 48% at 46% 37%,rgba(244,194,180,.31),transparent 88%),
-    radial-gradient(ellipse 94% 53% at 24% 60%,rgba(195,175,233,.25),transparent 88%),
-    radial-gradient(ellipse 92% 49% at 79% 76%,rgba(159,200,242,.23),transparent 88%),
-    radial-gradient(ellipse 88% 48% at 34% 77%,rgba(238,168,203,.23),transparent 88%),
-    radial-gradient(ellipse 90% 49% at 33% 94%,rgba(175,207,244,.28),transparent 88%),
-    #f7f3f7}
-  .soft-sky__light{opacity:.46}
-  .soft-sky__light--blush{opacity:.54}
-  .soft-sky__light--blue{opacity:.5}
-  .soft-sky__light--lilac{opacity:.4}
-  .soft-sky__light--peach{opacity:.29}
-  .soft-sky__light--mint{display:none}
-  .soft-sky__layer--far{opacity:.66}
-  .soft-sky__layer--middle{opacity:.65}
-  .soft-sky__layer--near{opacity:.58}
-  .soft-sky__cloud--far-center,
-  .soft-sky__cloud--middle-left,
-  .soft-sky__cloud--middle-center,
-  .soft-sky__cloud--near-right,
-  .soft-sky__cloud--accent{display:none}
-  .soft-sky__cloud--far-left{top:12%;left:-6%;width:clamp(128px,39vw,174px)}
-  .soft-sky__cloud--far-right{top:25%;right:-8%;width:clamp(132px,40vw,176px)}
-  .soft-sky__cloud--middle-right{top:46%;right:-9%;width:clamp(178px,51vw,228px)}
-  .soft-sky__cloud--near-left{bottom:8%;left:-10%;width:clamp(190px,56vw,250px)}
-  .soft-sky__cloud-mass{animation-duration:52s}
-  .soft-sky__wisp{width:clamp(65px,20vw,90px);height:clamp(24px,7vw,33px);opacity:.31}
-  .soft-sky__wisp:not(.soft-sky__wisp--mobile){display:none}
-  .soft-sky__wisp--upper-center{top:36%;left:65%}
-  .soft-sky__wisp--middle-right{top:69%;right:3%}
-  .soft-sky__wisp--mid-slide{display:none}
-  .soft-sky__ambient-fog-layer--far{opacity:.16;animation-duration:35s}
+    radial-gradient(ellipse 103% 50% at 0% 0%,rgba(246,190,220,.56),transparent 80%),
+    radial-gradient(ellipse 103% 49% at 100% 4%,rgba(173,211,246,.56),transparent 80%),
+    radial-gradient(ellipse 95% 56% at 52% 11%,rgba(255,229,171,.4),transparent 79%),
+    radial-gradient(ellipse 110% 76% at 50% 71%,rgba(206,194,245,.39),transparent 82%),
+    radial-gradient(ellipse 100% 57% at 50% 100%,rgba(251,210,197,.33),transparent 80%),#fffcfa}
+  .soft-sky__light--mint,.soft-sky__cloud--far-high-right,.soft-sky__cloud--middle-small-left,.soft-sky__cloud--middle-small-right{display:none}
+  .soft-sky__layer--far{opacity:.67}.soft-sky__layer--middle{opacity:.75}.soft-sky__layer--near{opacity:.67}
+  .soft-sky__cloud--far-left{top:8%;left:-17%;width:clamp(152px,47vw,205px)}
+  .soft-sky__cloud--far-right{top:18%;right:-17%;width:clamp(140px,42vw,185px)}
+  .soft-sky__cloud--far-high-left{top:30%;left:4%;width:clamp(90px,25vw,116px)}
+  .soft-sky__cloud--middle-left{top:40%;left:-17%;width:clamp(164px,48vw,210px)}
+  .soft-sky__cloud--middle-right{top:52%;right:-17%;width:clamp(164px,48vw,210px)}
+  .soft-sky__cloud--middle-warm{top:29%;left:55%;width:clamp(156px,44vw,192px)}
+  .soft-sky__cloud--near-left{bottom:6%;left:-23%;width:clamp(205px,60vw,260px)}
+  .soft-sky__cloud--near-right{right:-24%;bottom:12%;width:clamp(190px,55vw,245px)}
+  .soft-sky__cloud--near-small-left{bottom:35%;left:57%;width:clamp(86px,24vw,104px)}
+  .soft-sky__cloud-ambient--drift{animation-duration:52s}
+  .soft-sky__ambient-fog-layer--far{opacity:.21;animation-duration:50s}
   .soft-sky__ambient-fog-layer--middle{display:none}
-  .soft-sky__center-light{background:
-    radial-gradient(ellipse 86% 35% at 47% 34%,rgba(255,241,231,.24),transparent 88%),
-    radial-gradient(ellipse 82% 42% at 67% 53%,rgba(238,168,203,.13),transparent 88%),
-    radial-gradient(ellipse 84% 43% at 29% 73%,rgba(159,200,242,.15),transparent 89%),
-    radial-gradient(ellipse 80% 42% at 51% 66%,rgba(195,175,233,.13),transparent 89%)}
-  .hero-portrait{background:
-    radial-gradient(ellipse 59% 39% at 20% 25%,rgba(238,168,203,.2),transparent 86%),
-    radial-gradient(ellipse 62% 42% at 78% 27%,rgba(248,205,191,.21),transparent 86%),
-    radial-gradient(ellipse 61% 44% at 33% 76%,rgba(159,200,242,.17),transparent 87%),
-    radial-gradient(ellipse 60% 43% at 75% 73%,rgba(195,175,233,.16),transparent 87%),
-    radial-gradient(ellipse 42% 38% at 50% 45%,rgba(255,241,231,.23),transparent 87%)}
-  .soft-glass-rail,.soft-mobile-header{backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%)}
+  .soft-sky__wisp{width:clamp(58px,18vw,76px);height:clamp(21px,6vw,28px);opacity:.34}
+  .soft-sky__wisp--upper-center{top:35%;left:67%}
+  .soft-sky__wisp--lower-center{display:none}
+  .soft-sky__wisp--middle-right{top:69%;right:2%}
+  .sfh-panel,.sfh-mobile-panel{backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%)}
   .product-card{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 }
-.hero-portrait:before{background:radial-gradient(ellipse 44% 38% at 50% 45%,rgba(255,243,233,.2),rgba(249,205,216,.08) 54%,transparent 78%);filter:blur(24px)}
-@media(min-width:768px) and (max-width:1023px){
-  .soft-sky__cloud--near-left,.soft-sky__cloud--near-right{opacity:.5}
-  .soft-sky__cloud--middle-center{opacity:.28}
-}
 @media(prefers-reduced-motion:reduce){
-  .soft-sky__ambient-fog-layer,.soft-sky__cloud-mass{animation:none!important;transform:none!important;will-change:auto}
+  .soft-sky__ambient-fog-layer,.soft-sky__cloud-ambient{animation:none!important;transform:none!important;will-change:auto}
   .soft-sky__cloud,.soft-sky__layer,.soft-sky__wisp{transform:none!important;will-change:auto}
 }

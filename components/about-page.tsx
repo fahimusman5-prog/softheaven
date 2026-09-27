@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { images } from '@/lib/data';
 import { ProductMedia } from './product-media';
+import { AboutPrinciples } from './about-principles';
 import styles from '@/app/about/about.module.css';
 
 type IconName = 'arrow' | 'gift' | 'heart' | 'sparkle';
@@ -47,13 +48,6 @@ function ProductImage({ src, alt, className, priority = false, fit = 'contain', 
   );
 }
 
-const principles = [
-  { title: 'Thoughtful Designs', text: 'Created with care for the little moments that make a day feel special.', icon: 'heart' as const },
-  { title: 'Premium Quality', text: 'Selected with comfort, character and lasting enjoyment in mind.', icon: 'sparkle' as const },
-  { title: 'More Than a Gift', text: 'A soft companion is a simple way to let someone know you care.', icon: 'gift' as const },
-];
-const iconStyles = { heart: styles.iconHeart, sparkle: styles.iconSparkle, gift: styles.iconGift };
-
 function AboutHero() {
   return (
     <section className={styles.hero} aria-labelledby="about-title">
@@ -70,23 +64,6 @@ function AboutHero() {
         <Image className={styles.heroTeddy} src="/assets/about/story-teddy.webp" alt="Cream teddy bear with a lavender bow, seated among pastel clouds" fill priority unoptimized sizes="(max-width: 900px) 94vw, (max-width: 1500px) 55vw, 760px" />
         <Image className={`${styles.heroCloud} ${styles.heroCloudBack}`} src="/assets/clouds/generated/dream-cloud-06.webp" alt="" aria-hidden="true" unoptimized width={1280} height={640} sizes="(max-width: 900px) 100vw, 720px" />
         <Image className={styles.heroCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" unoptimized width={1400} height={340} sizes="(max-width: 900px) 100vw, 900px" />
-      </div>
-    </section>
-  );
-}
-
-function BrandPrinciples() {
-  return (
-    <section className={styles.principles} aria-labelledby="principles-title">
-      <p className={styles.eyebrow} id="principles-title">What Makes Us Different</p>
-      <div className={styles.principleGrid}>
-        {principles.map((item) => (
-          <article className={styles.principleCard} key={item.title}>
-            <span className={`${styles.iconBubble} ${iconStyles[item.icon]}`}><Icon name={item.icon} /></span>
-            <h2>{item.title}</h2>
-            <p>{item.text}</p>
-          </article>
-        ))}
       </div>
     </section>
   );
@@ -144,7 +121,7 @@ export function AboutPage() {
   return (
     <div className={styles.aboutPage}>
       <AboutHero />
-      <div id="principles"><BrandPrinciples /></div>
+      <div id="principles"><AboutPrinciples /></div>
       <EveryMoment />
       <BrandPromise />
     </div>

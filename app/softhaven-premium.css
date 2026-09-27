@@ -348,3 +348,29 @@
  .home-collection-tile,.home-collection-tile__image,.home-collection-tile__arrow,.home-page .home-product-grid .product-card,.home-page .home-product-grid .product-image img{transition:none!important}
  .home-collection-tile:hover,.home-page .home-product-grid .product-card:hover{transform:none}
 }
+
+/* Fit the complete storefront hero in the desktop first view. */
+@media(min-width:901px){
+ .home-page .hero-portrait{padding:8px 20px 14px}
+ .home-page .hero-portrait__copy h1{font-size:clamp(44px,6vh,72px);line-height:.9}
+ .home-page .hero-portrait__copy p{max-width:44rem;margin-top:9px;font-size:clamp(12px,1.05vw,14px);line-height:1.45}
+ .home-page .portrait-carousel{margin-top:12px}
+ .home-page .portrait-carousel__stage{height:clamp(285px,37vh,390px)}
+ .home-page .portrait-carousel__card{width:clamp(250px,22vw,330px);height:clamp(270px,33vh,350px)}
+ .home-page .portrait-carousel__controls{min-height:22px;margin-top:3px}
+ .home-page .portrait-hero-actions{width:min(100%,500px);margin-top:8px}
+ .home-page .portrait-hero-button{min-height:48px}
+ .home-page .portrait-hero-note{margin-top:6px}
+}
+@media(min-width:901px) and (max-height:820px){
+ .home-page .hero-portrait{padding-top:4px;padding-bottom:10px}
+ .home-page .hero-portrait__copy h1{font-size:clamp(40px,5.4vh,52px)}
+ .home-page .hero-portrait__copy p{margin-top:7px;font-size:12px;line-height:1.4}
+ .home-page .portrait-carousel{margin-top:9px}
+ .home-page .portrait-carousel__stage{height:clamp(255px,36vh,300px)}
+ .home-page .portrait-carousel__card{width:clamp(230px,20vw,290px);height:clamp(245px,32vh,280px)}
+ .home-page .portrait-carousel__controls{min-height:20px;margin-top:2px}
+ .home-page .portrait-hero-actions{margin-top:6px}
+ .home-page .portrait-hero-button{min-height:44px}
+ .home-page .portrait-hero-note{margin-top:4px;font-size:14px}
+}

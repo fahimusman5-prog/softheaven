@@ -13,6 +13,7 @@ type CloudDefinition = {
   className: string;
   asset: string;
   travel: number;
+  drift?: boolean;
 };
 
 type WispDefinition = {
@@ -22,9 +23,9 @@ type WispDefinition = {
 };
 
 const depthTravel = {
-  far: { ratio: 0.2, min: 180, max: 320, mobileRatio: 0.28, mobileMin: 60, mobileMax: 120 },
-  middle: { ratio: 0.38, min: 350, max: 600, mobileRatio: 0.44, mobileMin: 120, mobileMax: 220 },
-  near: { ratio: 0.52, min: 550, max: 900, mobileRatio: 0.64, mobileMin: 180, mobileMax: 320 },
+  far: { ratio: 0.25, min: 250, max: 420, mobileRatio: 0.44, mobileMin: 120, mobileMax: 220 },
+  middle: { ratio: 0.45, min: 500, max: 800, mobileRatio: 0.8, mobileMin: 240, mobileMax: 420 },
+  near: { ratio: 0.67, min: 800, max: 1200, mobileRatio: 1.2, mobileMin: 400, mobileMax: 650 },
 } satisfies Record<CloudDepth, { ratio: number; min: number; max: number; mobileRatio: number; mobileMin: number; mobileMax: number }>;
 
 function getTravel(depth: CloudDepth, mobile: boolean) {
@@ -38,28 +39,23 @@ function getTravel(depth: CloudDepth, mobile: boolean) {
 
 const clouds: CloudDefinition[] = [
   { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 0.82 },
-  { id: 'far-center', depth: 'far', className: 'soft-sky__cloud--far-center', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 1.08 },
   { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/generated/dream-cloud-06.webp', travel: 0.94 },
   { id: 'far-high-left', depth: 'far', className: 'soft-sky__cloud--far-high-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 0.74 },
   { id: 'far-high-right', depth: 'far', className: 'soft-sky__cloud--far-high-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 1.12 },
-  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 0.9 },
-  { id: 'middle-center', depth: 'middle', className: 'soft-sky__cloud--middle-center', asset: '/assets/clouds/generated/dream-cloud-05.webp', travel: 1.12 },
+  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 0.9, drift: true },
   { id: 'middle-right', depth: 'middle', className: 'soft-sky__cloud--middle-right', asset: '/assets/clouds/generated/dream-cloud-03.webp', travel: 1.04 },
   { id: 'middle-small-left', depth: 'middle', className: 'soft-sky__cloud--middle-small-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-08.webp', travel: 0.82 },
-  { id: 'middle-small-right', depth: 'middle', className: 'soft-sky__cloud--middle-small-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 1.14 },
-  { id: 'near-left', depth: 'near', className: 'soft-sky__cloud--near-left', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 0.9 },
+  { id: 'middle-small-right', depth: 'middle', className: 'soft-sky__cloud--middle-small-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 1.14, drift: true },
+  { id: 'middle-warm', depth: 'middle', className: 'soft-sky__cloud--middle-warm', asset: '/assets/clouds/generated/dream-cloud-warm.webp', travel: 1.08 },
+  { id: 'near-left', depth: 'near', className: 'soft-sky__cloud--near-left', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 0.9, drift: true },
   { id: 'near-right', depth: 'near', className: 'soft-sky__cloud--near-right', asset: '/assets/clouds/generated/dream-cloud-08.webp', travel: 1.08 },
   { id: 'near-small-left', depth: 'near', className: 'soft-sky__cloud--near-small-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-03.webp', travel: 0.76 },
-  { id: 'near-small-center', depth: 'near', className: 'soft-sky__cloud--near-small-center soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 1.18 },
 ];
 
 const wisps: WispDefinition[] = [
   { id: 'wisp-upper-center', depth: 'far', className: 'soft-sky__wisp--upper-center soft-sky__wisp--mobile' },
-  { id: 'wisp-upper-right', depth: 'far', className: 'soft-sky__wisp--upper-right' },
-  { id: 'wisp-middle-center', depth: 'middle', className: 'soft-sky__wisp--middle-center' },
   { id: 'wisp-middle-right', depth: 'middle', className: 'soft-sky__wisp--middle-right soft-sky__wisp--mobile' },
   { id: 'wisp-lower-center', depth: 'near', className: 'soft-sky__wisp--lower-center' },
-  { id: 'wisp-mid-slide', depth: 'middle', className: 'soft-sky__wisp--mid-slide' },
 ];
 
 function getAtmosphereMode(pathname: string) {
@@ -134,8 +130,8 @@ export function SoftHavenCloudBackground() {
 
             const travel = getTravel(depth, mobile);
             const verticalTravel = mobile
-              ? { far: 10, middle: 18, near: 28 }[depth]
-              : { far: 20, middle: 38, near: 58 }[depth];
+              ? { far: 14, middle: 26, near: 42 }[depth]
+              : { far: 22, middle: 42, near: 68 }[depth];
             motion.to(layer, { y: -verticalTravel, duration: 1 }, 0);
 
             clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
@@ -215,7 +211,7 @@ export function SoftHavenCloudBackground() {
               id={cloud.id}
               className={`soft-sky__cloud ${cloud.className}`}
             >
-              <span className="soft-sky__cloud-mass">
+              <span className={`soft-sky__cloud-ambient${cloud.drift ? ' soft-sky__cloud-ambient--drift' : ''}`}>
                 <picture>
                   <source media="(max-width: 767px)" srcSet={cloud.asset.replace('.webp', '-mobile.webp')} />
                   <img src={cloud.asset} alt="" loading="lazy" decoding="async" />
