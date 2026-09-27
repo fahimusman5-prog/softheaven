@@ -1,3 +1,31 @@
 'use client';
 import Link from 'next/link';
-export function SiteFooter() { return <footer className="site-footer"><div><Link href="/" className="wordmark">Soft<span>Haven</span></Link><p>Created to make every moment feel warmer.<br/>Premium companions crafted for hugs, memories,<br/>and thoughtful gifting.</p><div className="socials"><Link href="/contact">Contact the team →</Link></div></div><div><h3>Shop</h3><Link href="/shop?category=Teddy%20Bear%20Collection">Teddy Bears</Link><Link href="/shop?category=Soft%20Animal%20Friends">Animal Friends</Link><Link href="/shop?category=Love%20%26%20Gifting">Love & Gifting</Link></div><div><h3>Gifting & Experience</h3><Link href="/shop">Giftable companions</Link><Link href="/contact">Gift guidance</Link><Link href="/about">The SoftHaven story</Link><Link href="/contact">Visit the concierge</Link></div><div><h3>Customer Care</h3><Link href="/contact">Contact the team</Link><Link href="/contact">Delivery questions</Link><Link href="/contact">Order questions</Link><Link href="/contact">Companion care</Link></div><div><h3>Join the Soft Side</h3><p>Receive exclusive drops,<br/>invitations, and sensory gifting notes.</p><form className="footer-form" onSubmit={(event) => event.preventDefault()}><label className="sr-only" htmlFor="footer-email">Your email address</label><input id="footer-email" type="email" placeholder="Your email address" required/><button type="submit">Subscribe →</button></form></div><div className="footer-bottom"><span>© 2025 ANTZ SoftHaven Pte. Ltd. All rights reserved.</span><span>Privacy Policy　 Terms of Service　 Cookies</span></div></footer>; }
+import { products } from '@/lib/data';
+
+const categories = Array.from(new Set(products.map((product) => product.category)));
+
+export function SiteFooter() {
+  return (
+    <footer className="site-footer site-footer--refined">
+      <div className="site-footer__brand">
+        <Link href="/" className="wordmark">Soft<span>Haven</span></Link>
+        <p>Soft companions for thoughtful gifting and everyday comfort.</p>
+      </div>
+      <div className="site-footer__column">
+        <h3>Shop</h3>
+        <Link href="/shop">All companions</Link>
+        {categories.map((category) => <Link href={`/shop?category=${encodeURIComponent(category)}`} key={category}>{category}</Link>)}
+      </div>
+      <div className="site-footer__column">
+        <h3>Discover</h3>
+        <Link href="/collections">Collections</Link>
+        <Link href="/about">About SoftHaven</Link>
+      </div>
+      <div className="site-footer__column">
+        <h3>Get in touch</h3>
+        <Link href="/contact">Contact SoftHaven</Link>
+      </div>
+      <div className="footer-bottom"><span>© 2026 SoftHaven</span><Link href="/">Back to top ↑</Link></div>
+    </footer>
+  );
+}
