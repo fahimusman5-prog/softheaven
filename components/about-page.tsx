@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { images } from '@/lib/data';
 import { ProductMedia } from './product-media';
 import styles from '@/app/about/about.module.css';
@@ -36,8 +37,8 @@ function ProductImage({ src, alt, className, priority = false, fit = 'contain' }
 }
 
 const principles = [
-  { title: 'Thoughtful Design', text: 'Friendly shapes and considered details make each companion feel personal.', icon: 'heart' as const },
-  { title: 'Quality Focus', text: 'We choose pieces for their character, comfort and place in everyday life.', icon: 'sparkle' as const },
+  { title: 'Thoughtful Designs', text: 'Created with care for the little moments that make a day feel special.', icon: 'heart' as const },
+  { title: 'Premium Quality', text: 'Selected with comfort, character and lasting enjoyment in mind.', icon: 'sparkle' as const },
   { title: 'More Than a Gift', text: 'A soft companion is a simple way to let someone know you care.', icon: 'gift' as const },
 ];
 const iconStyles = { heart: styles.iconHeart, sparkle: styles.iconSparkle, gift: styles.iconGift };
@@ -47,17 +48,17 @@ function AboutHero() {
     <section className={styles.hero} aria-labelledby="about-title">
       <div className={styles.heroCopy}>
         <p className={styles.eyebrow}>Our Story</p>
-        <h1 id="about-title">A Softer<br />Kind of<br /><em>Happiness.</em><span className={styles.headingHeart} aria-hidden="true">♡</span></h1>
-        <p className={styles.heroLede}>At SoftHaven, we believe in the quiet magic of soft things — companions that bring comfort, joy and warmth to everyday moments.</p>
-        <Link className={styles.button} href="/shop">Explore SoftHaven <Icon name="arrow" /></Link>
+        <h1 id="about-title">A Softer<br />Kind of<br /><span className={styles.heartLine}><em>Happiness.</em><span className={styles.headingHeart} aria-hidden="true">♡</span></span></h1>
+        <p className={styles.heroLede}>At SoftHaven, we believe in the quiet magic of soft things — the kind that bring comfort, joy and a little more love into everyday life.</p>
+        <Link className={styles.button} href="#principles">Our Journey <Icon name="arrow" /></Link>
       </div>
-      <div className={styles.heroVisual} aria-label="SoftHaven plush companions">
+      <div className={styles.heroVisual}>
         <span className={`${styles.orbit} ${styles.orbitOne}`} aria-hidden="true" />
-        <span className={`${styles.orbit} ${styles.orbitTwo}`} aria-hidden="true" />
+        <span className={styles.heroHeart} aria-hidden="true">♡</span>
         <span className={styles.sparkle} aria-hidden="true"><Icon name="sparkle" /></span>
-        <ProductImage src={images.bunny} alt="Cloud cream bunny plush from the SoftHaven collection" className={styles.heroProduct} priority fit="cover" />
-        <ProductImage src={images.bear} alt="Honey caramel teddy bear from the SoftHaven collection" className={styles.heroCompanion} fit="cover" />
-        <span className={styles.heroCloud} aria-hidden="true" />
+        <Image className={styles.heroTeddy} src="/assets/about/story-teddy.webp" alt="Cream teddy bear with a lavender bow, seated among pastel clouds" fill priority sizes="(max-width: 900px) 94vw, (max-width: 1500px) 55vw, 760px" />
+        <Image className={`${styles.heroCloud} ${styles.heroCloudBack}`} src="/assets/clouds/generated/dream-cloud-06.webp" alt="" aria-hidden="true" width={1280} height={640} sizes="(max-width: 900px) 100vw, 720px" />
+        <Image className={styles.heroCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" width={1400} height={340} sizes="(max-width: 900px) 100vw, 900px" />
       </div>
     </section>
   );
@@ -108,8 +109,8 @@ function BrandPromise() {
   return (
     <section className={styles.promise} aria-labelledby="promise-title">
       <div className={styles.promiseVisual}>
-        <img className={styles.promiseTeddies} src="/assets/header-teddies.png" alt="Two teddy bear companions from SoftHaven" loading="lazy" />
-        <span className={styles.promiseCloud} aria-hidden="true" />
+        <Image className={styles.promiseTeddies} src="/assets/about/plush-group.webp" alt="Three SoftHaven plush companions gathered together" fill sizes="(max-width: 620px) 88vw, (max-width: 1100px) 45vw, 650px" />
+        <Image className={styles.promiseCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" width={1400} height={340} sizes="(max-width: 620px) 100vw, 680px" />
       </div>
       <div className={styles.promiseCopy}>
         <p className={styles.eyebrow}>Our Promise</p>
@@ -125,7 +126,7 @@ export function AboutPage() {
   return (
     <div className={styles.aboutPage}>
       <AboutHero />
-      <BrandPrinciples />
+      <div id="principles"><BrandPrinciples /></div>
       <EveryMoment />
       <BrandPromise />
     </div>
