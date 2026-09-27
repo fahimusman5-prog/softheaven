@@ -21,10 +21,10 @@ type WispDefinition = {
 };
 
 const depthTravel = {
-  far: { ratio: 0.16, min: 180, max: 300, mobileRatio: 0.22, mobileMin: 60, mobileMax: 110, scrub: 0.55, mobileScrub: 0.45 },
-  middle: { ratio: 0.31, min: 350, max: 550, mobileRatio: 0.39, mobileMin: 120, mobileMax: 200, scrub: 0.35, mobileScrub: 0.3 },
-  near: { ratio: 0.44, min: 550, max: 850, mobileRatio: 0.58, mobileMin: 180, mobileMax: 300, scrub: 0.22, mobileScrub: 0.18 },
-} satisfies Record<CloudDepth, { ratio: number; min: number; max: number; mobileRatio: number; mobileMin: number; mobileMax: number; scrub: number; mobileScrub: number }>;
+  far: { ratio: 0.22, min: 250, max: 400, mobileRatio: 0.34, mobileMin: 100, mobileMax: 160 },
+  middle: { ratio: 0.42, min: 450, max: 700, mobileRatio: 0.55, mobileMin: 180, mobileMax: 280 },
+  near: { ratio: 0.58, min: 700, max: 1000, mobileRatio: 0.75, mobileMin: 280, mobileMax: 420 },
+} satisfies Record<CloudDepth, { ratio: number; min: number; max: number; mobileRatio: number; mobileMin: number; mobileMax: number }>;
 
 function getTravel(depth: CloudDepth, mobile: boolean) {
   const settings = depthTravel[depth];
@@ -47,15 +47,10 @@ const wisps: WispDefinition[] = [
   { id: 'wisp-upper-left', depth: 'far', className: 'soft-sky__wisp--upper-left' },
   { id: 'wisp-upper-center', depth: 'far', className: 'soft-sky__wisp--upper-center soft-sky__wisp--mobile' },
   { id: 'wisp-upper-right', depth: 'far', className: 'soft-sky__wisp--upper-right' },
-  { id: 'wisp-middle-left', depth: 'middle', className: 'soft-sky__wisp--middle-left' },
   { id: 'wisp-middle-right', depth: 'middle', className: 'soft-sky__wisp--middle-right soft-sky__wisp--mobile' },
-  { id: 'wisp-right-low', depth: 'middle', className: 'soft-sky__wisp--right-low' },
   { id: 'wisp-lower-left', depth: 'near', className: 'soft-sky__wisp--lower-left' },
   { id: 'wisp-lower-center', depth: 'near', className: 'soft-sky__wisp--lower-center' },
-  { id: 'wisp-small-upper-left', depth: 'far', className: 'soft-sky__wisp--small-upper-left' },
-  { id: 'wisp-small-upper-right', depth: 'far', className: 'soft-sky__wisp--small-upper-right' },
   { id: 'wisp-small-mid-right', depth: 'middle', className: 'soft-sky__wisp--small-mid-right' },
-  { id: 'wisp-small-lower-right', depth: 'near', className: 'soft-sky__wisp--small-lower-right' },
 ];
 
 function getAtmosphereMode(pathname: string) {
@@ -123,12 +118,12 @@ export function SoftHavenCloudBackground() {
                 trigger: document.documentElement,
                 start: 'top top',
                 end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
-                scrub: mobile ? depthTravel[depth].mobileScrub : depthTravel[depth].scrub,
+                scrub: true,
                 invalidateOnRefresh: true,
               },
             });
             const travel = getTravel(depth, mobile);
-            motion.to(layer, { y: mobile ? -Math.min(34, travel * 0.12) : -Math.min(92, travel * 0.12), duration: 1 }, 0);
+            motion.to(layer, { y: mobile ? -Math.min(24, travel * 0.08) : -Math.min(64, travel * 0.08), duration: 1 }, 0);
 
             clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
