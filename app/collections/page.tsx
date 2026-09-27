@@ -61,7 +61,7 @@ export default function CollectionsPage() {
           <Link className={styles.primaryButton} href="#collection-list">Explore Collections <span aria-hidden="true">→</span></Link>
         </div>
         <div className={styles.heroArt}>
-          <Image src="/assets/soft-haven-collections-hero.png" alt="A pastel teddy bear nestled among soft clouds, hearts, and stars" fill priority sizes="(max-width: 760px) 92vw, 52vw" className={styles.heroTeddies} />
+          <Image src="/assets/soft-haven-collections-hero.png" alt="A pastel teddy bear nestled among soft clouds, hearts, and stars" fill priority unoptimized sizes="(max-width: 760px) 92vw, 52vw" className={styles.heroTeddies} />
           <span className={styles.heroNote}>Different collections.<br />The same soft happiness.</span>
         </div>
       </section>
@@ -160,7 +160,7 @@ export default function CollectionsPage() {
             <p>Meet the companions in our current collections.</p>
             <Link className={styles.primaryButton} href="/shop">Shop All Collections <span aria-hidden="true">→</span></Link>
           </div>
-          <Image src="/assets/header-teddies.png" alt="" aria-hidden="true" fill sizes="(max-width: 760px) 62vw, 28vw" className={styles.ctaTeddies} />
+          <Image src="/assets/header-teddies.png" alt="" aria-hidden="true" fill unoptimized sizes="(max-width: 760px) 62vw, 28vw" className={styles.ctaTeddies} />
         </section>
       </SectionReveal>
     </main>
