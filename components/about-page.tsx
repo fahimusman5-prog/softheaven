@@ -32,6 +32,7 @@ function ProductImage({ src, alt, className, priority = false, fit = 'contain', 
           fill
           priority={priority}
           sizes={sizes ?? '(max-width: 700px) 90vw, (max-width: 1100px) 44vw, 620px'}
+          unoptimized
           className={styles.giftingImage}
         />
       ) : (
