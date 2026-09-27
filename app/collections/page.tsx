@@ -60,12 +60,9 @@ export default function CollectionsPage() {
           <p>Thoughtfully curated collections for every person, every mood and every special moment.</p>
           <Link className={styles.primaryButton} href="#collection-list">Explore Collections <span aria-hidden="true">→</span></Link>
         </div>
-        <div className={styles.heroArt} aria-label="SoftHaven teddy companions">
-          <span className={styles.heroHalo} aria-hidden="true" />
-          <Image src="/assets/header-teddies.png" alt="Two soft honey teddy companions" fill priority sizes="(max-width: 760px) 92vw, 52vw" className={styles.heroTeddies} />
-          <span className={styles.heroNote} aria-hidden="true">Different collections.<br />The same soft happiness. <b>♡</b></span>
-          <span className={styles.floatHeart + ' ' + styles.floatHeartOne} aria-hidden="true">♡</span>
-          <span className={styles.floatHeart + ' ' + styles.floatHeartTwo} aria-hidden="true">✧</span>
+        <div className={styles.heroArt}>
+          <Image src="/assets/soft-haven-collections-hero.png" alt="A pastel teddy bear nestled among soft clouds, hearts, and stars" fill priority sizes="(max-width: 760px) 92vw, 52vw" className={styles.heroTeddies} />
+          <span className={styles.heroNote}>Different collections.<br />The same soft happiness.</span>
         </div>
       </section>
 
