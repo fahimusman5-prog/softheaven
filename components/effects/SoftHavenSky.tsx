@@ -40,11 +40,17 @@ const clouds: CloudDefinition[] = [
   { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 0.82 },
   { id: 'far-center', depth: 'far', className: 'soft-sky__cloud--far-center', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 1.08 },
   { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/generated/dream-cloud-06.webp', travel: 0.94 },
+  { id: 'far-high-left', depth: 'far', className: 'soft-sky__cloud--far-high-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 0.74 },
+  { id: 'far-high-right', depth: 'far', className: 'soft-sky__cloud--far-high-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 1.12 },
   { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 0.9 },
   { id: 'middle-center', depth: 'middle', className: 'soft-sky__cloud--middle-center', asset: '/assets/clouds/generated/dream-cloud-05.webp', travel: 1.12 },
   { id: 'middle-right', depth: 'middle', className: 'soft-sky__cloud--middle-right', asset: '/assets/clouds/generated/dream-cloud-03.webp', travel: 1.04 },
+  { id: 'middle-small-left', depth: 'middle', className: 'soft-sky__cloud--middle-small-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-08.webp', travel: 0.82 },
+  { id: 'middle-small-right', depth: 'middle', className: 'soft-sky__cloud--middle-small-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 1.14 },
   { id: 'near-left', depth: 'near', className: 'soft-sky__cloud--near-left', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 0.9 },
   { id: 'near-right', depth: 'near', className: 'soft-sky__cloud--near-right', asset: '/assets/clouds/generated/dream-cloud-08.webp', travel: 1.08 },
+  { id: 'near-small-left', depth: 'near', className: 'soft-sky__cloud--near-small-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-03.webp', travel: 0.76 },
+  { id: 'near-small-center', depth: 'near', className: 'soft-sky__cloud--near-small-center soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 1.18 },
 ];
 
 const wisps: WispDefinition[] = [
