@@ -5,6 +5,7 @@ import { SectionReveal } from '@/components/section-reveal';
 import { ProductMedia } from '@/components/product-media';
 import { products } from '@/lib/data';
 import { CollectionsMotion } from '@/components/collections-motion';
+import { SoftHavenForThat } from '@/components/soft-haven-for-that';
 import { collections, getCollectionProducts } from '@/lib/collections';
 import styles from './collections.module.css';
 
@@ -75,27 +76,7 @@ export default function CollectionsPage() {
         </section>
       </CollectionsMotion>
 
-      <SectionReveal>
-        <section className={styles.everyChapter} aria-labelledby="chapter-heading">
-          <div className={styles.chapterCopy}>
-            <span className={styles.eyebrow}>Made for everyone</span>
-            <h2 id="chapter-heading">Soft Companions<br />for <em>Every Chapter.</em></h2>
-            <p>From quiet evenings at home to a thoughtful gift for someone special, our collections belong in life’s little moments.</p>
-            <Link className={styles.primaryButton} href="/about">Our Story <span aria-hidden="true">→</span></Link>
-          </div>
-          <div className={styles.collage}>
-            <div className={styles.collageImage + ' ' + styles.collageMain} data-sky-editorial-image>
-              <ProductMedia product={bunny} alt={bunny.name} fit="cover" sizes="(max-width: 760px) 92vw, 32vw" />
-            </div>
-            <div className={styles.collageImage + ' ' + styles.collageTop}>
-              <ProductMedia product={love} alt={love.name} fit="cover" sizes="(max-width: 760px) 45vw, 22vw" />
-            </div>
-            <div className={styles.collageImage + ' ' + styles.collageBottom}>
-              <ProductMedia product={sloth} alt={sloth.name} fit="cover" sizes="(max-width: 760px) 45vw, 22vw" />
-            </div>
-          </div>
-        </section>
-      </SectionReveal>
+      <SoftHavenForThat />
 
       <CollectionsMotion>
         <section className={styles.moreFriends} aria-labelledby="more-friends-heading">
