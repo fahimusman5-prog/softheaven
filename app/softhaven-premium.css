@@ -427,3 +427,17 @@
 @media(prefers-reduced-motion:reduce){
  .home-page .portrait-carousel__card{transition:none}
 }
+
+/* Campaign-scale desktop hero to match the SoftHaven reference composition. */
+@media(min-width:901px){
+ .home-page .hero-portrait{padding:clamp(60px,4vw,80px) 20px 42px}
+ .home-page .hero-portrait__copy h1{font-size:clamp(58px,4.8vw,96px);line-height:.98}
+ .home-page .hero-portrait__copy p{max-width:56rem;margin-top:19px;font-size:clamp(16px,1.05vw,21px);line-height:1.55}
+ .home-page .portrait-carousel{margin-top:clamp(22px,1.6vw,32px)}
+ .home-page .portrait-carousel__stage{height:clamp(430px,22.7vw,450px)}
+ .home-page .portrait-carousel__card{width:clamp(310px,19vw,370px);height:clamp(410px,21.4vw,424px);aspect-ratio:auto}
+ .home-page .portrait-carousel__controls{min-height:34px;margin-top:12px}
+ .home-page .portrait-hero-actions{width:min(100%,640px);gap:clamp(14px,1.2vw,24px);margin-top:14px}
+ .home-page .portrait-hero-button{min-height:clamp(60px,4vw,76px);font-size:clamp(14px,1vw,20px)}
+ .home-page .portrait-hero-note{margin-top:22px;font-size:clamp(22px,2vw,40px)}
+}
