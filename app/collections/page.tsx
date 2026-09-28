@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ProductMedia } from '@/components/product-media';
 import { CollectionsMotion } from '@/components/collections-motion';
-import { CollectionsChapterMotion } from '@/components/collections-chapter-motion';
 import { CollectionsMomentMotion } from '@/components/collections-moment-motion';
 import { CollectionsExperienceMotion } from '@/components/collections-experience-motion';
 import { collections, getCollectionProducts } from '@/lib/collections';
