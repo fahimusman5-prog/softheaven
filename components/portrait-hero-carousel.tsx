@@ -67,8 +67,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
   const dragStart = useRef<number | null>(null);
   const isHovering = useRef(false);
   const resumeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isMobile = useMediaQuery('(max-width: 620px)');
-  const visibleRadius = isMobile ? 1 : 2;
+  const isCompact = useMediaQuery('(max-width: 900px)');
+  const visibleRadius = isCompact ? 1 : 2;
 
   const scheduleResume = () => {
     if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
@@ -100,7 +100,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
     if (reducedMotion || isPaused || !isDocumentVisible) return;
     const timer = setInterval(() => {
       move(1);
-    }, 3200);
+    }, 4600);
     return () => clearInterval(timer);
   }, [isDocumentVisible, isPaused, reducedMotion, slides.length]);
 
@@ -109,12 +109,14 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
   }, []);
 
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest('button, a, input')) return;
     dragStart.current = event.clientX;
     setIsPaused(true);
     event.currentTarget.setPointerCapture(event.pointerId);
   };
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest('button, a, input')) return;
     if (dragStart.current !== null) {
       const distance = event.clientX - dragStart.current;
       if (Math.abs(distance) > 42) move(distance < 0 ? 1 : -1);
@@ -183,8 +185,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
             </article>
           );
         })}
-        <button className="portrait-carousel__arrow portrait-carousel__arrow--left" type="button" onClick={() => { setIsPaused(true); move(-1); scheduleResume(); }} aria-label="Previous featured companion"><ArrowIcon direction="left" /></button>
-        <button className="portrait-carousel__arrow portrait-carousel__arrow--right" type="button" onClick={() => { setIsPaused(true); move(1); scheduleResume(); }} aria-label="Next featured companion"><ArrowIcon direction="right" /></button>
+        <button className="portrait-carousel__arrow portrait-carousel__arrow--left" type="button" onPointerDown={(event) => event.stopPropagation()} onPointerUp={(event) => event.stopPropagation()} onClick={() => { setIsPaused(true); move(-1); scheduleResume(); }} aria-label="Previous slide"><ArrowIcon direction="left" /></button>
+        <button className="portrait-carousel__arrow portrait-carousel__arrow--right" type="button" onPointerDown={(event) => event.stopPropagation()} onPointerUp={(event) => event.stopPropagation()} onClick={() => { setIsPaused(true); move(1); scheduleResume(); }} aria-label="Next slide"><ArrowIcon direction="right" /></button>
       </div>
 
       <div className="portrait-carousel__controls">

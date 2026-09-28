@@ -349,28 +349,81 @@
  .home-collection-tile:hover,.home-page .home-product-grid .product-card:hover{transform:none}
 }
 
-/* Fit the complete storefront hero in the desktop first view. */
-@media(min-width:901px){
- .home-page .hero-portrait{padding:8px 20px 14px}
- .home-page .hero-portrait__copy h1{font-size:clamp(44px,6vh,72px);line-height:.9}
- .home-page .hero-portrait__copy p{max-width:44rem;margin-top:9px;font-size:clamp(12px,1.05vw,14px);line-height:1.45}
- .home-page .portrait-carousel{margin-top:12px}
- .home-page .portrait-carousel__stage{height:clamp(285px,37vh,390px)}
- .home-page .portrait-carousel__card{width:clamp(250px,22vw,330px);height:clamp(270px,33vh,350px)}
- .home-page .portrait-carousel__controls{min-height:22px;margin-top:3px}
- .home-page .portrait-hero-actions{width:min(100%,500px);margin-top:8px}
- .home-page .portrait-hero-button{min-height:48px}
- .home-page .portrait-hero-note{margin-top:6px}
+/* The hero is intentionally allowed to continue below the fold. */
+.home-page .hero-portrait{min-height:0;overflow:visible;padding:clamp(78px,5.7vw,96px) 20px clamp(46px,5vw,72px)}
+.home-page .hero-portrait__copy h1{font-size:clamp(3.8rem,5vw,5.4rem);line-height:.98}
+.home-page .hero-portrait__copy h1 em{display:inline-block;font-size:.9em;line-height:.98}
+.home-page .hero-portrait__copy p{max-width:43rem;margin-top:20px;font-size:clamp(15px,1.2vw,17px);line-height:1.58}
+.home-page .portrait-carousel{width:min(100%,1320px);margin:clamp(32px,3.1vw,44px) auto 0}
+.home-page .portrait-carousel__stage{width:min(100%,1220px);height:clamp(420px,29vw,470px);overflow:hidden;perspective:1400px}
+.home-page .portrait-carousel__card{width:clamp(300px,21vw,340px);height:auto;aspect-ratio:.79}
+.home-page .portrait-carousel__card.is-center{transform:translate3d(-50%,0,42px) scale(1) rotateZ(0)}
+.home-page .portrait-carousel__card.is-near-left{transform:translate3d(calc(-50% - clamp(205px,16.5vw,255px)),14px,-56px) scale(.9) rotateZ(-.8deg)}
+.home-page .portrait-carousel__card.is-near-right{transform:translate3d(calc(-50% + clamp(205px,16.5vw,255px)),14px,-56px) scale(.9) rotateZ(.8deg)}
+.home-page .portrait-carousel__card.is-side-left{transform:translate3d(calc(-50% - clamp(340px,28vw,430px)),30px,-150px) scale(.79) rotateZ(-1.8deg);opacity:.76}
+.home-page .portrait-carousel__card.is-side-right{transform:translate3d(calc(-50% + clamp(340px,28vw,430px)),30px,-150px) scale(.79) rotateZ(1.8deg);opacity:.76}
+.home-page .portrait-carousel__arrow{z-index:20}
+.home-page .portrait-carousel__arrow--left{left:calc(50% - clamp(340px,28vw,430px) - clamp(118px,8.3vw,138px) - clamp(14px,calc(72px - 3vw),34px))}
+.home-page .portrait-carousel__arrow--right{right:calc(50% - clamp(340px,28vw,430px) - clamp(118px,8.3vw,138px) - clamp(14px,calc(72px - 3vw),34px))}
+.home-page .portrait-carousel__controls{min-height:30px;margin-top:16px}
+.home-page .portrait-hero-actions{width:min(100%,550px);margin-top:22px}
+.home-page .portrait-hero-button{min-height:56px}
+.home-page .portrait-hero-note{margin-top:14px}
+@media(min-width:901px) and (max-width:1100px){
+ .home-page .portrait-carousel{width:100%}
+ .home-page .portrait-carousel__stage{width:min(100%,950px);height:clamp(390px,41vw,440px)}
+ .home-page .portrait-carousel__card{width:clamp(270px,27vw,300px)}
+ .home-page .portrait-carousel__card.is-near-left{transform:translate3d(calc(-50% - clamp(178px,19vw,205px)),13px,-56px) scale(.88) rotateZ(-.8deg)}
+ .home-page .portrait-carousel__card.is-near-right{transform:translate3d(calc(-50% + clamp(178px,19vw,205px)),13px,-56px) scale(.88) rotateZ(.8deg)}
+ .home-page .portrait-carousel__card.is-side-left{transform:translate3d(calc(-50% - clamp(280px,29vw,320px)),28px,-150px) scale(.76) rotateZ(-1.6deg)}
+ .home-page .portrait-carousel__card.is-side-right{transform:translate3d(calc(-50% + clamp(280px,29vw,320px)),28px,-150px) scale(.76) rotateZ(1.6deg)}
+ .home-page .portrait-carousel__arrow--left{left:calc(50% - clamp(280px,29vw,320px) - clamp(106px,11vw,119px) - 45px)}
+ .home-page .portrait-carousel__arrow--right{right:calc(50% - clamp(280px,29vw,320px) - clamp(106px,11vw,119px) - 45px)}
 }
-@media(min-width:901px) and (max-height:820px){
- .home-page .hero-portrait{padding-top:4px;padding-bottom:10px}
- .home-page .hero-portrait__copy h1{font-size:clamp(40px,5.4vh,52px)}
- .home-page .hero-portrait__copy p{margin-top:7px;font-size:12px;line-height:1.4}
- .home-page .portrait-carousel{margin-top:9px}
- .home-page .portrait-carousel__stage{height:clamp(255px,36vh,300px)}
- .home-page .portrait-carousel__card{width:clamp(230px,20vw,290px);height:clamp(245px,32vh,280px)}
- .home-page .portrait-carousel__controls{min-height:20px;margin-top:2px}
- .home-page .portrait-hero-actions{margin-top:6px}
- .home-page .portrait-hero-button{min-height:44px}
- .home-page .portrait-hero-note{margin-top:4px;font-size:14px}
+@media(max-width:900px){
+ .home-page .hero-portrait{padding:clamp(54px,8vw,74px) 16px 44px}
+ .home-page .hero-portrait__copy h1{font-size:clamp(3.25rem,8.8vw,4.25rem)}
+ .home-page .hero-portrait__copy p{max-width:38rem;margin-top:17px;font-size:15px}
+ .home-page .portrait-carousel{width:100%;margin-top:30px}
+ .home-page .portrait-carousel__stage{width:100%;height:clamp(390px,55vw,445px);perspective:none}
+ .home-page .portrait-carousel__card{width:clamp(255px,34vw,300px);aspect-ratio:.79}
+ .home-page .portrait-carousel__card.is-near-left{transform:translate3d(calc(-50% - clamp(178px,24vw,220px)),13px,0) scale(.84) rotateZ(-1deg);opacity:.66}
+ .home-page .portrait-carousel__card.is-near-right{transform:translate3d(calc(-50% + clamp(178px,24vw,220px)),13px,0) scale(.84) rotateZ(1deg);opacity:.66}
+ .home-page .portrait-carousel__arrow{top:14%;display:grid;width:42px;height:42px}
+ .home-page .portrait-carousel__arrow--left{left:8px}
+ .home-page .portrait-carousel__arrow--right{right:8px}
+ .home-page .portrait-carousel__controls{margin-top:12px}
+ .home-page .portrait-hero-actions{margin-top:20px}
+}
+@media(max-width:620px){
+ .home-page .hero-portrait{padding:44px 0 38px}
+ .home-page .hero-portrait__copy{padding-inline:20px}
+ .home-page .hero-portrait__copy h1{font-size:clamp(2.625rem,12vw,3.25rem);line-height:.99}
+ .home-page .hero-portrait__copy h1 em{font-size:.92em}
+ .home-page .hero-portrait__copy p{max-width:34rem;margin-top:14px;font-size:14px;line-height:1.55}
+ .home-page .portrait-carousel{margin-top:25px}
+ .home-page .portrait-carousel__stage{height:clamp(345px,92vw,390px)}
+ .home-page .portrait-carousel__card{width:clamp(230px,64vw,270px);aspect-ratio:.79;border-radius:25px}
+ .home-page .portrait-carousel__card.is-near-left{transform:translate3d(calc(-50% - clamp(178px,53vw,220px)),13px,0) scale(.82) rotateZ(-1deg);opacity:.55}
+ .home-page .portrait-carousel__card.is-near-right{transform:translate3d(calc(-50% + clamp(178px,53vw,220px)),13px,0) scale(.82) rotateZ(1deg);opacity:.55}
+ .home-page .portrait-carousel__arrow{width:38px;height:38px}
+ .home-page .portrait-carousel__arrow--left{left:4px}
+ .home-page .portrait-carousel__arrow--right{right:4px}
+ .home-page .portrait-carousel__caption{right:15px;bottom:16px;left:15px}
+ .home-page .portrait-carousel__controls{min-height:28px;margin-top:10px}
+ .home-page .portrait-hero-actions{width:calc(100% - 40px);gap:9px;margin-top:19px}
+ .home-page .portrait-hero-button{min-height:52px;gap:6px;padding-inline:8px;font-size:10px}
+ .home-page .portrait-hero-button svg{width:17px;height:17px}
+ .home-page .portrait-hero-note{margin-top:13px;font-size:14px}
+}
+@media(max-width:380px){
+ .home-page .hero-portrait__copy{padding-inline:16px}
+ .home-page .hero-portrait__copy h1{font-size:clamp(2.5rem,11.7vw,2.75rem)}
+ .home-page .portrait-carousel__arrow{width:34px;height:34px}
+ .home-page .portrait-carousel__arrow--left{left:2px}
+ .home-page .portrait-carousel__arrow--right{right:2px}
+ .home-page .portrait-hero-button{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+ .home-page .portrait-carousel__card{transition:none}
 }
