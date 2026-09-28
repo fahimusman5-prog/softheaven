@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ProductMedia } from '@/components/product-media';
 import { CollectionsMotion } from '@/components/collections-motion';
-import { CollectionsMomentMotion } from '@/components/collections-moment-motion';
+import { CollectionsChapterMotion } from '@/components/collections-chapter-motion';
 import { CollectionsExperienceMotion } from '@/components/collections-experience-motion';
 import { collections, getCollectionProducts } from '@/lib/collections';
 import { products } from '@/lib/data';
@@ -87,26 +87,28 @@ export default function CollectionsPage() {
         </section>
       </CollectionsMotion>
 
-      <CollectionsMomentMotion>
-        <section className={styles.momentSection} aria-labelledby="moment-heading">
-          <div className={styles.momentCopy} data-moment-copy>
-            <span className={styles.momentEyebrow} data-moment-eyebrow>Whatever the moment <i aria-hidden="true" /></span>
-            <h2 id="moment-heading" data-moment-heading>There’s a SoftHaven<br /><em>For That.</em></h2>
-            <p data-moment-description>Big celebrations, little surprises, comforting hugs or simply because — find a companion made for the moment.</p>
-            <a className={styles.momentCta} href="/shop" data-moment-cta>Find Your Perfect Match <span aria-hidden="true">→</span></a>
+      <CollectionsChapterMotion>
+        <section className={styles.chapterSection} aria-labelledby="chapter-heading">
+          <div className={styles.chapterCopy}>
+            <span className={styles.chapterEyebrow} data-chapter-eyebrow>Made for everyone <i aria-hidden="true" /></span>
+            <h2 id="chapter-heading" data-chapter-heading>Soft Companions<br />for <em>Every<br />Chapter.</em></h2>
+            <p data-chapter-copy>From quiet evenings at home to a thoughtful gift for someone special, our collections belong in life's little moments.</p>
+            <Link className={styles.chapterCta} href="/about" data-chapter-cta>Our Story <span aria-hidden="true">→</span></Link>
           </div>
-          <div className={styles.momentWorld} aria-label="SoftHaven companions gathered in the clouds">
-            <Image className={styles.momentCloud + ' ' + styles.momentCloudFar} src="/assets/clouds/generated/dream-cloud-03.webp" alt="" width={900} height={390} aria-hidden="true" data-moment-cloud-far />
-            <Image className={styles.momentCloud + ' ' + styles.momentCloudMid} src="/assets/clouds/soft-cloud-cluster.webp" alt="" width={900} height={390} aria-hidden="true" data-moment-cloud-mid />
-            <div className={styles.momentArt} data-moment-artwork><ProductMedia src="/images/collections/softheaven-collections-world.png" alt="SoftHaven plush companions gathered in pastel clouds" className={styles.momentArtImage} fit="contain" loading="eager" sizes="(max-width: 767px) 100vw, 58vw" /></div>
-            <Image className={styles.momentCloud + ' ' + styles.momentCloudFront} src="/assets/clouds/generated/dream-cloud-warm.webp" alt="" width={900} height={390} aria-hidden="true" data-moment-cloud-foreground />
-            <svg className={styles.momentConnectors} viewBox="0 0 700 560" aria-hidden="true"><path d="M118 136c6 50 30 53 61 65" /><path d="M593 159c-26 28-38 38-55 46" /><path d="M612 423c-14-20-26-31-48-43" /></svg>
-            <div className={styles.momentCallout + ' ' + styles.momentCalloutBirthday} data-moment-callout><span className={styles.momentCalloutIcon} aria-hidden="true">✦</span><span>Birthday<br />Surprise</span></div>
-            <div className={styles.momentCallout + ' ' + styles.momentCalloutBecause} data-moment-callout><span className={styles.momentCalloutIcon} aria-hidden="true">♡</span><span>Just<br />Because</span></div>
-            <div className={styles.momentCallout + ' ' + styles.momentCalloutHug} data-moment-callout><span className={styles.momentCalloutIcon} aria-hidden="true">✧</span><span>A Comforting<br />Hug</span></div>
+          <div className={styles.chapterWorld} data-chapter-art-parallax>
+            <div className={styles.chapterArtwork} data-chapter-art-entrance>
+              <Image
+                src="/images/collections/softheaven-collections-world.png"
+                alt="SoftHaven plush companions from across our collections"
+                width={1672}
+                height={940}
+                unoptimized
+                sizes="(max-width: 767px) 106vw, (max-width: 1100px) 58vw, 60vw"
+              />
+            </div>
           </div>
         </section>
-      </CollectionsMomentMotion>
+      </CollectionsChapterMotion>
 
       <section className={styles.giftSection} aria-labelledby="gift-heading">
         <div className={styles.giftCopy}>
