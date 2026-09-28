@@ -12,23 +12,20 @@ export type PortraitHeroSlide = {
   category: string;
 };
 
-type Position = -3 | -2 | -1 | 0 | 1 | 2 | 3;
+type Position = -2 | -1 | 0 | 1 | 2;
 
 const positionClass: Record<Position, string> = {
-  [-3]: 'is-far-left',
-  [-2]: 'is-side-left',
+  [-2]: 'is-far-left',
   [-1]: 'is-near-left',
   [0]: 'is-center',
   [1]: 'is-near-right',
-  [2]: 'is-side-right',
-  [3]: 'is-far-right',
+  [2]: 'is-far-right',
 };
 
 function getPosition(index: number, activeIndex: number, total: number): Position {
-  let offset = index - activeIndex;
-  if (offset > Math.floor(total / 2)) offset -= total;
-  if (offset < -Math.floor(total / 2)) offset += total;
-  return Math.max(-3, Math.min(3, offset)) as Position;
+  const half = Math.floor(total / 2);
+  const offset = ((index - activeIndex + total + half) % total) - half;
+  return Math.max(-2, Math.min(2, offset)) as Position;
 }
 
 function useMediaQuery(query: string) {
@@ -172,7 +169,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
                 alt={isActive ? slide.name : ''}
                 fill
                 fit="cover"
-                sizes="(max-width: 620px) 76vw, (max-width: 1023px) 330px, (max-width: 1439px) 340px, 360px"
+                sizes="(max-width: 620px) 76vw, (max-width: 1023px) 300px, (max-width: 1439px) 320px, 350px"
                 priority={index === 0}
                 loading={index === 0 ? 'eager' : 'lazy'}
               />

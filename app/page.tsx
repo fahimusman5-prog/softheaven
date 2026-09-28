@@ -11,6 +11,9 @@ const carouselSlides: PortraitHeroSlide[] = [
   { id: 'amour-hero', image: images.heart, name: products[3].name, descriptor: 'A velvet-hearted keepsake.', category: 'Love and gifting' },
   { id: 'celeste-hero', image: images.bunny, name: products[1].name, descriptor: 'A cloud-soft companion for tender days.', category: 'Soft animal friend' },
   { id: 'oliver-hero', image: images.sloth, name: products[2].name, descriptor: 'The gentle reminder to take it slow.', category: 'Soft animal friend' },
+  // The fifth slot keeps the desktop fan mathematically symmetrical with another
+  // approved Aurelius catalogue image, rather than inventing a new product.
+  { id: 'aurelius-gift-hero', image: images.gift, name: products[0].name, descriptor: 'A timeless companion for every hug.', category: 'Gift-ready teddy' },
 ];
 
 function BenefitIcon({ type }: { type: 'quality' | 'selected' | 'gift' | 'delivery' }) {
