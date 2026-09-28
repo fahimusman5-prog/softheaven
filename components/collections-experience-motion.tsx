@@ -10,36 +10,73 @@ export function CollectionsExperienceMotion({ children }: { children: ReactNode 
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!node) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const context = gsap.context(() => {
-      const mobile = window.matchMedia('(max-width: 767px)').matches;
+    const media = gsap.matchMedia(node);
+    media.add({
+      desktop: '(min-width: 768px)',
+      reduceMotion: '(prefers-reduced-motion: reduce)',
+    }, ({ conditions }) => {
+      if (conditions?.reduceMotion) return;
+
+      const mobile = !conditions?.desktop;
       const trigger = { trigger: node, start: 'top 82%', once: true };
       const intro = gsap.timeline({ scrollTrigger: trigger });
-      const reveal = (selector: string, vars: gsap.TweenVars, position?: gsap.Position) => {
+      const reveal = (selector: string, y: number, position?: gsap.Position, stagger = 0) => {
         const elements = node.querySelectorAll(selector);
-        if (elements.length) {
-          intro.fromTo(elements, { ...vars, immediateRender: false }, {
-            ...Object.fromEntries(Object.keys(vars).map((key) => [key, key === 'autoAlpha' ? 1 : 0])),
-            y: 0,
-            clearProps: 'transform,opacity,visibility',
-            duration: mobile ? 0.58 : 0.72,
-            ease: 'power3.out',
-            stagger: selector === '[data-experience-reason]' ? (mobile ? 0.06 : 0.11) : 0,
-          }, position);
-        }
+        if (!elements.length) return;
+        intro.fromTo(elements, { autoAlpha: 0, y, immediateRender: false }, {
+          autoAlpha: 1,
+          y: 0,
+          clearProps: 'transform,opacity,visibility',
+          duration: mobile ? 0.58 : 0.72,
+          ease: 'power3.out',
+          stagger,
+        }, position);
       };
 
-      reveal('[data-experience-eyebrow]', { autoAlpha: 0, y: mobile ? 16 : 20 });
-      reveal('[data-experience-heading]', { autoAlpha: 0, y: mobile ? 24 : 34 }, '<+=.06');
-      reveal('[data-experience-description]', { autoAlpha: 0, y: mobile ? 18 : 25 }, '<+=.1');
-      reveal('[data-experience-reason]', { autoAlpha: 0, y: mobile ? 18 : 26 }, '<+=.08');
-
+      reveal('[data-experience-eyebrow]', mobile ? 16 : 20);
+      reveal('[data-experience-heading]', mobile ? 24 : 34, '<+=.06');
+      reveal('[data-experience-description]', mobile ? 18 : 25, '<+=.1');
       const dividers = node.querySelectorAll('[data-experience-divider]');
-      if (dividers.length) {
-        intro.fromTo(dividers, { scaleY: 0 }, { scaleY: 1, transformOrigin: 'top', duration: mobile ? 0.5 : 0.8, ease: 'power3.out', stagger: 0.1 }, '<+=.04');
-      }
+      const reasons = node.querySelectorAll('[data-experience-reason]');
+      reasons.forEach((reason, index) => {
+        const number = reason.querySelector('[data-experience-number]');
+        const details = reason.querySelectorAll('[data-experience-detail]');
+        if (number) {
+          intro.fromTo(number, { autoAlpha: 0, y: mobile ? -10 : -14, immediateRender: false }, {
+            autoAlpha: 1,
+            y: 0,
+            clearProps: 'transform,opacity,visibility',
+            duration: mobile ? 0.5 : 0.62,
+            ease: 'power3.out',
+          }, index === 0 ? '<+=.08' : '>');
+        }
+        if (details.length) {
+          intro.fromTo(details, { autoAlpha: 0, y: mobile ? 12 : 16, immediateRender: false }, {
+            autoAlpha: 1,
+            y: 0,
+            clearProps: 'transform,opacity,visibility',
+            duration: mobile ? 0.46 : 0.56,
+            ease: 'power3.out',
+            stagger: 0.045,
+          }, '<+=.04');
+        }
+        const divider = dividers[index];
+        if (divider) {
+          intro.fromTo(divider,
+            { scaleX: mobile ? 0 : 1, scaleY: mobile ? 1 : 0, immediateRender: false },
+            {
+              scaleX: 1,
+              scaleY: 1,
+              transformOrigin: mobile ? 'left center' : 'top',
+              clearProps: 'transform',
+              duration: mobile ? 0.5 : 0.8,
+              ease: 'power3.out',
+            }, '>');
+        }
+      });
 
       const artwork = node.querySelector('[data-experience-artwork]');
       if (artwork) {
@@ -51,7 +88,7 @@ export function CollectionsExperienceMotion({ children }: { children: ReactNode 
           clearProps: 'transform,opacity,visibility',
           duration: mobile ? 0.78 : 1,
           ease: 'power3.out',
-        }, '<+=.05');
+        }, '>+=.06');
       }
 
       if (!mobile) {
@@ -61,9 +98,9 @@ export function CollectionsExperienceMotion({ children }: { children: ReactNode 
           if (element) gsap.to(element, { y, ease: 'none', scrollTrigger: range });
         });
       }
-    }, node);
+    });
 
-    return () => context.revert();
+    return () => media.revert();
   }, []);
 
   return <div ref={ref}>{children}</div>;

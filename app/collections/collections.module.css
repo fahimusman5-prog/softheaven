@@ -251,12 +251,12 @@
 .experienceCloudLeft { top: 14%; left: -17%; width: 66%; opacity: .17; filter: blur(.1px) drop-shadow(0 18px 24px rgba(145, 125, 185, .1)); }
 .experienceCloudBottom { right: -11%; bottom: -8%; width: 74%; opacity: .38; filter: drop-shadow(0 15px 22px rgba(145, 125, 185, .12)); }
 .experienceCopy { position: relative; z-index: 3; max-width: 475px; }
-.experienceEyebrow { display: flex; align-items: center; gap: 15px; color: #59618d; font: 700 clamp(11px, 1vw, 13px)/1.2 'Plus Jakarta Sans', sans-serif; letter-spacing: .24em; text-transform: uppercase; }
-.experienceEyebrow i { display: block; width: min(138px, 12vw); height: 1px; background: linear-gradient(90deg, rgba(123, 109, 185, .62), transparent); }
+.experienceEyebrow { display: flex; flex-wrap: nowrap; align-items: center; gap: 15px; color: #59618d; font: 700 clamp(11px, 1vw, 13px)/1.2 'Plus Jakarta Sans', sans-serif; letter-spacing: .24em; text-transform: uppercase; white-space: nowrap; }
+.experienceEyebrow i { display: block; flex: 0 0 min(112px, 8vw); width: min(112px, 8vw); height: 1px; background: linear-gradient(90deg, rgba(123, 109, 185, .62), transparent); }
 .experienceCopy h2 { margin-top: 23px; color: #192140; font: 500 clamp(52px, 4.6vw, 76px)/.92 'Playfair Display', Georgia, serif; letter-spacing: -.055em; }
 .experienceCopy h2 em { color: transparent; background: linear-gradient(108deg, #bd54dd, #8b73e9 52%, #75bce9); -webkit-background-clip: text; background-clip: text; font-weight: 400; }
 .experienceCopy > p { max-width: 460px; margin-top: 26px; color: #59627e; font-size: clamp(16px, 1.24vw, 19px); line-height: 1.64; }
-.experienceReasons { position: relative; z-index: 4; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: center; min-width: 0; padding-right: clamp(78px, 10vw, 160px); }
+.experienceReasons { position: relative; z-index: 4; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-self: center; min-width: 0; padding-right: clamp(170px, 15vw, 220px); }
 .experienceReason { position: relative; min-width: 0; padding: 0 clamp(16px, 2.2vw, 30px); }
 .experienceReason:first-child { padding-left: 0; }
 .experienceNumber { display: block; color: rgba(233, 140, 193, .42); font: italic 400 clamp(76px, 7vw, 120px)/.72 'Playfair Display', Georgia, serif; letter-spacing: -.08em; }
@@ -274,15 +274,15 @@
 .experienceAccentBlue { background: #89b7ef; }
 .experienceReason p { max-width: 190px; margin-top: 14px; color: #626a85; font-size: 14px; line-height: 1.6; }
 .experienceDivider { width: 1px; height: 178px; align-self: center; background: linear-gradient(180deg, transparent, rgba(145, 129, 177, .28) 20%, rgba(145, 129, 177, .28) 80%, transparent); transform-origin: top; }
-.experienceVisual { position: absolute; z-index: 2; right: -3%; bottom: -4%; width: min(29%, 350px); pointer-events: none; filter: drop-shadow(0 20px 26px rgba(110, 81, 119, .15)); will-change: transform, opacity; }
+.experienceVisual { position: absolute; z-index: 2; right: -1%; bottom: -4%; width: min(20%, 280px); pointer-events: none; filter: drop-shadow(0 20px 26px rgba(110, 81, 119, .15)); will-change: transform, opacity; }
 .experienceTeddy { display: block; width: 100%; height: auto; object-fit: contain; }
 @media (max-width: 1100px) {
-  .experienceSection { grid-template-columns: minmax(230px, .75fr) minmax(0, 1.6fr); gap: 28px; padding-inline: 26px; }
-  .experienceReasons { padding-right: 64px; }
+  .experienceSection { grid-template-columns: 1fr; gap: 32px; padding-inline: 26px; }
+  .experienceReasons { padding-right: clamp(200px, 24vw, 250px); }
   .experienceReason { padding-inline: 13px; }
   .experienceReason h3 { font-size: 21px; }
   .experienceReason p { font-size: 13px; }
-  .experienceVisual { width: 26%; right: -2%; }
+  .experienceVisual { width: min(26%, 280px); right: 0; }
 }
 @media (max-width: 840px) {
   .experienceSection { grid-template-columns: 1fr; gap: 38px; min-height: 0; padding: 64px 30px 70px; }
@@ -294,7 +294,7 @@
 @media (max-width: 760px) {
   .experienceSection { display: flex; flex-direction: column; align-items: stretch; gap: 34px; margin-top: 56px; padding: 56px 20px 42px; }
   .experienceEyebrow { font-size: 10px; letter-spacing: .2em; }
-  .experienceEyebrow i { width: 64px; }
+  .experienceEyebrow i { flex-basis: 64px; width: 64px; }
   .experienceCopy h2 { margin-top: 17px; font-size: clamp(43px, 11vw, 58px); }
   .experienceCopy > p { margin-top: 18px; font-size: 15px; line-height: 1.65; }
   .experienceReasons { display: flex; flex-direction: column; gap: 0; }
