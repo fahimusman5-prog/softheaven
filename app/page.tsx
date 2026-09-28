@@ -11,9 +11,6 @@ const carouselSlides: PortraitHeroSlide[] = [
   { id: 'amour-hero', image: images.heart, name: products[3].name, descriptor: 'A velvet-hearted keepsake.', category: 'Love and gifting' },
   { id: 'celeste-hero', image: images.bunny, name: products[1].name, descriptor: 'A cloud-soft companion for tender days.', category: 'Soft animal friend' },
   { id: 'oliver-hero', image: images.sloth, name: products[2].name, descriptor: 'The gentle reminder to take it slow.', category: 'Soft animal friend' },
-  { id: 'keepsake-hero', image: images.gift, name: 'Eternal Warmth Keepsake Box', descriptor: 'A little luxury, beautifully held.', category: 'Gift-ready edit' },
-  { id: 'aurelius-hero-detail', image: images.bear, name: products[0].name, descriptor: 'Grounded softness for slower evenings.', category: 'Heritage archive' },
-  { id: 'celeste-hero-detail', image: images.bunny, name: products[1].name, descriptor: 'Made for room-filling tenderness.', category: 'New arrival' },
 ];
 
 function BenefitIcon({ type }: { type: 'quality' | 'selected' | 'gift' | 'delivery' }) {
