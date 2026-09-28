@@ -10,6 +10,7 @@ export function CollectionsChapterMotion({ children }: { children: React.ReactNo
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     gsap.registerPlugin(ScrollTrigger);
     const context = gsap.context(() => {
