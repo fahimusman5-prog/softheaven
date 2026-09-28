@@ -8,6 +8,8 @@ export type SoftHavenCollection = {
   symbol: string;
   tone: 'cream' | 'blue' | 'mint' | 'rose' | 'lavender' | 'sky';
   productIds: string[];
+  image?: string;
+  imageAlt?: string;
 };
 
 // Product links reflect the real catalogue entries currently available in this repository.
@@ -21,6 +23,8 @@ export const collections: SoftHavenCollection[] = [
     symbol: '♡',
     tone: 'cream',
     productIds: ['aurelius', 'amour'],
+    image: '/images/collections/teddy-classic-cuddles.webp',
+    imageAlt: 'A group of teddy and classic plush companions nestled together on soft clouds',
   },
   {
     slug: 'bunny-sweet-friends',
@@ -30,6 +34,8 @@ export const collections: SoftHavenCollection[] = [
     symbol: '✧',
     tone: 'blue',
     productIds: ['celeste'],
+    image: '/images/collections/bunny-sweet-friends.webp',
+    imageAlt: 'A group of pastel bunny friends gathered together on a soft cloud bed',
   },
   {
     slug: 'puppy-pals',
@@ -48,6 +54,8 @@ export const collections: SoftHavenCollection[] = [
     symbol: '✿',
     tone: 'mint',
     productIds: ['oliver'],
+    image: '/images/collections/wild-wonderful.webp',
+    imageAlt: 'A group of wild and wonderful plush animal friends gathered together',
   },
   {
     slug: 'kitty-corner',

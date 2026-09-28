@@ -51,17 +51,17 @@ export default function CollectionsPage() {
           </div>
           <div className={styles.collectionGrid}>
             {featuredCollections.map((collection) => {
-              const product = getCollectionProducts(collection)[0];
               return (
               <Link
                 key={collection.slug}
                 className={styles.collectionCard + ' ' + styles[collection.tone]}
                 href={'/shop?collection=' + collection.slug}
                 aria-label={'Browse ' + collection.name}
+                data-collection={collection.slug}
                 data-collection-card
               >
                 <div className={styles.cardPhoto}>
-                  {product && <ProductMedia product={product} alt={product.name} className={styles.photoImage} fit="contain" sizes="(max-width: 760px) 92vw, (max-width: 1050px) 46vw, 31vw" />}
+                  {collection.image && <ProductMedia src={collection.image} alt={collection.imageAlt ?? collection.name} className={styles.photoImage} fit="cover" sizes="(max-width: 760px) 92vw, (max-width: 1050px) 46vw, 31vw" />}
                   <span className={styles.cardSymbol} aria-hidden="true">{collection.symbol}</span>
                 </div>
                 <div className={styles.cardDetails}>
