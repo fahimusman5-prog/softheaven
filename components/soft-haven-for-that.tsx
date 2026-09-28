@@ -23,7 +23,7 @@ function Cloud({ src, className, sizes, depth }: { src: string; className: strin
   return (
     <div className={`${styles.cloudLayer} ${className}`} data-cloud-parallax={depth} aria-hidden="true">
       <div className={styles.cloudDrift} data-cloud-drift>
-        <Image src={src} alt="" fill sizes={sizes} quality={82} />
+        <Image src={src} alt="" fill sizes={sizes} quality={75} />
       </div>
     </div>
   );
@@ -121,7 +121,7 @@ export function SoftHavenForThat() {
           <Cloud src="/assets/clouds/soft-cloud-cluster.webp" className={styles.cloudMid} sizes="(max-width: 767px) 86vw, 43vw" depth="mid" />
           <div className={styles.island} data-island-entrance>
             <div className={styles.companionScene} data-companion-entrance>
-              <Image src="/images/collections/teddy-classic-cuddles.webp" alt="A teddy, puppy, elephant, and kitten nestled together among SoftHaven clouds" fill sizes="(max-width: 767px) 112vw, (max-width: 1100px) 78vw, 50vw" quality={86} />
+              <Image src="/images/collections/teddy-classic-cuddles.webp" alt="A teddy, puppy, elephant, and kitten nestled together among SoftHaven clouds" fill sizes="(max-width: 767px) 112vw, (max-width: 1100px) 78vw, 50vw" quality={75} />
             </div>
             <Cloud src="/assets/clouds/soft-cloud-bank.webp" className={styles.cloudNear} sizes="(max-width: 767px) 100vw, 52vw" depth="near" />
             <Cloud src="/assets/clouds/cloud-wisp.webp" className={styles.cloudWisp} sizes="(max-width: 767px) 70vw, 33vw" depth="near" />
