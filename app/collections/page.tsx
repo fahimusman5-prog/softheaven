@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ProductMedia } from '@/components/product-media';
 import { CollectionsMotion } from '@/components/collections-motion';
 import { CollectionsChapterMotion } from '@/components/collections-chapter-motion';
+import { CollectionsMomentMotion } from '@/components/collections-moment-motion';
 import { collections, getCollectionProducts } from '@/lib/collections';
 import { products } from '@/lib/data';
 import styles from './collections.module.css';
@@ -89,22 +90,26 @@ export default function CollectionsPage() {
         </section>
       </CollectionsMotion>
 
-      <CollectionsChapterMotion>
-        <section className={styles.everyChapter} aria-labelledby="chapter-heading">
-          <div className={styles.chapterCopy}>
-            <span className={styles.eyebrow} data-chapter-eyebrow>Why SoftHaven</span>
-            <h2 id="chapter-heading" data-chapter-heading>Made to Feel<br /><em>Better.</em></h2>
-            <p data-chapter-copy>A familiar face, a comforting texture, a little softness close by. Our companions are chosen for the everyday moments that matter.</p>
-            <Link className={styles.textLink} href="/about" data-chapter-cta>Our approach to softer days <span aria-hidden="true">→</span></Link>
+      <CollectionsMomentMotion>
+        <section className={styles.momentSection} aria-labelledby="moment-heading">
+          <div className={styles.momentCopy} data-moment-copy>
+            <span className={styles.momentEyebrow} data-moment-eyebrow>Whatever the moment <i aria-hidden="true" /></span>
+            <h2 id="moment-heading" data-moment-heading>There’s a SoftHaven<br /><em>For That.</em></h2>
+            <p data-moment-description>Big celebrations, little surprises, comforting hugs or simply because — find a companion made for the moment.</p>
+            <a className={styles.momentCta} href="/shop" data-moment-cta>Find Your Perfect Match <span aria-hidden="true">→</span></a>
           </div>
-          <figure className={styles.chapterFigure} data-chapter-art-parallax>
-            <div className={styles.chapterArtEntrance} data-chapter-art-entrance>
-              <ProductMedia product={bunny} alt="Celeste Cloud Bunny, a soft blue-eared plush companion" className={styles.chapterArtwork} fit="cover" sizes="(max-width: 767px) 92vw, 58vw" />
-            </div>
-            <figcaption><span>SoftHaven companion</span><strong>Celeste Cloud Bunny</strong></figcaption>
-          </figure>
+          <div className={styles.momentWorld} aria-label="SoftHaven companions gathered in the clouds">
+            <Image className={styles.momentCloud + ' ' + styles.momentCloudFar} src="/assets/clouds/generated/dream-cloud-03.webp" alt="" width={900} height={390} aria-hidden="true" data-moment-cloud-far />
+            <Image className={styles.momentCloud + ' ' + styles.momentCloudMid} src="/assets/clouds/soft-cloud-cluster.webp" alt="" width={900} height={390} aria-hidden="true" data-moment-cloud-mid />
+            <div className={styles.momentArt} data-moment-artwork><ProductMedia src="/images/collections/softheaven-collections-world.png" alt="SoftHaven plush companions gathered in pastel clouds" className={styles.momentArtImage} fit="contain" loading="eager" sizes="(max-width: 767px) 100vw, 58vw" /></div>
+            <Image className={styles.momentCloud + ' ' + styles.momentCloudFront} src="/assets/clouds/generated/dream-cloud-warm.webp" alt="" width={900} height={390} aria-hidden="true" data-moment-cloud-foreground />
+            <svg className={styles.momentConnectors} viewBox="0 0 700 560" aria-hidden="true"><path d="M118 136c6 50 30 53 61 65" /><path d="M593 159c-26 28-38 38-55 46" /><path d="M612 423c-14-20-26-31-48-43" /></svg>
+            <div className={styles.momentCallout + ' ' + styles.momentCalloutBirthday} data-moment-callout><span className={styles.momentCalloutIcon} aria-hidden="true">✦</span><span>Birthday<br />Surprise</span></div>
+            <div className={styles.momentCallout + ' ' + styles.momentCalloutBecause} data-moment-callout><span className={styles.momentCalloutIcon} aria-hidden="true">♡</span><span>Just<br />Because</span></div>
+            <div className={styles.momentCallout + ' ' + styles.momentCalloutHug} data-moment-callout><span className={styles.momentCalloutIcon} aria-hidden="true">✧</span><span>A Comforting<br />Hug</span></div>
+          </div>
         </section>
-      </CollectionsChapterMotion>
+      </CollectionsMomentMotion>
 
       <section className={styles.littleThings} aria-labelledby="little-things-heading">
         <div className={styles.editorialPhotoGrid}>
