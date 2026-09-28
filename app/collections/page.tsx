@@ -6,6 +6,7 @@ import { ProductMedia } from '@/components/product-media';
 import { products } from '@/lib/data';
 import { CollectionsMotion } from '@/components/collections-motion';
 import { CollectionsChapterMotion } from '@/components/collections-chapter-motion';
+import { CollectionsQualityMotion } from '@/components/collections-quality-motion';
 import { collections, getCollectionProducts } from '@/lib/collections';
 import styles from './collections.module.css';
 
@@ -22,7 +23,6 @@ const benefits = [
 ];
 
 export default function CollectionsPage() {
-  const love = products.find((product) => product.id === 'amour') ?? products[0];
   const featuredCollections = collections.filter((collection) => collection.featured);
   const moreCollections = collections.filter((collection) => !collection.featured);
 
@@ -127,21 +127,44 @@ export default function CollectionsPage() {
         </section>
       </CollectionsMotion>
 
-      <SectionReveal>
-        <section className={styles.feature} aria-labelledby="feature-heading">
-          <div className={styles.featureArt}>
-            <span className={styles.featureGlow} aria-hidden="true" />
-            <ProductMedia product={love} alt={love.name} fit="contain" sizes="(max-width: 760px) 72vw, 34vw" />
-            <span className={styles.giftTag} aria-hidden="true">A little<br />more love</span>
+      <CollectionsQualityMotion>
+        <section className={styles.qualitySection} aria-labelledby="quality-heading">
+          <div className={styles.qualityVisual} data-quality-visual-wrap>
+            <span className={styles.qualityGlow} aria-hidden="true" />
+            <span className={styles.qualityCloud + ' ' + styles.qualityCloudBack} aria-hidden="true" data-quality-cloud-back />
+            <div className={styles.qualityArtwork} data-quality-artwork>
+              <ProductMedia
+                src="/images/collections/softheaven-collections-world.png"
+                alt="SoftHaven plush companions gathered among pastel clouds"
+                className={styles.qualityImage}
+                fit="contain"
+                sizes="(max-width: 767px) 100vw, (max-width: 1099px) 48vw, 650px"
+              />
+            </div>
+            <span className={styles.qualityCloud + ' ' + styles.qualityCloudFront} aria-hidden="true" data-quality-cloud-front />
           </div>
-          <div className={styles.featureCopy}>
-            <span className={styles.eyebrow}>Thoughtful by design</span>
-            <h2 id="feature-heading">More Than<br /><em>Just Plushies.</em></h2>
-            <p>Each collection is a small invitation to bring warmth, comfort and a little more happiness into everyday life.</p>
-            <Link className={styles.primaryButton} href="/shop">Explore All Collections <span aria-hidden="true">→</span></Link>
+          <div className={styles.qualityCopy}>
+            <span className={styles.eyebrow} data-quality-eyebrow>The SoftHaven Difference</span>
+            <h2 id="quality-heading" data-quality-heading>Made to Feel<br /><em>Extra Special.</em></h2>
+            <p data-quality-description>Thoughtfully selected plush companions with the softness, character and quality that make every hug feel a little more special.</p>
+            <div className={styles.qualityMarkers} aria-label="The SoftHaven difference">
+              <div className={styles.qualityMarker} data-quality-marker>
+                <span className={styles.qualityIcon} aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3c3.4 2.3 5.5 5.2 5.5 8.3A5.5 5.5 0 0 1 12 16.8a5.5 5.5 0 0 1-5.5-5.5C6.5 8.2 9 5.3 12 3Z" /><path d="M12 16.8v4.2M9.3 21h5.4" /></svg></span>
+                <span>Soft to the Touch</span>
+              </div>
+              <div className={styles.qualityMarker} data-quality-marker>
+                <span className={styles.qualityIcon} aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20.5S4 15.8 4 9.3A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.3c0 6.5-8 11.2-8 11.2Z" /><path d="m12 4 .7 1.8L14.5 6l-1.8.7L12 8.5l-.7-1.8L9.5 6l1.8-.7L12 4Z" /></svg></span>
+                <span>Thoughtfully Selected</span>
+              </div>
+              <div className={styles.qualityMarker} data-quality-marker>
+                <span className={styles.qualityIcon} aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8h18v13H3zM2 4h20v4H2zM12 4v17M12 4c-1-3-6-4-6-1 0 2 3 2 6 1Zm0 0c1-3 6-4 6-1 0 2 3 2 6 1Z" /></svg></span>
+                <span>Made for Meaningful Moments</span>
+              </div>
+            </div>
+            <Link className={styles.qualityCta} href="/about" data-quality-cta>Discover the SoftHaven Story <span aria-hidden="true">→</span></Link>
           </div>
         </section>
-      </SectionReveal>
+      </CollectionsQualityMotion>
 
       <SectionReveal>
         <section className={styles.benefits} aria-labelledby="benefits-heading">
