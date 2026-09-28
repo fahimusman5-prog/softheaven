@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SectionReveal } from '@/components/section-reveal';
 import { ProductMedia } from '@/components/product-media';
-import { products } from '@/lib/data';
 import { CollectionsMotion } from '@/components/collections-motion';
 import { CollectionsChapterMotion } from '@/components/collections-chapter-motion';
 import { CollectionsQualityMotion } from '@/components/collections-quality-motion';
