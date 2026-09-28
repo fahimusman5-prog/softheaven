@@ -4,40 +4,14 @@ import Link from 'next/link';
 import { SectionReveal } from '@/components/section-reveal';
 import { ProductMedia } from '@/components/product-media';
 import { products } from '@/lib/data';
+import { CollectionsMotion } from '@/components/collections-motion';
+import { collections, getCollectionProducts } from '@/lib/collections';
 import styles from './collections.module.css';
 
 export const metadata: Metadata = {
   title: 'Collections | SoftHaven',
   description: 'Explore SoftHaven plush companions for thoughtful gifts, quiet comforts, and everyday moments.',
 };
-
-// Presentation families intentionally map to the three filters already supported by /shop.
-const collections = [
-  {
-    title: 'Plushie Collections',
-    description: 'Cuddly companions for comfort, hugs, and happier days.',
-    category: 'Teddy Bear Collection',
-    product: products.find((product) => product.id === 'aurelius') ?? products[0],
-    symbol: '♡',
-    tone: 'rose',
-  },
-  {
-    title: 'Precious Collections',
-    description: 'Thoughtful plush gifts for the moments you want to keep.',
-    category: 'Love & Gifting',
-    product: products.find((product) => product.id === 'amour') ?? products[0],
-    symbol: '✧',
-    tone: 'lilac',
-  },
-  {
-    title: 'Animal Collections',
-    description: 'Gentle animal friends to bring a little joy to every day.',
-    category: 'Soft Animal Friends',
-    product: products.find((product) => product.id === 'celeste') ?? products[0],
-    symbol: '⌁',
-    tone: 'blue',
-  },
-] as const;
 
 const benefits = [
   { icon: '♡', title: 'Thoughtful Selection', copy: 'Companions chosen for the moments that matter.' },
@@ -50,6 +24,8 @@ export default function CollectionsPage() {
   const love = products.find((product) => product.id === 'amour') ?? products[0];
   const bunny = products.find((product) => product.id === 'celeste') ?? products[0];
   const sloth = products.find((product) => product.id === 'oliver') ?? products[0];
+  const featuredCollections = collections.filter((collection) => collection.featured);
+  const moreCollections = collections.filter((collection) => !collection.featured);
 
   return (
     <main className={styles.page}>
@@ -66,34 +42,38 @@ export default function CollectionsPage() {
         </div>
       </section>
 
-      <SectionReveal>
+      <CollectionsMotion>
         <section className={styles.collectionSection} id="collection-list" aria-labelledby="collection-heading">
           <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>Explore our collections</span>
-            <h2 id="collection-heading">Three Special <em>Collections.</em></h2>
-            <p>Different personalities, the same soft comfort. Find the collection that feels right for you.</p>
+            <span className={styles.eyebrow} data-collection-reveal>Explore our collections</span>
+            <h2 id="collection-heading" data-collection-reveal>Meet Our Featured <em>Collections.</em></h2>
+            <p data-collection-reveal>From timeless teddy bears to playful little characters, discover the SoftHaven collection that feels made for you.</p>
           </div>
           <div className={styles.collectionGrid}>
-            {collections.map((collection) => (
+            {featuredCollections.map((collection) => {
+              const product = getCollectionProducts(collection)[0];
+              return (
               <Link
-                key={collection.category}
+                key={collection.slug}
                 className={styles.collectionCard + ' ' + styles[collection.tone]}
-                href={'/shop?category=' + encodeURIComponent(collection.category)}
-                aria-label={'Browse ' + collection.title}
+                href={'/shop?collection=' + collection.slug}
+                aria-label={'Browse ' + collection.name}
+                data-collection-card
               >
                 <div className={styles.cardPhoto}>
-                  <ProductMedia product={collection.product} alt={collection.product.name} className={styles.photoImage} fit="cover" sizes="(max-width: 760px) 92vw, (max-width: 1050px) 46vw, 31vw" />
+                  {product && <ProductMedia product={product} alt={product.name} className={styles.photoImage} fit="contain" sizes="(max-width: 760px) 92vw, (max-width: 1050px) 46vw, 31vw" />}
                   <span className={styles.cardSymbol} aria-hidden="true">{collection.symbol}</span>
                 </div>
                 <div className={styles.cardDetails}>
-                  <span><strong>{collection.title}</strong><small>{collection.description}</small></span>
+                  <span><strong>{collection.name}</strong><small>{collection.description}</small></span>
                   <span className={styles.cardArrow} aria-hidden="true">→</span>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </section>
-      </SectionReveal>
+      </CollectionsMotion>
 
       <SectionReveal>
         <section className={styles.everyChapter} aria-labelledby="chapter-heading">
@@ -116,6 +96,34 @@ export default function CollectionsPage() {
           </div>
         </section>
       </SectionReveal>
+
+      <CollectionsMotion>
+        <section className={styles.moreFriends} aria-labelledby="more-friends-heading">
+          <div className={styles.moreFriendsHeading}>
+            <span className={styles.eyebrow} data-collection-reveal>SoftHaven has more to discover</span>
+            <h2 id="more-friends-heading" data-collection-reveal>More Friends to <em>Meet.</em></h2>
+            <p data-collection-reveal>There are more little personalities waiting to find their way into your world.</p>
+          </div>
+          <div className={styles.moreFriendsGrid}>
+            {moreCollections.map((collection) => {
+              const product = getCollectionProducts(collection)[0];
+              return (
+                <Link key={collection.slug} href={'/shop?collection=' + collection.slug} className={styles.moreFriendCard + ' ' + styles[collection.tone]} data-collection-card>
+                  <span className={styles.moreFriendArt} aria-hidden="true">
+                    <span>{collection.symbol}</span>
+                    {!product && <small>New friends are on their way</small>}
+                  </span>
+                  <span className={styles.moreFriendCopy}>
+                    <strong>{collection.name}</strong>
+                    <small>{collection.description}</small>
+                    <span className={styles.moreFriendLink}>Explore this collection <span aria-hidden="true">→</span></span>
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      </CollectionsMotion>
 
       <SectionReveal>
         <section className={styles.feature} aria-labelledby="feature-heading">
