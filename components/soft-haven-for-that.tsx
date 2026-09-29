@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import '@/app/collections/soft-haven-for-that.module.css';
 
 const labels = [
   { className: 'birthday', icon: '✦', title: 'Birthday', detail: 'Surprise' },
