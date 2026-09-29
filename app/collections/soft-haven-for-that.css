@@ -17,3 +17,7 @@
 @media (prefers-reduced-motion:reduce){.softhaven-moment__cta,.softhaven-moment__cta b{transition:none}}
 
 
+
+/* Keep every companion above decorative cloud layers. */
+.softhaven-moment__foreground-cloud{display:none!important}
+.softhaven-moment__companions{z-index:20!important;bottom:-4%!important}
