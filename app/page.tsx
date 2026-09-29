@@ -25,7 +25,7 @@ function BenefitIcon({ type }: { type: 'quality' | 'selected' | 'gift' | 'delive
 
 export default function HomePage() { return <HomeMotion><div className="home-page">
    <div className="home-landing">
-   <section className="hero-portrait"><div className="hero-portrait__copy"><span className="eyebrow">Handcrafted with love</span><h1>More Than Toys,<br/><em>More Love</em></h1><p>Discover our collection of soft companions, made to bring warmth, joy, and comfort to every moment.</p></div><PortraitHeroCarousel slides={carouselSlides}/></section>
+   <section className="hero-portrait"><div className="hero-portrait__copy"><h1>More Than Toys,<br/><em>More Love</em></h1><p>Discover our collection of soft companions, made to bring warmth, joy, and comfort to every moment.</p></div><PortraitHeroCarousel slides={carouselSlides}/></section>
   </div>
   <SectionReveal><nav className="trust-row home-trust-row" aria-label="Discover SoftHaven collections"><Link href="/shop"><BenefitIcon type="quality"/><strong>Soft companions</strong><span>Meet the collection</span></Link><Link href="/shop?category=Soft%20Animal%20Friends"><BenefitIcon type="selected"/><strong>Animal friends</strong><span>Find your favourite</span></Link><Link href="/shop?category=Love%20%26%20Gifting"><BenefitIcon type="gift"/><strong>Love &amp; gifting</strong><span>Thoughtful keepsakes</span></Link><Link href="/shop?collection=teddy-classic-cuddles"><BenefitIcon type="gift"/><strong>Teddy bears</strong><span>Explore classic hugs</span></Link></nav></SectionReveal>
   <HomeEditorialJourney />
