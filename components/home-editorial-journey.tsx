@@ -64,9 +64,37 @@ export function HomeEditorialJourney() {
       gsap.to('[data-story-parallax="photo"]', { y: -24, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-story-parallax="detail"]', { y: -42, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-story-parallax="clouds"]', { y: -48, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.from('[data-next-hug-enter="photo"]', {
+        y: 35, scale: .985, opacity: 0, duration: .98, ease: 'power3.out',
+        scrollTrigger: { trigger: '.journey-next-hug', start: 'top 80%', once: true },
+      });
+      gsap.from('[data-next-hug-enter="copy"] > *', {
+        y: 25, opacity: 0, duration: .82, stagger: .1, ease: 'power3.out',
+        scrollTrigger: { trigger: '.journey-next-hug', start: 'top 78%', once: true },
+      });
     }, node);
 
-    return () => context.revert();
+    const nextHugArt = node.querySelector<HTMLElement>('[data-next-hug-pointer]');
+    const supportsPointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const moveNextHug = (event: PointerEvent) => {
+      if (!nextHugArt) return;
+      const bounds = nextHugArt.getBoundingClientRect();
+      nextHugArt.style.setProperty('--hug-pointer-x', `${((event.clientX - bounds.left) / bounds.width - .5) * 8}px`);
+      nextHugArt.style.setProperty('--hug-pointer-y', `${((event.clientY - bounds.top) / bounds.height - .5) * 8}px`);
+    };
+    const resetNextHug = () => {
+      nextHugArt?.style.setProperty('--hug-pointer-x', '0px');
+      nextHugArt?.style.setProperty('--hug-pointer-y', '0px');
+    };
+    if (nextHugArt && supportsPointer) {
+      nextHugArt.addEventListener('pointermove', moveNextHug);
+      nextHugArt.addEventListener('pointerleave', resetNextHug);
+    }
+    return () => {
+      nextHugArt?.removeEventListener('pointermove', moveNextHug);
+      nextHugArt?.removeEventListener('pointerleave', resetNextHug);
+      context.revert();
+    };
   }, []);
 
   return (
@@ -175,14 +203,14 @@ export function HomeEditorialJourney() {
         <span className="journey-family__cloud journey-family__cloud--bottom" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill unoptimized sizes="100vw" /></span>
       </section>
 
-      <section className="journey-final" aria-labelledby="journey-final-title">
-        <div className="journey-final__copy" data-journey-reveal>
-          <span className="eyebrow">A softer day starts here</span>
-          <h2 id="journey-final-title">There’s always room<br />for <em>one more hug.</em></h2>
-          <p>Find the SoftHaven companion waiting for you.</p>
-          <div><Link className="primary-button" href="/shop">Explore all plushies <span aria-hidden="true">→</span></Link><Link className="text-button" href="/contact">Need help choosing? <span aria-hidden="true">→</span></Link></div>
+      <section className="journey-next-hug" aria-labelledby="journey-next-hug-title">
+        <svg className="journey-next-hug__defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="next-hug-organic-clip" clipPathUnits="objectBoundingBox"><path d="M .01 .53 C .025 .26 .16 .18 .27 .065 C .38 -.04 .53 .05 .63 .085 C .79 .14 .83 .105 .94 .235 C 1 .31 .995 .45 .965 .55 C .925 .68 1 .76 .93 .88 C .86 1 .68 .94 .55 .98 C .39 1.02 .23 .95 .12 .9 C .015 .85 -.005 .69 .01 .53 Z" /></clipPath></defs></svg>
+        <span className="journey-next-hug__word" aria-hidden="true">HUG</span>
+        <Image className="journey-next-hug__cloud journey-next-hug__cloud--top" src="/assets/clouds/soft-cloud-distant.webp" width={700} height={300} alt="" unoptimized aria-hidden="true" />
+        <div className="journey-next-hug__inner">
+          <div className="journey-next-hug__copy" data-next-hug-enter="copy"><span className="journey-next-hug__eyebrow">A little more softness <i aria-hidden="true" /></span><h2 id="journey-next-hug-title">Your next<br /><em>favourite hug</em><br />is waiting.</h2><p>Meet the SoftHaven companions made for gifting, comforting and keeping close.</p><Link className="journey-next-hug__cta" href="/shop">Meet your companion <span aria-hidden="true">→</span></Link><Link className="journey-next-hug__link" href="/shop">or explore every soft friend</Link></div>
+          <div className="journey-next-hug__art" data-next-hug-enter="photo" data-next-hug-pointer aria-label="Caramel teddy and cream bunny in a sunlit bedroom"><div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src="/assets/home-story/teddy-bunny-editorial.jpg" alt="Caramel teddy with a lavender bow beside a cream bunny with a pink bow" fill unoptimized sizes="(max-width: 760px) 94vw, (max-width: 1100px) 54vw, 920px" priority /></div></div><span className="journey-next-hug__note">this one&apos;s<br />waiting for you ♡</span><svg className="journey-next-hug__doodle" viewBox="0 0 100 84" fill="none" aria-hidden="true"><path d="M48 74C31 58 8 40 14 23c5-16 26-14 34 4 9-18 31-18 38-4 7 18-20 39-38 51Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><path d="M16 70c14 8 33 7 47 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg><Image className="journey-next-hug__cloud journey-next-hug__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" /><Image className="journey-next-hug__cloud journey-next-hug__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1400} height={303} alt="" unoptimized aria-hidden="true" /></div>
         </div>
-        <div className="journey-final__art" data-journey-reveal data-journey-direction="up"><ProductMedia product={bunny} alt={bunny.name} fit="cover" sizes="(max-width: 760px) 80vw, 34vw" /></div>
       </section>
     </section>
   );
