@@ -1,33 +1,56 @@
+import { getStorefront } from '@/lib/storefront';
+import { CatalogueProvider } from '@/components/catalogue-provider';
 import type { Metadata } from 'next';
 import './globals.css';
 import './softhaven-premium.css';
 import './home-reference.css';
 import './collections/soft-haven-for-that.css';
 import './collections/collections-difference.css';
+import { StorefrontFrame } from '@/components/storefront-frame';
 import { CartProvider } from '@/components/cart-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
 
-export const metadata: Metadata = {
-  title: { default: 'ANTZ SoftHaven | The softer side of luxury', template: '%s | ANTZ SoftHaven' },
-  description: 'Heirloom plush companions and sensory gifts, curated for better hugs.',
-  metadataBase: new URL('https://softhaven.example'),
-  openGraph: { title: 'ANTZ SoftHaven', description: 'Heirloom plush companions for softer living.', type: 'website' },
-};
+export const dynamic = 'force-dynamic';
+export async function generateMetadata(): Promise<Metadata> {
+  const { settings } = await getStorefront();
+  const seo = settings.seo ?? {};
+  return {
+    title: {
+      default: seo.title ?? 'ANTZ SoftHaven',
+      template: '%s | ANTZ SoftHaven',
+    },
+    description: seo.description ?? '',
+    ...(process.env.NEXT_PUBLIC_SITE_URL
+      ? { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL) }
+      : {}),
+    openGraph: {
+      title: seo.title ?? 'ANTZ SoftHaven',
+      description: seo.description ?? '',
+      type: 'website',
+    },
+  };
+}
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const catalogue = await getStorefront();
   return (
     <html lang="en">
       <body>
-        <div className="softhaven-app">
-          <SoftHavenCloudBackground />
+        <CatalogueProvider value={catalogue}>
           <CartProvider>
-            <SiteHeader />
-            <main>{children}</main>
-            <SiteFooter />
+            <StorefrontFrame
+              header={<SiteHeader />}
+              footer={<SiteFooter />}
+              background={<SoftHavenCloudBackground />}
+            >
+              {children}
+            </StorefrontFrame>
           </CartProvider>
-        </div>
+        </CatalogueProvider>
       </body>
     </html>
   );

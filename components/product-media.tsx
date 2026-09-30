@@ -33,7 +33,7 @@ export function ProductMedia({
 }: ProductMediaProps) {
   const sourceList = useMemo(
     () => resolveProductMedia(product, src, sources),
-    [product?.id, product?.image, product?.images, product?.gallery, product?.variants, src, sources],
+    [product, src, sources],
   );
   const sourceKey = sourceList.join('\u0000');
   const [failed, setFailed] = useState<{ key: string; index: number } | null>(null);

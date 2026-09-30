@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import { useEffect, useRef, useState, useCallback, type KeyboardEvent, type PointerEvent } from 'react';
 import { ProductMedia } from './product-media';
 import { useSyncExternalStore } from 'react';
 
@@ -10,6 +10,7 @@ export type PortraitHeroSlide = {
   name: string;
   descriptor: string;
   category: string;
+  mobileImage?:string; alt?:string; ctaLabel?:string; ctaUrl?:string; secondaryCtaLabel?:string; secondaryCtaUrl?:string;
 };
 
 type Position = -2 | -1 | 0 | 1 | 2;
@@ -57,6 +58,7 @@ function ArrowTail() {
 }
 
 export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }) {
+  const isMobile=useMediaQuery('(max-width: 767px)');
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -74,9 +76,9 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
     }, 1500);
   };
 
-  const move = (direction: 1 | -1) => {
+  const move = useCallback((direction: 1 | -1) => {
     setActiveIndex((current) => (current + direction + slides.length) % slides.length);
-  };
+  },[slides.length]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -99,7 +101,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
       move(1);
     }, 4600);
     return () => clearInterval(timer);
-  }, [isDocumentVisible, isPaused, reducedMotion, slides.length]);
+  }, [isDocumentVisible, isPaused, reducedMotion, move]);
 
   useEffect(() => () => {
     if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
@@ -165,8 +167,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
               aria-roledescription="slide"
             >
               <ProductMedia
-                src={slide.image}
-                alt={isActive ? slide.name : ''}
+                src={slide.mobileImage && isMobile ? slide.mobileImage : slide.image}
+                alt={isActive ? slide.alt??slide.name : ''}
                 fill
                 fit="cover"
                 sizes="(max-width: 620px) 76vw, (max-width: 1023px) 300px, (max-width: 1439px) 320px, 350px"
@@ -196,8 +198,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
       </div>
 
       <div className="portrait-hero-actions">
-        <a className="portrait-hero-button portrait-hero-button--primary" href="/shop"><BagIcon /><span>Shop Now</span><ArrowTail /></a>
-        <a className="portrait-hero-button portrait-hero-button--secondary" href="/contact"><MessageIcon /><span>Contact Us</span><ArrowTail /></a>
+        <a className="portrait-hero-button portrait-hero-button--primary" href={slides[activeIndex]?.ctaUrl??'/shop'}><BagIcon /><span>{slides[activeIndex]?.ctaLabel??'Shop now'}</span><ArrowTail /></a>
+        <a className="portrait-hero-button portrait-hero-button--secondary" href={slides[activeIndex]?.secondaryCtaUrl??'/contact'}><MessageIcon /><span>{slides[activeIndex]?.secondaryCtaLabel??'Contact us'}</span><ArrowTail /></a>
       </div>
       <p className="portrait-hero-note">Little Moments, Lasting Happiness <span aria-hidden="true">♡</span></p>
     </div>

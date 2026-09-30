@@ -1,6 +1,206 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useState } from 'react';
 import { useCart } from '@/components/cart-provider';
 import { formatPrice } from '@/lib/format';
-export default function CheckoutPage() { const { lines, subtotal } = useCart(); const [submitted, setSubmitted] = useState(false); if (submitted) return <div className="success-page"><span className="success-mark">✓</span><span className="eyebrow">Your softness is on its way</span><h1>Ready for a beautiful arrival.</h1><p>This demo checkout is prepared for the future payment integration. No payment has been taken.</p><Link className="primary-button" href="/">Return to SoftHaven →</Link></div>; return <div className="checkout-page"><div className="checkout-main"><div className="checkout-steps"><span className="active">1　Contact & Gifting</span><span className="active">2　White-Glove Courier</span><span>3　Bespoke Payment</span></div><form onSubmit={(event) => { event.preventDefault(); setSubmitted(true); }}><section className="form-card"><span className="step-number">1</span><h2>Contact & Heirloom Registry</h2><p>Order confirmation & archive certificate dispatch</p><label>Email address for archive dispatch<input type="email" required placeholder="julian.tan@example.com"/></label><label className="check-label"><input type="checkbox" defaultChecked/> Enroll in the Keepsake Society</label><div className="gift-check"><label className="check-label"><input type="checkbox" defaultChecked/> 🎁 This order is a direct surprise gift for someone special</label><p>We&apos;ll exclude all pricing and invoices from the packaging.</p></div></section><section className="form-card"><span className="step-number">2</span><h2>Artisanal Unboxing & Gift Inscription</h2><p>Hand-pressed on 300gsm cotton letterpress card</p><label>Handwritten inscription note<textarea defaultValue="For Julian, to carry safe warmth and calm dreams through every chapter." maxLength={250}/></label><div className="included">♧　Infused French Lavender Sleep Sachet nested into the fur <b>Included (Rs. 0)</b></div></section><section className="form-card"><span className="step-number">3</span><h2>Delivery Destination</h2><div className="two-col"><label>Recipient first name<input required defaultValue="Julian"/></label><label>Recipient last name<input required defaultValue="Tan"/></label></div><label>Delivery street address<input required defaultValue="28 Nassim Hill, Penthouse #04–02"/></label><div className="two-col"><label>City / neighborhood<input required defaultValue="Singapore"/></label><label>Postal / ZIP code<input required defaultValue="258471"/></label></div><label>Recipient contact phone<input required defaultValue="+65 9123 4567"/></label><div className="radio-option"><label><input type="radio" name="courier" defaultChecked/> Express Archival White-Glove Courier <b>COMPLIMENTARY</b></label><small>Hand-delivered in weather-shielded archival casing</small></div></section><section className="form-card"><span className="step-number">4</span><h2>Payment Ritual</h2><p>Encrypted bespoke checkout. No card numbers stored.</p><div className="demo-payment">◉　Credit / Debit Card <span>VISA　MC　AMEX</span><input placeholder="••••　••••　••••　8842" inputMode="numeric"/><div className="two-col"><input placeholder="09 / 28"/><input placeholder="•••" type="password"/></div></div><button className="primary-button full" type="submit">Complete Bespoke Order — {formatPrice(subtotal)}　→</button><p className="form-note">This customer-facing frontend is ready for a real payment provider in the next phase.</p></section></form></div><aside className="checkout-summary"><h2>Curated Keepsake Suite <span>{lines.length} items in bag</span></h2>{lines.length ? lines.map(({ product, quantity }) => <div className="mini-line" key={product.id}><img src={product.image} alt=""/><div><b>{product.name}</b><small>{product.color} · Qty {quantity}</small></div><strong>{formatPrice(product.price * quantity)}</strong></div>) : <p>Your bag is empty. <Link href="/shop">Browse the collection.</Link></p>}<hr/><div><span>Keepsake Bag Subtotal</span><b>{formatPrice(subtotal)}</b></div><div><span>Archival Gift Box & Letterpress Foil</span><b className="green">FREE</b></div><div className="total"><span>Total investment</span><strong>{formatPrice(subtotal)}</strong></div><p className="summary-note">✓ Instant order receipt　•　✓ Hassle-free returns</p></aside></div>; }
+export default function CheckoutPage() {
+  const { lines, clear } = useCart();
+  const [rates, setRates] = useState<
+    Array<{ id: string; name: string; rate: number }>
+  >([]);
+  const [rate, setRate] = useState('');
+  const [quote, setQuote] = useState<Record<string, number> | null>(null);
+  const [order, setOrder] = useState<Record<string, unknown> | null>(null);
+  const [message, setMessage] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [key] = useState(() => crypto.randomUUID());
+  useEffect(() => {
+    fetch('/api/checkout')
+      .then((r) => r.json())
+      .then((v) => {
+        setRates(v.rates ?? []);
+        setRate(v.rates?.[0]?.id ?? '');
+      })
+      .catch(() => setMessage('Shipping options could not be loaded.'));
+  }, []);
+  if (order)
+    return (
+      <div className="success-page">
+        <h1>Order received</h1>
+        <p>
+          Order SH-{String(order.order_number)} ·{' '}
+          {formatPrice(Number(order.total))}
+        </p>
+        <p>Payment is pending. Pay cash on delivery.</p>
+        <Link href="/account">View order history →</Link>
+      </div>
+    );
+  return (
+    <div className="checkout-page">
+      <form
+        className="checkout-main"
+        onChange={() => setQuote(null)}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const submit = (e.nativeEvent as SubmitEvent)
+            .submitter as HTMLButtonElement;
+          const commit = submit?.value === 'place';
+          const f = new FormData(e.currentTarget);
+          setBusy(true);
+          setMessage('');
+          try {
+            const response = await fetch('/api/checkout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                lines: lines.map((l) => ({
+                  variant_id: l.variant.id,
+                  quantity: l.quantity,
+                })),
+                address: {
+                  name: f.get('name'),
+                  phone: f.get('phone'),
+                  address: f.get('address'),
+                  city: f.get('city'),
+                  district: f.get('district'),
+                  country: 'LK',
+                },
+                rate,
+                coupon: f.get('coupon'),
+                points: Number(f.get('points') || 0),
+                commit,
+                key,
+                notes: f.get('notes'),
+              }),
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error);
+            if (commit) {
+              setOrder(result);
+              clear();
+            } else setQuote(result);
+          } catch (e) {
+            setMessage((e as Error).message);
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        <section className="form-card">
+          <h1>Checkout</h1>
+          <p>
+            <Link href="/account">Sign in or create an account</Link> before
+            placing an order.
+          </p>
+          <h2>Delivery details</h2>
+          <label>
+            Recipient name
+            <input name="name" required maxLength={150} autoComplete="name" />
+          </label>
+          <label>
+            Phone
+            <input
+              name="phone"
+              required
+              minLength={6}
+              maxLength={30}
+              autoComplete="tel"
+            />
+          </label>
+          <label>
+            Street address
+            <input
+              name="address"
+              required
+              minLength={3}
+              maxLength={500}
+              autoComplete="street-address"
+            />
+          </label>
+          <div className="two-col">
+            <label>
+              City
+              <input name="city" required autoComplete="address-level2" />
+            </label>
+            <label>
+              District
+              <input name="district" required autoComplete="address-level1" />
+            </label>
+          </div>
+          <p>Country: Sri Lanka</p>
+          <label>
+            Delivery method
+            <select
+              value={rate}
+              onChange={(e) => setRate(e.target.value)}
+              required
+            >
+              <option value="">Select shipping</option>
+              {rates.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name} · {formatPrice(Number(r.rate))}
+                </option>
+              ))}
+            </select>
+          </label>
+          {!rates.length && (
+            <p role="status">
+              Delivery is not configured yet. Orders cannot be placed until an
+              administrator sets an active shipping zone and rate.
+            </p>
+          )}
+        </section>
+        <section className="form-card">
+          <h2>Discounts and rewards</h2>
+          <label>
+            Coupon code
+            <input name="coupon" maxLength={100} />
+          </label>
+          <label>
+            Reward points to redeem
+            <input type="number" min="0" name="points" defaultValue="0" />
+          </label>
+          <label>
+            Order notes
+            <textarea name="notes" maxLength={2000} />
+          </label>
+        </section>
+        <section className="form-card">
+          <h2>Order summary</h2>
+          {lines.map((l) => (
+            <p key={l.variant.id}>
+              {l.product.name} · {l.variant.color} × {l.quantity}
+            </p>
+          ))}
+          <p>Payment method: cash on delivery</p>
+          {quote && (
+            <>
+              <p>Subtotal: {formatPrice(quote.subtotal)}</p>
+              <p>Coupon discount: {formatPrice(quote.discount)}</p>
+              <p>Reward discount: {formatPrice(quote.points_discount)}</p>
+              <p>Shipping: {formatPrice(quote.shipping)}</p>
+              <strong>Total: {formatPrice(quote.total)}</strong>
+            </>
+          )}
+          <p role="alert">{message}</p>
+          <button
+            className="primary-button"
+            name="action"
+            value="quote"
+            disabled={busy || !lines.length || !rate}
+          >
+            Calculate total
+          </button>
+          <button
+            className="primary-button"
+            name="action"
+            value="place"
+            disabled={busy || !quote || !lines.length || !rate}
+          >
+            {busy ? 'Please wait…' : 'Place cash-on-delivery order'}
+          </button>
+        </section>
+      </form>
+    </div>
+  );
+}

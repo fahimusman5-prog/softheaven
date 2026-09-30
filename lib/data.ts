@@ -11,6 +11,9 @@ export type ProductVariant = {
 };
 
 export type Product = {
+  featured?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
   id: string;
   name: string;
   slug: string;

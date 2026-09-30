@@ -2,6 +2,8 @@ import { products } from '@/lib/data';
 
 export type SoftHavenCollection = {
   slug: string;
+  seoTitle?:string;
+  seoDescription?:string;
   name: string;
   description: string;
   featured: boolean;

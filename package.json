@@ -6,20 +6,29 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint app components lib tests",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.117.2",
     "gsap": "^3.15.0",
     "motion": "^13.4.4",
     "next": "16.3.5",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "sharp": "0.35.5",
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@types/node": "22.10.2",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.3.5",
+    "tsx": "4.23.15",
     "typescript": "5.7.2"
   }
 }

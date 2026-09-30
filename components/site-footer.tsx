@@ -1,15 +1,18 @@
 'use client';
 import Link from 'next/link';
-import { products } from '@/lib/data';
+import { useCatalogue } from '@/components/catalogue-provider';
+import { NewsletterForm } from '@/components/newsletter-form';
 
-const categories = Array.from(new Set(products.map((product) => product.category)));
+
 
 export function SiteFooter() {
+  const {categories: records, navigation,settings} = useCatalogue();
+  const categories=records.map(c=>c.name);
   return (
     <footer className="site-footer site-footer--refined">
       <div className="site-footer__brand">
         <Link href="/" className="wordmark">Soft<span>Haven</span></Link>
-        <p>Soft companions for thoughtful gifting and everyday comfort.</p>
+        <p>{settings.footer?.description}</p>
       </div>
       <div className="site-footer__column">
         <h3>Shop</h3>
@@ -23,9 +26,9 @@ export function SiteFooter() {
       </div>
       <div className="site-footer__column">
         <h3>Get in touch</h3>
-        <Link href="/contact">Contact SoftHaven</Link>
+        <Link href="/contact">Contact SoftHaven</Link>{settings.general?.email&&<a href={"mailto:"+settings.general.email}>{settings.general.email}</a>}{settings.general?.phone&&<a href={"tel:"+settings.general.phone}>{settings.general.phone}</a>}{navigation.filter(n=>n.placement==='footer').map(n=><Link href={n.url} key={n.id}>{n.label}</Link>)}<NewsletterForm/>
       </div>
-      <div className="footer-bottom"><span>© 2026 SoftHaven</span><Link href="/">Back to top ↑</Link></div>
+      <div className="footer-bottom"><span>{settings.footer?.copyright}</span><Link href="/">Back to top ↑</Link></div>
     </footer>
   );
 }
