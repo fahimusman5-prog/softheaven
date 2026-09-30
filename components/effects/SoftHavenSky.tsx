@@ -23,9 +23,9 @@ type WispDefinition = {
 };
 
 const depthMotion = {
-  far: { desktopY: 82, mobileY: 30, desktopX: 18, mobileX: 8, desktopScrub: 0.9, mobileScrub: 0.8 },
-  middle: { desktopY: 168, mobileY: 62, desktopX: 32, mobileX: 13, desktopScrub: 0.68, mobileScrub: 0.66 },
-  near: { desktopY: 305, mobileY: 112, desktopX: 46, mobileX: 19, desktopScrub: 0.48, mobileScrub: 0.58 },
+  far: { desktopY: 16, mobileY: 8, desktopX: 8, mobileX: 4, desktopScrub: 0.9, mobileScrub: 0.8 },
+  middle: { desktopY: 28, mobileY: 14, desktopX: 13, mobileX: 7, desktopScrub: 0.68, mobileScrub: 0.66 },
+  near: { desktopY: 44, mobileY: 20, desktopX: 20, mobileX: 10, desktopScrub: 0.48, mobileScrub: 0.58 },
 } satisfies Record<CloudDepth, { desktopY: number; mobileY: number; desktopX: number; mobileX: number; desktopScrub: number; mobileScrub: number }>;
 
 const clouds: CloudDefinition[] = [

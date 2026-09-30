@@ -61,11 +61,11 @@ export function HomeEditorialJourney() {
       gsap.to('[data-story-parallax="detail"]', { y: -42, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-story-parallax="clouds"]', { y: -48, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.from('[data-next-hug-enter="photo"]', {
-        y: 35, scale: .985, opacity: 0, duration: .98, ease: 'power3.out',
+        y: 35, scale: .985, opacity: .92, duration: .98, ease: 'power3.out', clearProps: 'transform,opacity',
         scrollTrigger: { trigger: '.journey-next-hug', start: 'top 80%', once: true },
       });
       gsap.from('[data-next-hug-enter="copy"] > *', {
-        y: 25, opacity: 0, duration: .82, stagger: .1, ease: 'power3.out',
+        y: 25, opacity: .86, duration: .82, stagger: .1, ease: 'power3.out', clearProps: 'transform,opacity',
         scrollTrigger: { trigger: '.journey-next-hug', start: 'top 78%', once: true },
       });
     }, node);

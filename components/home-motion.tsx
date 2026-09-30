@@ -14,12 +14,13 @@ export function HomeMotion({ children }: { children: ReactNode }) {
     const media = gsap.matchMedia();
     media.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.utils.toArray<HTMLElement>('.home-motion-image').forEach((image) => {
-        gsap.fromTo(image, { scale: 0.8, opacity: 0.55, filter: 'brightness(0.78)' }, {
-          scale: 1,
+        gsap.fromTo(image, { y: 14, opacity: 0.9 }, {
+          y: 0,
           opacity: 1,
-          filter: 'brightness(1)',
-          ease: 'none',
-          scrollTrigger: { trigger: image, start: 'top bottom', end: 'bottom top', scrub: 0.7 },
+          duration: 0.8,
+          ease: 'power2.out',
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: image, start: 'top 92%', once: true },
         });
       });
 
