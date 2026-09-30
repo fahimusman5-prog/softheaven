@@ -6,8 +6,6 @@ import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { collections } from '@/lib/collections';
-import { products } from '@/lib/data';
-import { ProductMedia } from '@/components/product-media';
 
 export function HomeEditorialJourney() {
   const root = useRef<HTMLElement>(null);
@@ -26,8 +24,6 @@ export function HomeEditorialJourney() {
     'wild-wonderful': 'Made for playful hearts.',
   };
   const featuredCollections = collections.filter((collection) => ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'].includes(collection.slug));
-  const bunny = products.find((product) => product.id === 'celeste') ?? products[0];
-  const gift = products.find((product) => product.id === 'amour') ?? products[0];
 
   useEffect(() => {
     const node = root.current;
@@ -155,16 +151,6 @@ export function HomeEditorialJourney() {
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="journey-gift" aria-labelledby="journey-gift-title">
-        <div className="journey-gift__copy" data-journey-reveal>
-          <span className="eyebrow">Made for meaningful moments</span>
-          <h2 id="journey-gift-title">Some hugs are<br /><em>meant to be given.</em></h2>
-          <p>Birthdays, little surprises, celebrations — or no reason at all. Find a SoftHaven companion for someone special.</p>
-          <Link className="primary-button" href={`/product/${gift.slug}`}>Find the perfect gift <span aria-hidden="true">→</span></Link>
-        </div>
-        <div className="journey-gift__visual" data-journey-reveal data-journey-direction="up"><ProductMedia product={gift} alt={gift.name} fit="cover" className="journey-gift__image" sizes="(max-width: 760px) 90vw, 48vw" /><span>{gift.name}</span></div>
       </section>
 
       <section className="journey-family" aria-labelledby="journey-family-title">
