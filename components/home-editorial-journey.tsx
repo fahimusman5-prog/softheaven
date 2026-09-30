@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
@@ -11,9 +11,7 @@ import { ProductMedia } from '@/components/product-media';
 
 export function HomeEditorialJourney() {
   const root = useRef<HTMLElement>(null);
-  const [selectedSlug, setSelectedSlug] = useState(collections[0].slug);
-  const selected = collections.find((collection) => collection.slug === selectedSlug) ?? collections[0];
-  const featuredProduct = getCollectionProducts(selected)[0];
+  const featuredCollections = collections.filter((collection) => ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'].includes(collection.slug));
   const bunny = products.find((product) => product.id === 'celeste') ?? products[0];
   const sloth = products.find((product) => product.id === 'oliver') ?? products[0];
   const gift = products.find((product) => product.id === 'amour') ?? products[0];
@@ -41,6 +39,8 @@ export function HomeEditorialJourney() {
         clearProps: 'transform',
         scrollTrigger: { trigger: '[data-family-list]', start: 'top 82%', once: true },
       });
+      gsap.to('[data-discover-parallax="word"]', { y: -22, ease: 'none', scrollTrigger: { trigger: '.journey-discover', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.to('[data-discover-parallax="clouds"]', { y: -38, ease: 'none', scrollTrigger: { trigger: '.journey-discover', start: 'top bottom', end: 'bottom top', scrub: 1 } });
     }, node);
 
     return () => context.revert();
@@ -65,43 +65,36 @@ export function HomeEditorialJourney() {
           </div>
         </div>
         <div className="chosen-care__visual" data-journey-reveal data-journey-direction="up">
-          <div className="chosen-care__photo"><Image src="/assets/softhaven/why-softhaven-editorial.webp" alt="A caramel teddy bear and cream bunny nestled together in pastel clouds" fill priority sizes="(max-width: 700px) 94vw, 54vw" /></div>
-          <div className="chosen-care__detail"><Image src="/assets/softhaven/why-softhaven-detail.webp" alt="Close-up of plush fur, a lavender satin bow and a bear charm" fill sizes="(max-width: 700px) 36vw, 19vw" /></div>
+          <div className="chosen-care__photo"><Image src="/assets/softhaven/why-softhaven-editorial.webp" alt="A caramel teddy bear and cream bunny nestled together in pastel clouds" fill priority unoptimized sizes="(max-width: 700px) 94vw, 54vw" /></div>
+          <div className="chosen-care__detail"><Image src="/assets/softhaven/why-softhaven-detail.webp" alt="Close-up of plush fur, a lavender satin bow and a bear charm" fill unoptimized sizes="(max-width: 700px) 36vw, 19vw" /></div>
           <span className="chosen-care__heart" aria-hidden="true">♡</span>
         </div>
       </section>
 
       <section className="journey-discover" aria-labelledby="journey-discover-title">
-        <div className="journey-discover__intro" data-journey-reveal>
-          <span className="eyebrow">Find your kind of companion</span>
-          <h2 id="journey-discover-title">Find the One<br />That <em>Feels Like You.</em></h2>
-          <p>Every personality is different. Explore the SoftHaven collections and find the companion that matches your world.</p>
-          <div className="journey-collection-tabs" role="tablist" aria-label="Choose a SoftHaven collection">
-            {collections.map((collection) => (
-              <button
-                type="button"
-                key={collection.slug}
-                role="tab"
-                aria-selected={selected.slug === collection.slug}
-                className={selected.slug === collection.slug ? 'is-selected' : ''}
-                onClick={() => setSelectedSlug(collection.slug)}
-              >{collection.name}</button>
-            ))}
+        <span className="journey-discover__word" data-discover-parallax="word" aria-hidden="true">Companions</span>
+        <div className="journey-discover__inner">
+          <div className="journey-discover__intro" data-journey-reveal>
+            <span className="eyebrow">Find your companion <i aria-hidden="true" /></span>
+            <h2 id="journey-discover-title">A little personality<br /><em>for every kind of love.</em></h2>
+            <p>Quiet cuddlers, playful personalities and timeless teddy bears — discover the SoftHaven collection made for your kind of moment.</p>
+            <Link className="journey-discover__cta" href="/collections">Explore all collections <span aria-hidden="true">→</span></Link>
+          </div>
+          <div className="journey-discover__scene" aria-label="SoftHaven plush collection">
+            <div className="journey-discover__bunny"><Image src="/assets/home-collections/bunny-editorial.jpg" alt="A white plush bunny with a pink satin bow" fill unoptimized sizes="(max-width: 700px) 46vw, 290px" /></div>
+            <div className="journey-discover__teddy"><Image src="/assets/home-collections/teddy-editorial.jpg" alt="A caramel teddy bear wearing a lavender satin bow" fill unoptimized sizes="(max-width: 700px) 78vw, (max-width: 1100px) 48vw, 600px" /></div>
+            <div className="journey-discover__detail"><Image src="/assets/home-collections/detail-editorial.jpg" alt="Lavender satin bow and gold teddy charm on plush fur" fill unoptimized sizes="(max-width: 700px) 34vw, 250px" /></div>
+            <Link className="journey-discover__float journey-discover__float--teddy" href={`/shop?collection=${featuredCollections[0].slug}`}><span aria-hidden="true">✦</span><span><strong>{featuredCollections[0].name}</strong><small>Timeless favourites.</small></span></Link>
+            <Link className="journey-discover__float journey-discover__float--bunny" href={`/shop?collection=${featuredCollections[1].slug}`}><span aria-hidden="true">♡</span><span><strong>{featuredCollections[1].name}</strong><small>Soft. Playful. Adorable.</small></span></Link>
+            <Link className="journey-discover__float journey-discover__float--wild" href={`/shop?collection=${featuredCollections[2].slug}`}><span aria-hidden="true">⊞</span><span><strong>{featuredCollections[2].name}</strong><small>For little dreamers.</small></span></Link>
           </div>
         </div>
-        <div className="journey-discover__visual" role="tabpanel" aria-label={selected.name}>
-          {featuredProduct ? (
-            <ProductMedia key={featuredProduct.id} product={featuredProduct} alt={featuredProduct.name} fit="cover" className="journey-discover__image" sizes="(max-width: 760px) 90vw, 56vw" />
-          ) : (
-            <div className="journey-discover__empty" aria-live="polite"><span aria-hidden="true">{selected.symbol}</span><strong>New friends are on their way</strong><small>This collection is growing. Meet the SoftHaven friends already here.</small></div>
-          )}
-          <div className="journey-discover__panel" aria-live="polite">
-            <span className="eyebrow">SoftHaven collection</span>
-            <h3>{selected.name}</h3>
-            <p>{selected.description}</p>
-            <Link className="text-button" href={`/shop?collection=${selected.slug}`}>Explore collection <span aria-hidden="true">→</span></Link>
-          </div>
-        </div>
+        <div className="journey-discover__clouds" data-discover-parallax="clouds" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill unoptimized sizes="100vw" /></div>
+        <nav className="journey-discover__rail" aria-label="Explore featured collections">
+          {featuredCollections.map((collection, index) => <Link className={`journey-discover__rail-item journey-discover__rail-item--${index + 1}`} href={`/shop?collection=${collection.slug}`} key={collection.slug}>
+            <span className="journey-discover__number">0{index + 1}</span><span className="journey-discover__rail-icon" aria-hidden="true">{['✦', '♡', '⊞'][index]}</span><strong>{collection.name}</strong><span className="journey-discover__arrow" aria-hidden="true">→</span>
+          </Link>)}
+        </nav>
       </section>
 
       <section className="journey-details" aria-labelledby="journey-details-title">
