@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -47,18 +48,26 @@ export function HomeEditorialJourney() {
 
   return (
     <section className="home-journey" ref={root} aria-label="The SoftHaven story">
-      <section className="journey-why" aria-labelledby="journey-why-title">
-        <div className="journey-why__copy" data-journey-reveal>
-          <span className="eyebrow">Why SoftHaven</span>
-          <h2 id="journey-why-title">Made to Feel<br /><em>Better.</em></h2>
-          <p>Every SoftHaven companion is chosen with care — for softer moments, brighter days and a little more joy at home.</p>
-          <Link className="text-button" href="/collections">Discover our collections <span aria-hidden="true">→</span></Link>
+      <section className="chosen-care" aria-labelledby="chosen-care-title">
+        <div className="chosen-care__cloud chosen-care__cloud--left" aria-hidden="true" />
+        <div className="chosen-care__cloud chosen-care__cloud--right" aria-hidden="true" />
+        <div className="chosen-care__cloud chosen-care__cloud--foreground" aria-hidden="true" />
+        <div className="chosen-care__copy" data-journey-reveal>
+          <span className="chosen-care__ghost" aria-hidden="true">SOFT</span>
+          <span className="chosen-care__eyebrow">Why SoftHaven <i aria-hidden="true" /></span>
+          <h2 id="chosen-care-title"><span>Chosen with care.</span><em>Kept for years.</em></h2>
+          <p>More than something soft to hold. We choose companions for the celebrations, quiet moments and everyday memories that stay with you.</p>
+          <Link className="chosen-care__cta" href="/about"><span>Discover our story</span><b aria-hidden="true">→</b></Link>
+          <div className="chosen-care__features" aria-label="The SoftHaven difference">
+            <span><i className="chosen-care__feature-icon chosen-care__feature-icon--leaf" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.5 4.5C11 5 5.3 9.2 5 16.3c-.1 2.1 1.1 3.2 3.2 3.1C15.3 19.1 19 13.7 19.5 4.5Z" /><path d="M6 19c3.8-5.2 7.7-8.7 12.5-12.5" /></svg></i><strong>Soft to hold</strong></span>
+            <span><i className="chosen-care__feature-icon chosen-care__feature-icon--heart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.5 8.7c0 5.1-8.5 10.1-8.5 10.1S3.5 13.8 3.5 8.7a4.4 4.4 0 0 1 8.5-1.6 4.4 4.4 0 0 1 8.5 1.6Z" /></svg></i><strong>Made to gift</strong></span>
+            <span><i className="chosen-care__feature-icon chosen-care__feature-icon--star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 2.1 5.7 6 .4-4.6 3.8 1.5 5.9-5-3.2-5 3.2 1.5-5.9-4.6-3.8 6-.4L12 3Z" /></svg></i><strong>Easy to love</strong></span>
+          </div>
         </div>
-        <div className="journey-why__art" data-journey-reveal data-journey-direction="up">
-          <ProductMedia product={bunny} alt={bunny.name} fit="cover" className="journey-why__image" sizes="(max-width: 760px) 90vw, 58vw" />
-          <article className="journey-note journey-note--one"><strong>Soft-touch feel</strong><span>Chosen for that comforting feel.</span></article>
-          <article className="journey-note journey-note--two"><strong>Made for cuddles</strong><span>Plush friends for everyday moments.</span></article>
-          <article className="journey-note journey-note--three"><strong>A friend for every mood</strong><span>Meet the companions in our collection.</span></article>
+        <div className="chosen-care__visual" data-journey-reveal data-journey-direction="up">
+          <div className="chosen-care__photo"><Image src="/assets/softhaven/why-softhaven-editorial.webp" alt="A caramel teddy bear and cream bunny nestled together in pastel clouds" fill priority sizes="(max-width: 700px) 94vw, 54vw" /></div>
+          <div className="chosen-care__detail"><Image src="/assets/softhaven/why-softhaven-detail.webp" alt="Close-up of plush fur, a lavender satin bow and a bear charm" fill sizes="(max-width: 700px) 36vw, 19vw" /></div>
+          <span className="chosen-care__heart" aria-hidden="true">♡</span>
         </div>
       </section>
 
