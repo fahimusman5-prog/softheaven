@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './softhaven-premium.css';
+import './home-reference.css';
 import './collections/soft-haven-for-that.css';
-import './collections/personalities.css';
+import './collections/collections-difference.css';
 import { CartProvider } from '@/components/cart-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
