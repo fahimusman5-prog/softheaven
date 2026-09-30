@@ -1,16 +1,30 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { collections, getCollectionProducts } from '@/lib/collections';
+import { collections } from '@/lib/collections';
 import { products } from '@/lib/data';
 import { ProductMedia } from '@/components/product-media';
 
 export function HomeEditorialJourney() {
   const root = useRef<HTMLElement>(null);
+  const familyCollections = collections.filter((collection) => collection.featured);
+  const [activeFamilySlug, setActiveFamilySlug] = useState(familyCollections[0].slug);
+  const [previewFamilySlug, setPreviewFamilySlug] = useState<string | null>(null);
+  const activeFamily = familyCollections.find((collection) => collection.slug === (previewFamilySlug ?? activeFamilySlug)) ?? familyCollections[0];
+  const familyImages: Record<string, string> = {
+    'teddy-classic-cuddles': '/assets/collections/soft-family-editorial.webp',
+    'bunny-sweet-friends': '/images/collections/bunny-sweet-friends.webp',
+    'wild-wonderful': '/images/collections/wild-wonderful.webp',
+  };
+  const familySummaries: Record<string, string> = {
+    'teddy-classic-cuddles': 'Timeless comfort.',
+    'bunny-sweet-friends': 'Gentle little personalities.',
+    'wild-wonderful': 'Made for playful hearts.',
+  };
   const featuredCollections = collections.filter((collection) => ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'].includes(collection.slug));
   const bunny = products.find((product) => product.id === 'celeste') ?? products[0];
   const sloth = products.find((product) => product.id === 'oliver') ?? products[0];
@@ -31,14 +45,8 @@ export function HomeEditorialJourney() {
           scrollTrigger: { trigger: element, start: 'top 88%', once: true },
         });
       });
-      gsap.from('[data-family-item]', {
-        y: (index) => 52 + ((index % 3) * 13),
-        duration: 0.85,
-        ease: 'power3.out',
-        stagger: 0.1,
-        clearProps: 'transform',
-        scrollTrigger: { trigger: '[data-family-list]', start: 'top 82%', once: true },
-      });
+      gsap.to('[data-family-parallax="word"]', { y: -20, ease: 'none', scrollTrigger: { trigger: '.journey-family', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.to('[data-family-parallax="cloud"]', { y: -34, ease: 'none', scrollTrigger: { trigger: '.journey-family', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-discover-parallax="word"]', { y: -22, ease: 'none', scrollTrigger: { trigger: '.journey-discover', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-discover-parallax="clouds"]', { y: -38, ease: 'none', scrollTrigger: { trigger: '.journey-discover', start: 'top bottom', end: 'bottom top', scrub: 1 } });
     }, node);
@@ -126,22 +134,39 @@ export function HomeEditorialJourney() {
       </section>
 
       <section className="journey-family" aria-labelledby="journey-family-title">
-        <div className="journey-family__heading" data-journey-reveal>
-          <span className="eyebrow">Meet the SoftHaven family</span>
-          <h2 id="journey-family-title">A world of<br /><em>soft companions.</em></h2>
-          <p>From timeless teddies to playful characters, find a SoftHaven collection that feels right for you.</p>
-          <Link className="text-button" href="/collections">Explore all collections <span aria-hidden="true">→</span></Link>
+        <span className="journey-family__cloud journey-family__cloud--top" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-cluster.webp" alt="" fill unoptimized sizes="420px" /></span>
+        <span className="journey-family__word" data-family-parallax="word" aria-hidden="true">FAMILY</span>
+        <div className="journey-family__heading">
+          <span className="eyebrow">Meet the SoftHaven family <i aria-hidden="true" /></span>
+          <h2 id="journey-family-title">Every Soft Friend<br /><em>Has a Story.</em></h2>
+          <p>From timeless teddy bears to playful little personalities, discover the SoftHaven family one companion at a time.</p>
+          <div className="journey-family__list" role="group" aria-label="Choose a collection">
+            {familyCollections.map((collection, index) => <button
+              className={`journey-family__item${activeFamily.slug === collection.slug ? ' is-active' : ''}`}
+              type="button"
+              key={collection.slug}
+              aria-pressed={activeFamilySlug === collection.slug}
+              onMouseEnter={() => setPreviewFamilySlug(collection.slug)}
+              onMouseLeave={() => setPreviewFamilySlug(null)}
+              onFocus={() => setPreviewFamilySlug(collection.slug)}
+              onBlur={() => setPreviewFamilySlug(null)}
+              onClick={() => { setActiveFamilySlug(collection.slug); setPreviewFamilySlug(null); }}>
+              <span className="journey-family__number">0{index + 1}</span>
+              <span className="journey-family__icon" aria-hidden="true">{index === 0 ? '♡' : index === 1 ? '♧' : '✦'}</span>
+              <span className="journey-family__label"><strong>{collection.name}</strong><small>{familySummaries[collection.slug]}</small></span>
+              <span className="journey-family__arrow" aria-hidden="true">→</span>
+            </button>)}
+          </div>
         </div>
-        <div className="journey-family__list" data-family-list>
-          {collections.map((collection) => {
-            const product = getCollectionProducts(collection)[0];
-            return <Link className={`journey-family__item${product ? '' : ' is-coming'}`} href={`/shop?collection=${collection.slug}`} key={collection.slug} data-family-item>
-              <span className="journey-family__art">{product ? <ProductMedia product={product} alt={product.name} fit="contain" sizes="(max-width: 760px) 38vw, 16vw" /> : <span aria-hidden="true">{collection.symbol}</span>}</span>
-              <strong>{collection.name}</strong>
-              {!product && <small>Coming soon</small>}
-            </Link>;
-          })}
+        <div className="journey-family__visual">
+          <span className="journey-family__heart" aria-hidden="true">♡</span>
+          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}>{activeFamily.slug === 'teddy-classic-cuddles' && <source media="(max-width: 700px)" srcSet="/assets/collections/soft-family-editorial-mobile.webp" />}<Image src={familyImages[activeFamily.slug]} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill unoptimized sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
+          <span className="journey-family__sparkle" aria-hidden="true">✧</span>
+          <article className="journey-family__note" aria-live="polite">
+            <span>✧</span><div><small>Currently meeting</small><h3>{activeFamily.name}</h3><Link href={`/shop?collection=${activeFamily.slug}`}>Explore collection <span aria-hidden="true">→</span></Link></div>
+          </article>
         </div>
+        <span className="journey-family__cloud journey-family__cloud--bottom" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill unoptimized sizes="100vw" /></span>
       </section>
 
       <section className="journey-final" aria-labelledby="journey-final-title">
