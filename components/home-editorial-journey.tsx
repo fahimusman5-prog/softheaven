@@ -27,7 +27,6 @@ export function HomeEditorialJourney() {
   };
   const featuredCollections = collections.filter((collection) => ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'].includes(collection.slug));
   const bunny = products.find((product) => product.id === 'celeste') ?? products[0];
-  const sloth = products.find((product) => product.id === 'oliver') ?? products[0];
   const gift = products.find((product) => product.id === 'amour') ?? products[0];
 
   useEffect(() => {
@@ -49,6 +48,22 @@ export function HomeEditorialJourney() {
       gsap.to('[data-family-parallax="cloud"]', { y: -34, ease: 'none', scrollTrigger: { trigger: '.journey-family', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-discover-parallax="word"]', { y: -22, ease: 'none', scrollTrigger: { trigger: '.journey-discover', start: 'top bottom', end: 'bottom top', scrub: 1 } });
       gsap.to('[data-discover-parallax="clouds"]', { y: -38, ease: 'none', scrollTrigger: { trigger: '.journey-discover', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.from('[data-story-enter="photo"]', {
+        y: 25, scale: .985, opacity: .92, duration: 1.15, ease: 'power3.out',
+        scrollTrigger: { trigger: '.journey-details', start: 'top 82%', once: true },
+      });
+      gsap.from('[data-story-enter="detail"]', {
+        y: 30, scale: .96, opacity: .65, duration: 1, delay: .12, ease: 'power3.out',
+        scrollTrigger: { trigger: '.journey-details', start: 'top 80%', once: true },
+      });
+      gsap.from('[data-story-enter="copy"] > *', {
+        y: 16, opacity: .85, duration: .85, stagger: .09, ease: 'power3.out',
+        scrollTrigger: { trigger: '.journey-details', start: 'top 78%', once: true },
+      });
+      gsap.to('[data-story-parallax="word"]', { y: -20, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.to('[data-story-parallax="photo"]', { y: -24, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.to('[data-story-parallax="detail"]', { y: -42, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+      gsap.to('[data-story-parallax="clouds"]', { y: -48, ease: 'none', scrollTrigger: { trigger: '.journey-details', start: 'top bottom', end: 'bottom top', scrub: 1 } });
     }, node);
 
     return () => context.revert();
@@ -56,29 +71,6 @@ export function HomeEditorialJourney() {
 
   return (
     <section className="home-journey" ref={root} aria-label="The SoftHaven story">
-      <section className="chosen-care" aria-labelledby="chosen-care-title">
-        <div className="chosen-care__cloud chosen-care__cloud--left" aria-hidden="true" />
-        <div className="chosen-care__cloud chosen-care__cloud--right" aria-hidden="true" />
-        <div className="chosen-care__cloud chosen-care__cloud--foreground" aria-hidden="true" />
-        <div className="chosen-care__copy" data-journey-reveal>
-          <span className="chosen-care__ghost" aria-hidden="true">SOFT</span>
-          <span className="chosen-care__eyebrow">Why SoftHaven <i aria-hidden="true" /></span>
-          <h2 id="chosen-care-title"><span>Chosen with care.</span><em>Kept for years.</em></h2>
-          <p>More than something soft to hold. We choose companions for the celebrations, quiet moments and everyday memories that stay with you.</p>
-          <Link className="chosen-care__cta" href="/about"><span>Discover our story</span><b aria-hidden="true">→</b></Link>
-          <div className="chosen-care__features" aria-label="The SoftHaven difference">
-            <span><i className="chosen-care__feature-icon chosen-care__feature-icon--leaf" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.5 4.5C11 5 5.3 9.2 5 16.3c-.1 2.1 1.1 3.2 3.2 3.1C15.3 19.1 19 13.7 19.5 4.5Z" /><path d="M6 19c3.8-5.2 7.7-8.7 12.5-12.5" /></svg></i><strong>Soft to hold</strong></span>
-            <span><i className="chosen-care__feature-icon chosen-care__feature-icon--heart" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20.5 8.7c0 5.1-8.5 10.1-8.5 10.1S3.5 13.8 3.5 8.7a4.4 4.4 0 0 1 8.5-1.6 4.4 4.4 0 0 1 8.5 1.6Z" /></svg></i><strong>Made to gift</strong></span>
-            <span><i className="chosen-care__feature-icon chosen-care__feature-icon--star" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 3 2.1 5.7 6 .4-4.6 3.8 1.5 5.9-5-3.2-5 3.2 1.5-5.9-4.6-3.8 6-.4L12 3Z" /></svg></i><strong>Easy to love</strong></span>
-          </div>
-        </div>
-        <div className="chosen-care__visual" data-journey-reveal data-journey-direction="up">
-          <div className="chosen-care__photo"><Image src="/assets/softhaven/why-softhaven-editorial.webp" alt="A caramel teddy bear and cream bunny nestled together in pastel clouds" fill priority unoptimized sizes="(max-width: 700px) 94vw, 54vw" /></div>
-          <div className="chosen-care__detail"><Image src="/assets/softhaven/why-softhaven-detail.webp" alt="Close-up of plush fur, a lavender satin bow and a bear charm" fill unoptimized sizes="(max-width: 700px) 36vw, 19vw" /></div>
-          <span className="chosen-care__heart" aria-hidden="true">♡</span>
-        </div>
-      </section>
-
       <section className="journey-discover" aria-labelledby="journey-discover-title">
         <span className="journey-discover__word" data-discover-parallax="word" aria-hidden="true">Companions</span>
         <div className="journey-discover__inner">
@@ -106,20 +98,34 @@ export function HomeEditorialJourney() {
       </section>
 
       <section className="journey-details" aria-labelledby="journey-details-title">
-        <div className="journey-details__collage" aria-label="SoftHaven companions and gifting details">
-          <div className="journey-details__photo journey-details__photo--main" data-journey-reveal data-journey-direction="up"><ProductMedia product={bunny} alt={bunny.name} fit="cover" sizes="(max-width: 760px) 90vw, 42vw" /></div>
-          <div className="journey-details__photo journey-details__photo--top" data-journey-reveal><ProductMedia product={sloth} alt={sloth.name} fit="cover" sizes="(max-width: 760px) 42vw, 20vw" /></div>
-          <div className="journey-details__photo journey-details__photo--gift" data-journey-reveal data-journey-direction="up"><ProductMedia product={gift} alt={gift.name} fit="cover" sizes="(max-width: 760px) 42vw, 20vw" /></div>
-        </div>
-        <div className="journey-details__copy" data-journey-reveal>
-          <span className="eyebrow">SoftHaven details</span>
-          <h2 id="journey-details-title">It’s the<br /><em>little things.</em></h2>
-          <p>From the feel of the fabric to each character’s expression, our companions bring a little more warmth to everyday moments.</p>
-          <ol>
-            <li><span>01</span><div><strong>The Feel</strong><small>Soft companions made for happy hugs.</small></div></li>
-            <li><span>02</span><div><strong>The Character</strong><small>Distinct expressions, colours and personalities.</small></div></li>
-            <li><span>03</span><div><strong>The Moment</strong><small>For gifting, decorating or keeping close.</small></div></li>
-          </ol>
+        <svg className="journey-details__clip-defs" width="0" height="0" aria-hidden="true" focusable="false">
+          <defs><clipPath id="journey-story-organic-clip" clipPathUnits="objectBoundingBox"><path d="M .015 .59 C .035 .31 .22 .025 .43 .025 C .59 .015 .615 .19 .75 .22 C .84 .245 .94 .195 .985 .38 C 1 .445 .99 .64 .96 .79 C .93 .93 .78 .98 .63 .94 C .47 .895 .37 .99 .2 .935 C .06 .895 .005 .78 .015 .59 Z" /></clipPath></defs>
+        </svg>
+        <span className="journey-details__word" data-story-parallax="word" aria-hidden="true">SOFT</span>
+        <div className="journey-details__inner">
+          <div className="journey-details__art" aria-label="SoftHaven teddy and bunny editorial photography">
+            <div className="journey-details__photo-parallax" data-story-parallax="photo">
+              <div className="journey-details__photo-enter" data-story-enter="photo">
+                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src="/assets/home-story/teddy-bunny-editorial.jpg" alt="Caramel teddy with lavender bow cuddled beside a cream bunny with pink bow" fill unoptimized sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
+              </div>
+            </div>
+            <Image className="journey-details__cloud journey-details__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
+            <div className="journey-details__cloud-parallax" data-story-parallax="clouds"><Image className="journey-details__cloud journey-details__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1500} height={600} alt="" unoptimized aria-hidden="true" /></div>
+            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-collections/detail-editorial.jpg" alt="Lavender satin ribbon and gold teddy charm on plush fur" fill unoptimized sizes="(max-width: 760px) 36vw, 270px" /></div></div>
+            <svg className="journey-details__heart" viewBox="0 0 100 85" fill="none" aria-hidden="true"><path d="M49 73C31 58 8 41 14 24c5-16 26-15 35 3 9-18 31-18 37-4 8 19-20 39-37 50Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M49 73c13 9 26 7 37 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+            <svg className="journey-details__sparkle" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 0c2.2 12 7.8 17.8 20 20-12.2 2.2-17.8 8-20 20C17.8 28 12.2 22.2 0 20 12.2 17.8 17.8 12 20 0Z" fill="currentColor" /></svg>
+          </div>
+          <div className="journey-details__copy" data-story-enter="copy">
+            <span className="eyebrow">Why SoftHaven <i aria-hidden="true" /></span>
+            <h2 id="journey-details-title">Chosen with care.<br /><em>Kept for years.</em></h2>
+            <p>More than something soft to hold. We choose companions for the celebrations, quiet moments and everyday memories that stay with you.</p>
+            <Link className="journey-details__cta" href="/about">Discover our story <span aria-hidden="true">→</span></Link>
+            <div className="journey-details__benefits" aria-label="SoftHaven qualities">
+              <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 4C9 4 5 9 5 17c6 1 15-2 15-13ZM4 21c3-5 7-8 12-11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>Soft to hold</span>
+              <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20s-8-5.4-8-11a4.5 4.5 0 0 1 8-2.7A4.5 4.5 0 0 1 20 9c0 5.6-8 11-8 11Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" /></svg>Made to gift</span>
+              <span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m12 2 2.9 6 6.6.9-4.8 4.7 1.1 6.6L12 17.1l-5.8 3.1 1.1-6.6-4.8-4.7L9.1 8 12 2Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" /></svg>Easy to love</span>
+            </div>
+          </div>
         </div>
       </section>
 
