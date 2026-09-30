@@ -48,14 +48,13 @@ export function SoftHavenForThat() {
         </div>
         <div className="softhaven-moment__world" aria-label="SoftHaven plush companions nestled in clouds">
           <div className="softhaven-moment__cloud softhaven-moment__cloud--middle" data-moment-parallax="mid" aria-hidden="true" />
-          <Image className="softhaven-moment__plush" data-moment-parallax="mid" src="/assets/collections/softhaven-plush-cloud-world.webp" alt="A teddy bear, giraffe, lion, unicorn, rabbits, puppy, koala and hedgehog resting in pastel clouds" width={1672} height={940} sizes="(max-width: 767px) 112vw, (max-width: 1100px) 65vw, 62vw" unoptimized priority />
+          <Image className="softhaven-moment__plush" data-moment-parallax="mid" src="/assets/collections/softhaven-four-companions-cloud-world.webp" alt="A caramel teddy bear, blue-eared bunny, gray kitten and brown-and-white puppy nestled together in pastel clouds" width={1536} height={1024} sizes="(max-width: 767px) 112vw, (max-width: 1100px) 65vw, 62vw" unoptimized priority />
           <div className="softhaven-moment__cloud softhaven-moment__cloud--foreground" data-moment-parallax="near" aria-hidden="true" />
           <div className="softhaven-moment__heart-cloud" aria-hidden="true"><span /><span /><span /></div>
           <svg className="softhaven-moment__strokes" viewBox="0 0 760 560" fill="none" aria-hidden="true">
-            <path d="M141 164c-27 8-29 34-9 39 25 6 27-22 7-20-25 3-12 34 22 35 22 1 34-10 42-23" />
+            <path d="M141 100c-27 8-29 34-9 39 25 6 27-22 7-20-25 3-12 34 22 35 22 1 34-10 42-23" />
             <path d="M600 144c20 9 22 29 9 38m-13-15c8 9 20 8 29-1" />
-            <path d="M585 393c29 0 41-20 28-34-13-13-34 2-19 17 13 13 39 5 52-14" />
-            <path d="M221 416c-12 11-2 26 13 24 14-1 16-17 5-21-16-5-20 16 1 28" />
+            <path d="M592 473c29 0 41-20 28-34-13-13-34 2-19 17 13 13 39 5 52-14" />
           </svg>
           <div className="softhaven-moment__sparkle softhaven-moment__sparkle--one" aria-hidden="true">✧</div>
           <div className="softhaven-moment__sparkle softhaven-moment__sparkle--two" aria-hidden="true">✦</div>
