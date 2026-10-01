@@ -59,6 +59,9 @@ export const getStorefront = cache(async () => {
     category: r.categories?.name ?? '',
     color: r.product_variants?.[0]?.color ?? '',
     description: r.description,
+    shortDescription: r.short_description,
+    newArrival: r.new_arrival,
+    bestSeller: r.best_seller,
     image: r.image ?? '',
     images: r.images,
     details: r.details,
@@ -80,6 +83,7 @@ export const getStorefront = cache(async () => {
           compare_at: number | null;
           sku: string;
           stock: number;
+          low_stock_threshold: number;
           active: boolean;
         }) => ({
           id: v.id,
@@ -89,6 +93,7 @@ export const getStorefront = cache(async () => {
           compareAt: v.compare_at == null ? undefined : Number(v.compare_at),
           sku: v.sku,
           stock: v.stock,
+          lowStockThreshold: v.low_stock_threshold,
           active: v.active,
         }),
       ),

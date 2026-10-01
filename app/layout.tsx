@@ -41,7 +41,7 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const catalogue = await getStorefront();
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <CatalogueProvider value={catalogue}>
           <CartProvider>

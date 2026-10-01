@@ -10,9 +10,19 @@ export async function GET(request: Request) {
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
     .limit(25);
-  return error
-    ? Response.json({ error: error.message }, { status: 400 })
-    : Response.json({ reviews: data });
+  if (error) return Response.json({ error: error.message }, { status: 400 });
+  const distribution = [0, 0, 0, 0, 0];
+  let count = 0;
+  let total = 0;
+  for (let offset = 0; ; offset += 1000) {
+    const { data: ratings, error: ratingError } = await db.from('reviews')
+      .select('rating').eq('product_id', new URL(request.url).searchParams.get('product'))
+      .eq('status', 'approved').order('id').range(offset, offset + 999);
+    if (ratingError) return Response.json({ error: ratingError.message }, { status: 400 });
+    for (const review of ratings ?? []) { count++; total += review.rating; distribution[review.rating - 1]++; }
+    if (!ratings || ratings.length < 1000) break;
+  }
+  return Response.json({ reviews: data, summary: { count, average: count ? total / count : 0, distribution } });
 }
 export async function POST(request: Request) {
   try {
