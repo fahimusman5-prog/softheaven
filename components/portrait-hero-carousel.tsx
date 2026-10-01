@@ -61,6 +61,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
   const isMobile=useMediaQuery('(max-width: 767px)');
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [autoplayStopped, setAutoplayStopped] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isDocumentVisible, setIsDocumentVisible] = useState(true);
   const dragStart = useRef<number | null>(null);
@@ -96,12 +97,12 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
   }, []);
 
   useEffect(() => {
-    if (reducedMotion || isPaused || !isDocumentVisible) return;
+    if (reducedMotion || isPaused || autoplayStopped || !isDocumentVisible) return;
     const timer = setInterval(() => {
       move(1);
     }, 4600);
     return () => clearInterval(timer);
-  }, [isDocumentVisible, isPaused, reducedMotion, move]);
+  }, [isDocumentVisible, isPaused, autoplayStopped, reducedMotion, move]);
 
   useEffect(() => () => {
     if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
@@ -166,12 +167,13 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
               aria-label={`${slide.name}, slide ${index + 1} of ${slides.length}`}
               aria-roledescription="slide"
             >
+              <div className="portrait-carousel__visual">
               <ProductMedia
                 src={slide.mobileImage && isMobile ? slide.mobileImage : slide.image}
                 alt={isActive ? slide.alt??slide.name : ''}
                 fill
                 fit="cover"
-                sizes="(max-width: 620px) 76vw, (max-width: 1023px) 300px, (max-width: 1439px) 320px, 350px"
+                sizes="(max-width: 620px) 260px, (max-width: 1100px) 270px, 290px"
                 priority={index === 0}
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
@@ -180,6 +182,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
                 <span>{slide.category}</span>
                 <h2>{slide.name}</h2>
                 <p>{slide.descriptor}</p>
+              </div>
               </div>
             </article>
           );
@@ -192,8 +195,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
         <div className="portrait-carousel__dots" role="tablist" aria-label="Choose a featured companion">
           {slides.map((slide, index) => <button className={index === activeIndex ? 'is-active' : ''} key={slide.id} type="button" role="tab" aria-label={`Show ${slide.name}`} aria-selected={index === activeIndex} onClick={() => { setActiveIndex(index); setIsPaused(true); scheduleResume(); }} />)}
         </div>
-        <button className="portrait-carousel__pause" type="button" aria-label={isPaused ? 'Resume carousel autoplay' : 'Pause carousel autoplay'} aria-pressed={isPaused} onClick={() => { if (resumeTimeout.current) clearTimeout(resumeTimeout.current); setIsPaused((paused) => !paused); }}>
-          {isPaused ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z" fill="currentColor" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>}
+        <button className="portrait-carousel__pause" type="button" aria-label={autoplayStopped ? 'Resume carousel autoplay' : 'Pause carousel autoplay'} aria-pressed={autoplayStopped} onClick={() => { if (resumeTimeout.current) clearTimeout(resumeTimeout.current); setAutoplayStopped((stopped) => !stopped); setIsPaused(false); }}>
+          {autoplayStopped ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z" fill="currentColor" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>}
         </button>
       </div>
 
