@@ -93,6 +93,8 @@ export function SoftHavenCloudBackground() {
     resizeObserver?.observe(page!);
     page?.addEventListener('load', refreshForLayoutChange, true);
 
+    let disposed = false;
+    void document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh(); });
     const context = gsap.context(() => {
       media = gsap.matchMedia(sky);
       media.add(
@@ -119,7 +121,7 @@ export function SoftHavenCloudBackground() {
                 invalidateOnRefresh: true,
               },
             });
-            motion.to(layer, { y: -(mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
+            motion.to(layer, { y: () => -(pathname === '/' ? window.innerHeight * (mobile ? { far: .10, middle: .22, near: .36 }[depth] : { far: .18, middle: .38, near: .62 }[depth]) : mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
 
             clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
@@ -151,16 +153,7 @@ export function SoftHavenCloudBackground() {
             });
           }
 
-          if (pathname === '/' && !document.hidden) {
-            const introTargets = Array.from(document.querySelectorAll<HTMLElement>('.hero-portrait__copy > *, .portrait-carousel'));
-            if (introTargets.length) {
-              gsap.fromTo(
-                introTargets,
-                { y: 14 },
-                { y: 0, duration: 0.68, stagger: 0.09, ease: 'power2.out', clearProps: 'transform', delay: 0.08 },
-              );
-            }
-          }
+
 
         },
         sky,
@@ -168,6 +161,7 @@ export function SoftHavenCloudBackground() {
     }, sky);
 
     return () => {
+      disposed = true;
       document.removeEventListener('visibilitychange', syncVisibility);
       page?.removeEventListener('load', refreshForLayoutChange, true);
       resizeObserver?.disconnect();

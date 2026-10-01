@@ -4,12 +4,13 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import { useCatalogue } from '@/components/catalogue-provider';
 import { useCart } from './cart-provider';
 
 type IconName = 'home' | 'bag' | 'heart' | 'user' | 'mail' | 'search' | 'cart' | 'menu' | 'close';
 type Notice = 'account' | 'wishlist' | null;
 
-const navigation: Array<{ href: string; label: string; icon: IconName }> = [
+const defaultNavigation: Array<{ href: string; label: string; icon: IconName }> = [
   { href: '/', label: 'Home', icon: 'home' },
   { href: '/shop', label: 'Shop', icon: 'bag' },
   { href: '/collections', label: 'Collections', icon: 'heart' },
@@ -47,6 +48,7 @@ function BearNavItem({ href, label, icon, active }: { href: string; label: strin
 }
 
 function DesktopNavigation({ pathname }: { pathname: string }) {
+ const {navigation:records}=useCatalogue(); const navigation=records.filter(r=>r.placement==='header').map(r=>({href:r.url,label:r.label,icon:defaultNavigation.find(n=>n.href===r.url)?.icon??'bag' as IconName}));
   return <nav className="sfh-nav" aria-label="Main navigation">{navigation.map((item) => <BearNavItem key={item.label} {...item} active={isCurrent(pathname, item.href)}/>)}</nav>;
 }
 
@@ -55,7 +57,7 @@ function HeaderSearch({ id, query, setQuery, submitSearch }: { id: string; query
 }
 
 function HeaderActions({ count, setNotice }: { count: number; setNotice: (notice: Notice) => void }) {
-  return <div className="sfh-actions" aria-label="Account actions"><button className="sfh-action" type="button" aria-label="Account" onClick={() => setNotice('account')}><HeaderIcon name="user"/></button><button className="sfh-action" type="button" aria-label="Wishlist, 0 items" onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sfh-count">0</span></button><Link className="sfh-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sfh-count">{count}</span></Link></div>;
+  return <div className="sfh-actions" aria-label="Account actions"><Link className="sfh-action" href="/account" aria-label="Account"><HeaderIcon name="user"/></Link><button className="sfh-action" type="button" aria-label="Wishlist, 0 items" onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sfh-count">0</span></button><Link className="sfh-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sfh-count">{count}</span></Link></div>;
 }
 
 function MobileHeader({ count, menuOpen, searchOpen, setMenuOpen, setNotice, setSearchOpen }: { count: number; menuOpen: boolean; searchOpen: boolean; setMenuOpen: (value: boolean) => void; setNotice: (notice: Notice) => void; setSearchOpen: (value: boolean) => void }) {
@@ -63,6 +65,7 @@ function MobileHeader({ count, menuOpen, searchOpen, setMenuOpen, setNotice, set
 }
 
 export function SiteHeader() {
+ const {navigation:records}=useCatalogue(); const navigation=records.filter(r=>r.placement==='header').map(r=>({href:r.url,label:r.label,icon:defaultNavigation.find(n=>n.href===r.url)?.icon??'bag' as IconName}));
   const { count } = useCart();
   const reduceMotion = useReducedMotion();
   const pathname = usePathname();

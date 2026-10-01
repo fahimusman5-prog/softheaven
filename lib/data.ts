@@ -11,6 +11,9 @@ export type ProductVariant = {
 };
 
 export type Product = {
+  featured?: boolean;
+  seoTitle?:string;
+  seoDescription?:string;
   id: string;
   name: string;
   slug: string;
@@ -48,6 +51,23 @@ export const products: Product[] = [
 ];
 
 export const findProduct = (slug: string) => products.find((product) => product.slug === slug) ?? products[0];
+
+export type ProductCollection = {
+  slug: string;
+  name: string;
+  shortName: string;
+  description: string;
+  products: Product[];
+};
+
+export function getCollections(): ProductCollection[] {
+  return [
+    { slug: 'teddy-classic-cuddles', name: 'Teddy & Classic Cuddles', shortName: 'Teddy bears', description: 'Timeless teddy companions for warm, everyday hugs.', products: products.filter((product) => product.category === 'Teddy Bear Collection') },
+    { slug: 'bunny-sweet-friends', name: 'Bunny & Sweet Friends', shortName: 'Bunnies', description: 'Cloud-soft friends for tender moments.', products: products.filter((product) => product.slug === 'celeste-cloud-bunny') },
+    { slug: 'wild-wonderful', name: 'Wild & Wonderful', shortName: 'Wild friends', description: 'Gentle animal companions with their own character.', products: products.filter((product) => product.slug === 'oliver-sleeping-sloth') },
+    { slug: 'love-gifting', name: 'Love & Gifting', shortName: 'Gifts', description: 'Thoughtful keepsakes for someone special.', products: products.filter((product) => product.category === 'Love & Gifting') },
+  ];
+}
 
 export function getProductVariants(product: Product): ProductVariant[] {
   const variants = product.variants?.filter((variant) => variant.active !== false);

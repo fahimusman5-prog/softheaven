@@ -1,0 +1,20 @@
+create table public.order_refunds(id uuid primary key default gen_random_uuid(),order_id uuid not null unique references public.orders,amount numeric(12,2) not null check(amount>0),reference text not null,reason text not null,actor_id uuid not null references public.profiles,created_at timestamptz not null default now());
+alter table public.order_refunds enable row level security;
+create policy refund_staff_read on public.order_refunds for select to authenticated using(private.permitted('orders'));
+create policy refund_customer_read on public.order_refunds for select to authenticated using(exists(select 1 from public.orders where id=order_id and customer_id=auth.uid()));
+grant select on public.order_refunds to authenticated;
+create function private.record_cod_refund(p_order uuid,p_reference text,p_reason text) returns void language plpgsql security definer set search_path='' as $$ declare o public.orders;begin
+ if not private.permitted('settings') then raise exception 'Permission denied';end if;
+ if length(trim(p_reference)) not between 3 and 200 or length(trim(p_reason)) not between 3 and 2000 then raise exception 'Provide a refund reference and reason';end if;
+ select * into o from public.orders where id=p_order for update;
+ if not found or o.payment_method<>'cod' or o.payment_status<>'paid' or o.total<=0 then raise exception 'Only a paid COD order can have an offline refund recorded';end if;
+ insert into public.order_refunds(order_id,amount,reference,reason,actor_id) values(p_order,o.total,p_reference,p_reason,auth.uid());
+ update public.orders set payment_status='refunded',updated_at=now() where id=p_order;
+ insert into public.reward_transactions(customer_id,points,type,reason,order_id,actor_id) select o.customer_id,-coalesce(sum(points),0),'refund_reversal','Recorded offline refund',p_order,auth.uid() from public.reward_transactions where order_id=p_order and type in ('earn','redeem') having coalesce(sum(points),0)<>0 on conflict(order_id,type) do nothing;
+ insert into public.order_events(order_id,actor_id,event) values(p_order,auth.uid(),'Offline COD refund recorded: '||p_reference);
+end $$;
+revoke all on function private.record_cod_refund(uuid,text,text) from public,anon;
+grant execute on function private.record_cod_refund(uuid,text,text) to authenticated;
+create function public.record_cod_refund(p_order uuid,p_reference text,p_reason text) returns void language sql security invoker set search_path='' as $$select private.record_cod_refund(p_order,p_reference,p_reason)$$;
+revoke all on function public.record_cod_refund(uuid,text,text) from public,anon;grant execute on function public.record_cod_refund(uuid,text,text) to authenticated;
+create trigger audit_refund after insert on public.order_refunds for each row execute function private.audit_change();

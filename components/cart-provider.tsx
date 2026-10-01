@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { Product, ProductVariant } from '@/lib/data';
 import { getProductVariants } from '@/lib/data';
+import { useCatalogue } from '@/components/catalogue-provider';
 import { STORE_CURRENCY } from '@/lib/format';
 
 export type CartLine = { product: Product; variant: ProductVariant; quantity: number };
@@ -50,6 +51,7 @@ function readPersistedCart(value: unknown): CartLine[] | null {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const {products}=useCatalogue();
   const [lines, setLines] = useState<CartLine[]>([]);
   const hasHydrated = useRef(false);
 
@@ -62,7 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (source) {
         const parsed: unknown = JSON.parse(source);
         const normalized = readPersistedCart(parsed);
-        if (normalized) setLines(normalized);
+        if (normalized) setLines(normalized.flatMap(line=>{const product=products.find(p=>p.id===line.product.id);if(!product)return [];const variant=product.variants?.find(v=>v.id===line.variant.id)??(line.variant.id.endsWith('-default')?product.variants?.[0]:undefined);if(!variant)return [];return [{product,variant,quantity:Math.min(line.quantity,12)}];}));
       }
 
       window.localStorage.removeItem(PREVIOUS_CART_STORAGE_KEY);
@@ -74,7 +76,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       hasHydrated.current = true;
     }
-  }, []);
+  }, [products]);
 
   useEffect(() => {
     if (!hasHydrated.current) return;
@@ -88,11 +90,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     subtotal: lines.reduce((sum, line) => sum + line.variant.price * line.quantity, 0),
     add: (product, selectedVariant) => setLines((current) => {
       const variant = selectedVariant ?? getProductVariants(product)[0];
-      if (!variant) return current;
+      if (!variant || variant.stock===0) return current;
       const id = getCartLineId(product, variant);
       const existing = current.find((line) => getCartLineId(line.product, line.variant) === id);
       return existing
-        ? current.map((line) => getCartLineId(line.product, line.variant) === id ? { ...line, quantity: Math.min(12, line.quantity + 1) } : line)
+        ? current.map((line) => getCartLineId(line.product, line.variant) === id ? { ...line, quantity: Math.min(12, variant.stock??12, line.quantity + 1) } : line)
         : [...current, { product, variant, quantity: 1 }];
     }),
     update: (id, quantity) => setLines((current) => quantity < 1
