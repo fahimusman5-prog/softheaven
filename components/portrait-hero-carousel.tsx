@@ -23,10 +23,10 @@ const positionClass: Record<Position, string> = {
   [2]: 'is-far-right',
 };
 
-function getPosition(index: number, activeIndex: number, total: number): Position {
+function getPosition(index: number, activeIndex: number, total: number): number {
   const half = Math.floor(total / 2);
   const offset = ((index - activeIndex + total + half) % total) - half;
-  return Math.max(-2, Math.min(2, offset)) as Position;
+  return offset;
 }
 
 function useMediaQuery(query: string) {
@@ -161,7 +161,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
           const isActive = position === 0;
           return (
             <article
-              className={`portrait-carousel__card ${positionClass[position]}`}
+              className={`portrait-carousel__card ${positionClass[position as Position]}`}
               key={slide.id}
               aria-hidden={!isActive}
               aria-label={`${slide.name}, slide ${index + 1} of ${slides.length}`}
@@ -192,8 +192,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
       </div>
 
       <div className="portrait-carousel__controls">
-        <div className="portrait-carousel__dots" role="tablist" aria-label="Choose a featured companion">
-          {slides.map((slide, index) => <button className={index === activeIndex ? 'is-active' : ''} key={slide.id} type="button" role="tab" aria-label={`Show ${slide.name}`} aria-selected={index === activeIndex} onClick={() => { setActiveIndex(index); setIsPaused(true); scheduleResume(); }} />)}
+        <div className="portrait-carousel__dots" role="group" aria-label="Choose a featured companion">
+          {slides.map((slide, index) => <button className={index === activeIndex ? 'is-active' : ''} key={slide.id} type="button" aria-label={`Show ${slide.name}`} aria-pressed={index === activeIndex} onClick={() => { setActiveIndex(index); setIsPaused(true); scheduleResume(); }} />)}
         </div>
         <button className="portrait-carousel__pause" type="button" aria-label={autoplayStopped ? 'Resume carousel autoplay' : 'Pause carousel autoplay'} aria-pressed={autoplayStopped} onClick={() => { if (resumeTimeout.current) clearTimeout(resumeTimeout.current); setAutoplayStopped((stopped) => !stopped); setIsPaused(false); }}>
           {autoplayStopped ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z" fill="currentColor" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>}

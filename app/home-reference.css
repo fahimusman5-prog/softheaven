@@ -29,11 +29,11 @@ body:has(.home-page) .sfh-header.is-compact .sfh-stage,body:has(.home-page) .sfh
 .home-page .hero-portrait__copy h1 em{font:italic 500 clamp(66px,5.1vw,82px)/1.02 'Playfair Display',Georgia,serif;letter-spacing:-.052em;background:linear-gradient(100deg,#c983bf 4%,#a58bc7 52%,#79afd4 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .home-page .hero-portrait__copy p{max-width:720px;margin:11px auto 0;color:#514b57;font:400 clamp(17px,1.25vw,20px)/1.48 'Plus Jakarta Sans',sans-serif}
 .home-page .portrait-carousel{width:min(100%,1010px);margin:20px auto 0}
-.home-page .portrait-carousel__stage{width:100%;height:372px;overflow:visible;perspective:none}
-.home-page .portrait-carousel__card{top:0;width:280px;height:370px;border-radius:28px;transform-style:flat;opacity:1;filter:none;transition:transform .62s cubic-bezier(.22,1,.36,1),opacity .62s ease,box-shadow .62s ease}
+.home-page .portrait-carousel__stage{width:100%;height:372px;overflow:visible;perspective:1400px}
+.home-page .portrait-carousel__card{top:0;width:280px;height:370px;border-radius:28px;transform-style:preserve-3d;opacity:1;filter:none;transition:transform .62s cubic-bezier(.22,1,.36,1),opacity .62s ease,box-shadow .62s ease}
 .home-page .portrait-carousel__card.is-center{z-index:7;transform:translateX(-50%) scale(1)}
-.home-page .portrait-carousel__card.is-near-left{z-index:5;transform:translateX(calc(-50% - 192px)) translateY(20px) scale(.92) rotate(-.7deg)}
-.home-page .portrait-carousel__card.is-near-right{z-index:5;transform:translateX(calc(-50% + 192px)) translateY(20px) scale(.92) rotate(.7deg)}
+.home-page .portrait-carousel__card.is-near-left{z-index:5;transform:translateX(calc(-50% - 192px)) translateY(20px) translateZ(-60px) scale(.92) rotateY(5deg)}
+.home-page .portrait-carousel__card.is-near-right{z-index:5;transform:translateX(calc(-50% + 192px)) translateY(20px) translateZ(-60px) scale(.92) rotateY(-5deg)}
 .home-page .portrait-carousel__card.is-far-left{z-index:3;display:block;transform:translateX(calc(-50% - 348px)) translateY(44px) scale(.83) rotate(-1deg);opacity:.9}
 .home-page .portrait-carousel__card.is-far-right{z-index:3;display:block;transform:translateX(calc(-50% + 348px)) translateY(44px) scale(.83) rotate(1deg);opacity:.9}
 .home-page .portrait-carousel__card img{object-position:center 42%}
@@ -102,6 +102,7 @@ body:has(.home-page) .sfh-header.is-compact .sfh-stage,body:has(.home-page) .sfh
 .home-page .section{padding-block:110px}
 .home-page .section-heading h2{font-size:clamp(46px,4.2vw,64px);line-height:1.08}
 .home-page .section-heading p{font-size:18px;line-height:1.6}
+.home-page .home-journey :is(.journey-details,.journey-next-hug) h2{font-size:clamp(44px,4.4vw,64px)}
 .home-page .home-journey :is(.journey-why,.journey-details,.journey-family,.journey-next-hug){min-height:0;padding-block:100px}
 .home-page .home-journey .journey-discover{min-height:0;padding-top:100px}
 .home-page .home-journey :is(.journey-why__copy,.journey-discover__intro,.journey-details__copy,.journey-gift__copy,.journey-family__heading,.journey-next-hug__copy)>p{font-size:18px;line-height:1.65;max-width:52ch}
@@ -129,6 +130,7 @@ body:has(.home-page) .soft-sky__ambient-fog-layer{animation:none;will-change:aut
  .home-page .section{padding-block:64px}
  .home-page .section-heading h2{font-size:clamp(36px,9.5vw,46px)}
  .home-page .section-heading p{font-size:16px}
+ .home-page .home-journey :is(.journey-discover,.journey-details,.journey-family,.journey-next-hug) h2{font-size:clamp(36px,9.8vw,44px);line-height:1.04}
  .home-page .home-journey :is(.journey-why,.journey-details,.journey-family,.journey-next-hug){padding-block:64px}
  .home-page .home-journey .journey-discover{padding-top:64px}
  .home-page .home-journey :is(.journey-why__copy,.journey-discover__intro,.journey-details__copy,.journey-gift__copy,.journey-family__heading,.journey-next-hug__copy)>p{font-size:16px;line-height:1.6}
@@ -188,32 +190,21 @@ body:has(.home-page) .soft-sky__layer--middle{opacity:.64}
 
 /* Full-site responsive architecture: one fluid shell over the shared sky. */
 body:has(.home-page){
- --page-gutter:clamp(20px,5vw,96px);
- --content-max:1640px;
- --section-space:clamp(80px,8vw,150px);
+ --page-gutter:clamp(18px,4vw,72px);
+ --content-max:1480px;
+ --section-space:clamp(56px,5vw,80px);
  --glass-bg:rgba(255,255,255,.56);
  --glass-border:rgba(255,255,255,.72);
  --glass-shadow:0 16px 42px rgba(82,68,108,.10);
  --glass-blur:18px;
 }
-body:has(.home-page) .home-page{position:relative;isolation:isolate;overflow:clip}
-body:has(.home-page) .home-page :is(.home-journey,.section-inner,.home-product-grid,.home-collections){width:min(calc(100% - (2 * var(--page-gutter))),var(--content-max));margin-inline:auto}
-body:has(.home-page) .home-page .home-journey :is(.journey-discover,.journey-details){width:100%;max-width:none}
-body:has(.home-page) .home-page .home-journey :is(.journey-discover,.journey-details,.journey-family,.journey-next-hug){background-color:transparent}
-body:has(.home-page) .home-page :is(.journey-note,.journey-family__note,.journey-discover__float,.journey-discover__panel,.journey-details__benefits,.portrait-carousel__card,.portrait-hero-button--secondary,.filter-pill,.category-tabs button){background:var(--glass-bg);border-color:var(--glass-border);box-shadow:var(--glass-shadow);backdrop-filter:blur(var(--glass-blur)) saturate(130%);-webkit-backdrop-filter:blur(var(--glass-blur)) saturate(130%)}
-body:has(.home-page) .home-page .journey-gift,
-body:has(.home-page) .home-page .journey-final{background:rgba(255,255,255,.22);box-shadow:none}
-body:has(.home-page) .home-page .journey-discover__inner,
-body:has(.home-page) .home-page .journey-details__inner{width:min(calc(100% - (2 * var(--page-gutter))),var(--content-max));}
-body:has(.home-page) .home-page .journey-family{width:min(calc(100% - (2 * var(--page-gutter))),var(--content-max));min-height:0;padding-block:var(--section-space);background:transparent}
-body:has(.home-page) .home-page .journey-discover{padding-block:var(--section-space) 0}
-body:has(.home-page) .home-page .journey-details{padding-block:var(--section-space)}
-body:has(.home-page) .home-page .journey-final{width:min(calc(100% - (2 * var(--page-gutter))),var(--content-max))}
-body:has(.home-page) .home-page .home-product-grid .product-card{background:var(--glass-bg);border-color:var(--glass-border);box-shadow:var(--glass-shadow)}
-body:has(.home-page) .home-page .portrait-hero-button--secondary{color:#4e4560}
-@media(max-width:767px){
- body:has(.home-page) .home-page :is(.home-journey,.section-inner,.home-product-grid,.home-collections,.journey-final,.journey-family){width:calc(100% - (2 * var(--page-gutter)))}
- body:has(.home-page) .home-page .home-journey :is(.journey-discover,.journey-details){width:calc(100% + (2 * var(--page-gutter)));margin-left:calc(-1 * var(--page-gutter));padding-inline:var(--page-gutter)}
- body:has(.home-page) .home-page .journey-discover__inner,body:has(.home-page) .home-page .journey-details__inner{width:100%}
-}
-@media(prefers-reduced-motion:reduce){body:has(.home-page) .home-page :is(.journey-note,.journey-family__note,.journey-discover__float,.journey-discover__panel){backdrop-filter:none;-webkit-backdrop-filter:none}}
+/* One grid for content; atmosphere remains outside the content container. */
+.home-page .home-journey{width:100%;margin:0}
+.home-page .home-journey :is(.journey-discover,.journey-details,.journey-family,.journey-next-hug){width:100%;max-width:none;min-height:0;margin:0;padding-inline:var(--page-gutter);background:transparent;border:0;box-shadow:none}
+.home-page .home-journey :is(.journey-discover__inner,.journey-details__inner,.journey-next-hug__inner){width:min(100%,var(--content-max));margin-inline:auto}
+.home-page .home-journey .journey-family{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(24px,4vw,64px);padding-inline:max(var(--page-gutter),calc((100% - var(--content-max))/2))}
+.home-page .home-journey :is(.journey-discover,.journey-details,.journey-family,.journey-next-hug){padding-block:var(--section-space)}
+.home-page .home-journey .journey-discover{padding-bottom:24px}
+.home-page .section{width:min(calc(100% - 2 * var(--page-gutter)),var(--content-max));padding-block:var(--section-space)}
+.home-page .portrait-hero-button--secondary{color:#4e4560}
+@media(max-width:760px){.home-page .home-journey .journey-family{grid-template-columns:1fr;gap:24px}.home-page .home-journey .journey-discover{padding-bottom:0}}

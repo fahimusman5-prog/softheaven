@@ -8,6 +8,7 @@ import {
 } from '@/components/portrait-hero-carousel';
 import { HomeMotion } from '@/components/home-motion';
 import { HomeEditorialJourney } from '@/components/home-editorial-journey';
+import { HomeSmoothScroll } from '@/components/home-smooth-scroll';
 
 function BenefitIcon({
   type,
@@ -84,6 +85,7 @@ export default async function HomePage() {
   }));
   return (
     <HomeMotion>
+      <HomeSmoothScroll />
       <div className="home-page">
         <div className="home-landing">
           {hero && (

@@ -28,7 +28,7 @@ export function SiteFooter() {
         <h3>Get in touch</h3>
         <Link href="/contact">Contact SoftHaven</Link>{settings.general?.email&&<a href={"mailto:"+settings.general.email}>{settings.general.email}</a>}{settings.general?.phone&&<a href={"tel:"+settings.general.phone}>{settings.general.phone}</a>}{navigation.filter(n=>n.placement==='footer').map(n=><Link href={n.url} key={n.id}>{n.label}</Link>)}<NewsletterForm/>
       </div>
-      <div className="footer-bottom"><span>{settings.footer?.copyright}</span><Link href="/">Back to top ↑</Link></div>
+      <div className="footer-bottom"><span>{settings.footer?.copyright}</span><a href="#page-top">Back to top ↑</a></div>
     </footer>
   );
 }

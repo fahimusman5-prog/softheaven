@@ -1,11 +1,11 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-type CloudDepth = 'far' | 'middle' | 'near';
+type CloudDepth = 'far' | 'middle' | 'near' | 'foreground';
 
 type CloudDefinition = {
   id: string;
@@ -26,9 +26,11 @@ const depthMotion = {
   far: { desktopY: 82, mobileY: 30, desktopX: 18, mobileX: 8, desktopScrub: 0.9, mobileScrub: 0.8 },
   middle: { desktopY: 168, mobileY: 62, desktopX: 32, mobileX: 13, desktopScrub: 0.68, mobileScrub: 0.66 },
   near: { desktopY: 305, mobileY: 112, desktopX: 46, mobileX: 19, desktopScrub: 0.48, mobileScrub: 0.58 },
+  foreground: { desktopY: 52, mobileY: 20, desktopX: 40, mobileX: 18, desktopScrub: .25, mobileScrub: .2 },
 } satisfies Record<CloudDepth, { desktopY: number; mobileY: number; desktopX: number; mobileX: number; desktopScrub: number; mobileScrub: number }>;
 
 const clouds: CloudDefinition[] = [
+  { id: 'foreground-left', depth: 'foreground', className: 'soft-sky__cloud--foreground-left', asset: '/assets/clouds/soft-cloud-bank.webp', travel: 1 },
   { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 0.82, drift: true },
   { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/generated/dream-cloud-06.webp', travel: 0.94 },
   { id: 'far-high-left', depth: 'far', className: 'soft-sky__cloud--far-high-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 0.74 },
@@ -65,6 +67,14 @@ export function SoftHavenCloudBackground() {
   const skyRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const mode = getAtmosphereMode(pathname);
+  const isMobile = useSyncExternalStore(
+    (notify) => { const query = window.matchMedia('(max-width: 767px)'); query.addEventListener('change', notify); return () => query.removeEventListener('change', notify); },
+    () => window.matchMedia('(max-width: 767px)').matches,
+    () => false,
+  );
+  const visibleClouds = pathname === '/' && isMobile
+    ? clouds.filter((cloud) => ['far-left', 'far-right', 'middle-left', 'middle-right', 'foreground-left'].includes(cloud.id))
+    : clouds.filter((cloud) => pathname === '/' || cloud.depth !== 'foreground');
 
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
@@ -106,7 +116,7 @@ export function SoftHavenCloudBackground() {
         (match) => {
           if (match.conditions?.reduce) return;
           const mobile = Boolean(match.conditions?.mobile);
-          (['far', 'middle', 'near'] as const).forEach((depth) => {
+          (['far', 'middle', 'near', 'foreground'] as const).forEach((depth) => {
             const layer = sky.querySelector<HTMLElement>(`[data-parallax-layer="${depth}"]`);
             if (!layer || getComputedStyle(layer).display === 'none') return;
 
@@ -121,14 +131,16 @@ export function SoftHavenCloudBackground() {
                 invalidateOnRefresh: true,
               },
             });
-            motion.to(layer, { y: () => -(pathname === '/' ? window.innerHeight * (mobile ? { far: .10, middle: .22, near: .36 }[depth] : { far: .18, middle: .38, near: .62 }[depth]) : mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
+            motion.to(layer, { y: () => -(mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
 
             clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
               if (element && getComputedStyle(element).display !== 'none') {
-                const direction = cloud.className.includes('--right') ? -1 : 1;
-                const horizontalTravel = mobile ? settings.mobileX : settings.desktopX;
-                motion.to(element, { x: direction * horizontalTravel * cloud.travel, duration: 1 }, 0);
+                const direction = pathname === '/' ? 1 : cloud.className.includes('--right') ? -1 : 1;
+                const horizontalTravel = pathname === '/'
+                  ? (mobile ? { far: 6, middle: 12, near: 18, foreground: 24 } : { far: 9, middle: 18, near: 29, foreground: 40 })[depth]
+                  : mobile ? settings.mobileX : settings.desktopX;
+                motion.to(element, { x: () => direction * horizontalTravel * cloud.travel * (pathname === '/' ? window.innerWidth / 100 : 1), duration: 1 }, 0);
               }
             });
             wisps.filter((wisp) => wisp.depth === depth).forEach((wisp) => {
@@ -169,7 +181,7 @@ export function SoftHavenCloudBackground() {
       media?.revert();
       context.revert();
     };
-  }, [pathname, mode]);
+  }, [pathname, mode, isMobile]);
 
   if (pathname.startsWith('/admin')) return null;
 
@@ -181,18 +193,18 @@ export function SoftHavenCloudBackground() {
       <div className="soft-sky__light soft-sky__light--lilac" data-sky-light />
       <div className="soft-sky__light soft-sky__light--peach" data-sky-light />
       <div className="soft-sky__light soft-sky__light--mint" data-sky-light />
-      {(['far', 'middle', 'near'] as const).map((depth) => (
+      {(['far', 'middle', 'near', 'foreground'] as const).map((depth) => (
         <div className={`soft-sky__layer soft-sky__layer--${depth}`} key={depth} data-parallax-layer={depth}>
           {wisps.filter((wisp) => wisp.depth === depth).map((wisp) => (
             <span key={wisp.id} id={wisp.id} className={`soft-sky__wisp ${wisp.className}`} />
           ))}
-          {clouds.filter((cloud) => cloud.depth === depth).map((cloud) => (
+          {visibleClouds.filter((cloud) => cloud.depth === depth).map((cloud) => (
             <span
               key={cloud.id}
               id={cloud.id}
               className={`soft-sky__cloud ${cloud.className}`}
             >
-              <span className={`soft-sky__cloud-ambient${cloud.drift ? ' soft-sky__cloud-ambient--drift' : ''}`}>
+              <span className={`soft-sky__cloud-ambient${cloud.drift && pathname !== '/' ? ' soft-sky__cloud-ambient--drift' : ''}`}>
                 <picture>
                   <source media="(max-width: 767px)" srcSet={cloud.asset.replace('.webp', '-mobile.webp')} />
                   <img src={cloud.asset} alt="" loading="lazy" decoding="async" />

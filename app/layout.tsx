@@ -4,10 +4,13 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './softhaven-premium.css';
 import './home-reference.css';
+import 'lenis/dist/lenis.css';
+import './home-sky.css';
 import './collections/soft-haven-for-that.css';
 import './collections/collections-difference.css';
 import { StorefrontFrame } from '@/components/storefront-frame';
 import { CartProvider } from '@/components/cart-provider';
+import { WishlistProvider } from '@/components/wishlist-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
@@ -42,6 +45,7 @@ export default async function RootLayout({
       <body>
         <CatalogueProvider value={catalogue}>
           <CartProvider>
+            <WishlistProvider>
             <StorefrontFrame
               header={<SiteHeader />}
               footer={<SiteFooter />}
@@ -49,6 +53,7 @@ export default async function RootLayout({
             >
               {children}
             </StorefrontFrame>
+            </WishlistProvider>
           </CartProvider>
         </CatalogueProvider>
       </body>

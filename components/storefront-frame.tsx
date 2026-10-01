@@ -15,10 +15,10 @@ export function StorefrontFrame({
   return admin ? (
     <>{children}</>
   ) : (
-    <div className="softhaven-app">
+    <div className="softhaven-app" id="page-top">
       {background}
       {header}
-      <main>{children}</main>
+      <main id="main-content">{children}</main>
       {footer}
     </div>
   );
