@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getStorefront } from '@/lib/storefront';
+import { CollectionsRestoredContent } from '@/components/collections-restored-content';
 import { CollectionsDiscoveryMotion } from '@/components/collections-discovery-motion';
 import { HomeSmoothScroll } from '@/components/home-smooth-scroll';
 import styles from './collections.module.css';
@@ -61,10 +62,7 @@ export default async function CollectionsPage() {
             </div>)}
           </div>
         </section>
-        <section className={styles.directory} id="collection-list" aria-labelledby="collection-list-title">
-          <div><span className={styles.eyebrow}>More to discover <i aria-hidden="true" /></span><h2 id="collection-list-title">Every kind of <em>soft.</em></h2><p>Find the family that feels like you.</p></div>
-          <nav aria-label="All SoftHaven collections">{collections.map((collection, index) => <Link href={`/shop?collection=${encodeURIComponent(collection.slug)}`} key={collection.slug}><span className={styles.directoryNumber}>{String(index + 1).padStart(2, '0')}</span><span>{collection.name}</span><span aria-hidden="true">↗</span></Link>)}</nav>
-        </section>
+        <CollectionsRestoredContent collections={collections} />
       </CollectionsDiscoveryMotion>
     </div>
   );
