@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { products, type Product } from '@/lib/data';
+import type { Product } from '@/lib/data';
+import {useCatalogue} from '@/components/catalogue-provider';
 import { formatPrice } from '@/lib/format';
 import { ProductMedia } from './product-media';
 
@@ -28,15 +29,16 @@ function MatchIcon({ type }: { type: DiscoveryIcon }) {
   return <svg {...props}><circle cx="16" cy="16" r="10"/><path d="M11 16h10M16 11v10"/></svg>;
 }
 
-function previewFor(option: MatchOption): Product[] {
+function previewFor(option: MatchOption,products:Product[]): Product[] {
   if (!option.category) return products.slice(0, 4);
   return products.filter((product) => product.category === option.category);
 }
 
 export function PerfectMatch() {
+ const {products}=useCatalogue();
   const [selectedKey, setSelectedKey] = useState('teddy');
   const selected = matchOptions.find((option) => option.key === selectedKey) ?? matchOptions[0];
-  const previewProducts = useMemo(() => previewFor(selected), [selected]);
+  const previewProducts = useMemo(() => previewFor(selected,products), [selected,products]);
   const shopHref = selected.category ? `/shop?category=${encodeURIComponent(selected.category)}` : '/shop';
 
   return <section className="perfect-match-section" aria-labelledby="perfect-match-title">
