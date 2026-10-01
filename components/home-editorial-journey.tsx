@@ -6,10 +6,9 @@ import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useCatalogue } from '@/components/catalogue-provider';
-import { ProductMedia } from '@/components/product-media';
 
 export function HomeEditorialJourney() {
-  const {collections,products,sections} = useCatalogue();
+  const {collections,sections} = useCatalogue();
   const root = useRef<HTMLElement>(null);
   const familyCollections = collections.filter((collection) => collection.featured);
   const [activeFamilySlug, setActiveFamilySlug] = useState(familyCollections[0]?.slug??'');
@@ -26,8 +25,6 @@ export function HomeEditorialJourney() {
     'wild-wonderful': 'Made for playful hearts.',
   };
   const featuredCollections = collections.filter((collection) => ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'].includes(collection.slug));
-  const bunny = products.find((product) => product.id === 'celeste') ?? products[0];
-  const gift = products.find((product) => product.id === 'amour') ?? products[0];
 
   useEffect(() => {
     const node = root.current;
@@ -57,25 +54,9 @@ export function HomeEditorialJourney() {
     return () => { media.revert(); context.revert(); };
   }, []);
 
-  if(!bunny || !gift || !activeFamily || featuredCollections.length<3) return null;
+  if(!activeFamily || featuredCollections.length<3) return null;
   return (
     <section className="home-journey" ref={root} aria-label="The SoftHaven story">
-      {sections['why']&&<><section className="journey-why" aria-labelledby="journey-why-title">
-        <div className="journey-why__copy" data-journey-reveal>
-          <span className="eyebrow">{sections['why']?.eyebrow}</span>
-          <h2 id="journey-why-title">{sections['why']?.title}<br /><em>{sections['why']?.highlight}</em></h2>
-          <p>{sections['why']?.description}</p>
-          <Link className="text-button" href={sections['why']?.cta_url??'/shop'}>{sections['why']?.cta_label} <span aria-hidden="true">→</span></Link>
-          <picture className="journey-plush-accent"><source media="(max-width: 767px)" srcSet="/assets/home-story/plush-cloud-cutout-mobile.webp" /><img src="/assets/home-story/plush-cloud-cutout.webp" alt="" width="900" height="600" loading="lazy" decoding="async" /></picture>
-        </div>
-        <div className="journey-why__art" data-journey-reveal data-journey-direction="up">
-          <ProductMedia product={sections.why?.image?{...bunny,image:sections.why.image}:bunny} alt={bunny.name} fit="cover" className="journey-why__image" sizes="(max-width: 760px) 90vw, 58vw" />
-          <article className="journey-note journey-note--one"><strong>Soft-touch feel</strong><span>Chosen for that comforting feel.</span></article>
-          <article className="journey-note journey-note--two"><strong>Made for cuddles</strong><span>Plush friends for everyday moments.</span></article>
-          <article className="journey-note journey-note--three"><strong>A friend for every mood</strong><span>Meet the companions in our collection.</span></article>
-        </div>
-      </section></>}
-
       {sections['discover']&&<><section className="journey-discover" aria-labelledby="journey-discover-title">
         <span className="journey-discover__word" data-discover-parallax="word" aria-hidden="true">Companions</span>
         <div className="journey-discover__inner">
@@ -132,16 +113,6 @@ export function HomeEditorialJourney() {
             </div>
           </div>
         </div>
-      </section></>}
-
-      {sections['gift']&&<><section className="journey-gift" aria-labelledby="journey-gift-title">
-        <div className="journey-gift__copy" data-journey-reveal>
-          <span className="eyebrow">{sections['gift']?.eyebrow}</span>
-          <h2 id="journey-gift-title">{sections['gift']?.title}<br /><em>{sections['gift']?.highlight}</em></h2>
-          <p>{sections['gift']?.description}</p>
-          <Link className="primary-button" href={sections.gift?.cta_url??`/product/${gift.slug}`}>{sections['gift']?.cta_label} <span aria-hidden="true">→</span></Link>
-        </div>
-        <div className="journey-gift__visual" data-journey-reveal data-journey-direction="up"><ProductMedia product={sections.gift?.image?{...gift,image:sections.gift.image}:gift} alt={gift.name} fit="cover" className="journey-gift__image" sizes="(max-width: 760px) 90vw, 48vw" /><span>{gift.name}</span></div>
       </section></>}
 
       {sections['family']&&<><section className="journey-family" aria-labelledby="journey-family-title">
