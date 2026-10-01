@@ -1,12 +1,13 @@
 import 'server-only';
+import { getSupabaseConfig } from '@/lib/supabase/config';
 import { createClient } from '@supabase/supabase-js';
 import { cache } from 'react';
 import type { Product } from '@/lib/data';
 import type { SoftHavenCollection } from '@/lib/collections';
 export const publicClient = () =>
   createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    getSupabaseConfig().url,
+    getSupabaseConfig().key,
     {
       auth: { persistSession: false },
       global: {

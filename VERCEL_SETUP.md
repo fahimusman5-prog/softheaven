@@ -4,7 +4,7 @@ Connect the Vercel project to `fahimusman5-prog/softheaven`, with production bra
 
 ## Production environment variables
 
-In **Project → Settings → Environment Variables**, add:
+The app includes public connection defaults for the dedicated SoftHaven project, so missing variables no longer crash startup. These optional overrides belong in **Project → Settings → Environment Variables**:
 
 | Name | Value |
 | --- | --- |
@@ -14,7 +14,9 @@ In **Project → Settings → Environment Variables**, add:
 
 The publishable key is public browser configuration. This application does not require a service-role key, database password, Vercel Blob, a second database, or a Vercel cron job.
 
-Save the variables and deploy the latest `main` commit. If a deployment was created before the variables were added, **Redeploy** it: variable changes only apply to new deployments. Check that the deployment shows **Ready** before testing. See [Vercel environment variables](https://vercel.com/docs/environment-variables).
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` is supported as a legacy alternative to the publishable-key variable. If you override the project URL, supply a matching public key; the app does not mix keys between projects.
+
+Save any overrides and deploy the latest `main` commit. If a deployment was created before the variables were added, **Redeploy** it: variable changes only apply to new deployments. Check that the deployment shows **Ready** before testing. See [Vercel environment variables](https://vercel.com/docs/environment-variables).
 
 For Preview deployments, use a separately configured test Supabase project if administrators will test writes. Do not automatically connect arbitrary preview branches to production commerce data.
 
