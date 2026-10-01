@@ -539,12 +539,6 @@ html,body{overflow-x:clip}
   .portrait-hero-note{font-family:'Caveat',cursive;font-style:normal;font-weight:500;color:#a97550}
   .portrait-hero-note span{font-family:'Playfair Display',serif;font-style:normal;color:#a97550}
 }
-/* Let the Collections cloud atmosphere fade into the existing footer. */
-body:has([data-collections-page]) .site-footer {
-  border-top: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.58) 140px);
-  box-shadow: none;
-}
 
 /* The discovery rail now follows the hero instead of competing with its final frame. */
 .home-trust-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;width:min(calc(100% - 48px),1160px);min-height:70px;margin:0 auto;padding:10px 17px;border:1px solid rgba(255,255,255,.82);border-radius:24px;background:rgba(255,253,251,.62);box-shadow:inset 0 1px 0 rgba(255,255,255,.92),0 12px 30px rgba(91,79,126,.08);backdrop-filter:blur(18px) saturate(1.12);-webkit-backdrop-filter:blur(18px) saturate(1.12)}
@@ -1276,4 +1270,10 @@ body:before{background:none!important;filter:none!important;animation:none!impor
   .hero-portrait__copy .eyebrow{display:none}
   .portrait-hero-note{font-family:'Caveat',cursive;font-style:normal;font-weight:500;color:#a97550}
   .portrait-hero-note span{font-family:'Playfair Display',serif;font-style:normal;color:#a97550}
+}
+/* Let the Collections cloud atmosphere fade into the existing footer. */
+body:has([data-collections-page]) .site-footer {
+  border-top: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.58) 140px);
+  box-shadow: none;
 }

@@ -1,6 +1,6 @@
 # SoftHaven commerce administration
 
-This checkout now uses the dedicated Supabase project `ecaoxnaokkjlotklquip` for the storefront and administration system. Database migrations have been applied to that project. Application deployment is separate from the applied database migrations. See [Vercel setup](./VERCEL_SETUP.md) for hosting configuration.
+This checkout now uses the dedicated Supabase project `ecaoxnaokkjlotklquip` for the storefront and administration system. Database migrations have been applied to that project. Application changes are local to this checkout; they have not been pushed or deployed.
 
 ## Run
 
