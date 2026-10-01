@@ -52,6 +52,9 @@ update public.reviews set status='approved' where title='Transactional QA';
 do $$ declare oid uuid;begin
  select id into oid from public.orders where idempotency_key='40000000-0000-4000-8000-000000000001';
  if not exists(select 1 from public.reviews where title='Transactional QA' and verified_purchase) then raise exception 'Verified purchase failed';end if;
+ if (public.dashboard()->>'sales')::numeric<>(select coalesce(sum(total),0) from public.orders where payment_status='paid') then raise exception 'Paid revenue report incorrect';end if;
+ if (public.dashboard()->>'orders')::bigint<>(select count(*) from public.orders) then raise exception 'Order report incorrect';end if;
+ if (public.commerce_reports(now()-interval '1 day',now()+interval '1 day')->'products'->0->>'units_sold')::numeric<>(select sum(quantity) from public.order_items where order_id=oid) then raise exception 'Product sales report incorrect';end if;
  perform public.record_cod_refund(oid,'REFUND-QA','Rolled-back completed offline refund record');
  if not exists(select 1 from public.orders where id=oid and payment_status='refunded') then raise exception 'Offline refund recording failed';end if;
  perform public.update_order(oid,'returned','QA return');

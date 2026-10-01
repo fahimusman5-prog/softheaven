@@ -1,7 +1,12 @@
-export default function Loading() {
+import { Skeleton } from "@/components/admin/primitives";
+import "./admin.css";
+export default function AdminLoading() {
   return (
-    <div style={{ padding: 40, fontFamily: 'Arial,sans-serif' }} role="status">
-      Checking administrator access…
+    <div className="admin-auth" aria-busy="true">
+      <div style={{ width: "min(920px,100%)" }}>
+        <Skeleton metrics />
+        <Skeleton />
+      </div>
     </div>
   );
 }

@@ -37,7 +37,7 @@ export function AuthForm({ admin = false }: { admin?: boolean }) {
       <h1>{admin ? 'Administrator sign in' : 'Your SoftHaven account'}</h1>
       <p>
         {admin
-          ? 'Use your authorized Supabase account. New accounts require email confirmation.'
+          ? 'Sign in with your approved administrator account.'
           : 'Sign in to manage your orders, addresses and reward points.'}
       </p>
       <label>
