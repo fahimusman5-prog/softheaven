@@ -27,9 +27,7 @@ export function HomeMotion({ children }: { children: ReactNode }) {
         const targets = section.querySelectorAll('.eyebrow, h2, [class$="__copy"] > p, [class$="__intro"] > p, [class$="__heading"] > p, [class$="__cta"], [data-story-enter="photo"], [data-story-enter="detail"], [data-next-hug-enter="photo"], .journey-family__item, .journey-discover__rail-item');
         // Establish animation state only on entry. Offscreen content stays readable if setup fails.
         ScrollTrigger.create({ trigger: section, start: 'top 85%', once: true, onEnter: () => {
-          match.add(() => {
-            gsap.fromTo(targets, { y: index % 2 ? distance : distance * .7, opacity: .82 }, { y: 0, opacity: 1, duration: mobile ? .55 : .8, stagger: mobile ? .025 : .045, ease: 'power3.out', clearProps: 'transform,opacity' });
-          });
+          gsap.fromTo(targets, { y: index % 2 ? distance : distance * .7, opacity: .82 }, { y: 0, opacity: 1, duration: mobile ? .55 : .8, stagger: mobile ? .025 : .045, ease: 'power3.out', clearProps: 'transform,opacity' });
         }});
       });
     });
