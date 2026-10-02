@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getStorefront } from '@/lib/storefront';
-import { ProductMedia } from '@/components/product-media';
 import { CollectionsPageMotion } from '@/components/collections-page-motion';
 import { CollectionsFilmStrip } from '@/components/collections-film-strip';
 import styles from './collections.module.css';
@@ -35,9 +34,6 @@ const selections = [
 
 export default async function CollectionsPage() {
   const { collections } = await getStorefront();
-  const featuredSlugs = ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'];
-  const discovery = featuredSlugs.flatMap(slug => collections.filter(collection => collection.slug === slug));
-  const visibleCollections = discovery.length ? discovery : collections.filter(collection => collection.featured).slice(0, 3);
   return <CollectionsPageMotion>
     <div className={styles.page} data-collections-page>
       <section className={styles.hero} aria-labelledby="collections-title" data-collections-section="hero">
@@ -48,7 +44,7 @@ export default async function CollectionsPage() {
             <span className={styles.eyebrow} data-hero-enter>Our collections</span>
             <h1 id="collections-title"><span data-hero-enter>Find Your</span><span data-hero-enter>Kind of <em>Soft.</em></span></h1>
             <p data-hero-enter>Thoughtfully curated collections for every person, every mood and every special moment.</p>
-            <Link className={styles.primaryButton} href="#collection-list" data-hero-enter>Explore Collections <span aria-hidden="true">→</span></Link>
+            <Link className={styles.primaryButton} href="#edit-title" data-hero-enter>Explore Collections <span aria-hidden="true">→</span></Link>
           </div>
           <div className={styles.heroArt} data-hero-art>
             <picture><source media="(max-width: 700px)" srcSet="/assets/collections/redesign/hero-mobile.webp" /><Image src="/assets/collections/redesign/hero.webp" alt="A pastel plush teddy with a lavender satin bow nestled in pink, lavender and blue clouds" width={1351} height={1164} preload unoptimized sizes="(max-width: 700px) 100vw, 58vw" /></picture>
@@ -56,23 +52,6 @@ export default async function CollectionsPage() {
         </div>
         <Cloud depth="mid" position="heroMid" asset="soft-cloud-cluster" eager />
         <Cloud depth="front" position="heroFront" eager />
-      </section>
-
-      <section className={`${styles.container} ${styles.discovery}`} id="collection-list" aria-labelledby="discovery-title" data-collections-section="discovery">
-        <div className={styles.discoveryCopy}>
-          <span className={`${styles.eyebrow} ${styles.rule}`}>Meet the collection</span>
-          <h2 id="discovery-title">Find your soft<br /><em>companion.</em></h2>
-          <p>From timeless teddy bears to playful personalities, discover a SoftHaven friend made for every kind of moment.</p>
-          <Link className={styles.primaryButton} href="/shop">Explore all collections <span aria-hidden="true">→</span></Link>
-          <div className={styles.qualities} aria-label="SoftHaven values"><span><BenefitIcon type="heart" />Thoughtful<br />designs</span><span><BenefitIcon type="sparkle" />Premium<br />materials</span><span><BenefitIcon type="gift" />Made with<br />love</span></div>
-        </div>
-        <div className={styles.collectionGrid}>
-          {visibleCollections.map((collection, index) => <Link key={collection.slug} href={`/shop?collection=${collection.slug}`} className={styles.collectionCard} data-collection={collection.slug}>
-            <div className={styles.cardPhoto}>{collection.image && <ProductMedia src={collection.image} alt={collection.imageAlt ?? collection.name} className={styles.photoImage} />}</div>
-            <div className={styles.cardCopy}><span className={styles.cardNumber}>{String(index + 1).padStart(2, '0')} <span aria-hidden="true">{index === 1 ? '♡' : '✧'}</span></span><h3>{collection.name}</h3><p>{collection.description}</p><span className={styles.cardButton}>Explore collection <span aria-hidden="true">→</span></span></div>
-          </Link>)}
-        </div>
-        <Cloud depth="far" position="discoveryCloud" asset="soft-cloud-distant" />
       </section>
 
       <section className={`${styles.container} ${styles.edit}`} aria-labelledby="edit-title" data-collections-section="edit">
