@@ -72,9 +72,9 @@ export function SoftHavenCloudBackground() {
     () => window.matchMedia('(max-width: 767px)').matches,
     () => false,
   );
-  const visibleClouds = (pathname === '/' || mode === 'collections') && isMobile
+  const visibleClouds = pathname === '/' && isMobile
     ? clouds.filter((cloud) => ['far-left', 'far-right', 'middle-left', 'middle-right', 'foreground-left'].includes(cloud.id))
-    : clouds.filter((cloud) => pathname === '/' || mode === 'collections' || cloud.depth !== 'foreground');
+    : clouds.filter((cloud) => pathname === '/' || cloud.depth !== 'foreground');
 
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
@@ -131,18 +131,16 @@ export function SoftHavenCloudBackground() {
                 invalidateOnRefresh: true,
               },
             });
-            motion.to(layer, { y: () => -(mode === 'collections' ? (mobile ? 12 : 36) : mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
+            motion.to(layer, { y: () => -(mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
 
             clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
               if (element && getComputedStyle(element).display !== 'none') {
-                const direction = mode === 'collections' ? -1 : pathname === '/' ? 1 : cloud.className.includes('--right') ? -1 : 1;
-                const horizontalTravel = mode === 'collections'
-                  ? (mobile ? { far: 6, middle: 12, near: 18, foreground: 22 } : { far: 8, middle: 16, near: 26, foreground: 32 })[depth]
-                  : pathname === '/'
+                const direction = pathname === '/' ? 1 : cloud.className.includes('--right') ? -1 : 1;
+                const horizontalTravel = pathname === '/'
                   ? (mobile ? { far: 6, middle: 12, near: 18, foreground: 24 } : { far: 9, middle: 18, near: 29, foreground: 40 })[depth]
                   : mobile ? settings.mobileX : settings.desktopX;
-                motion.to(element, { x: () => direction * horizontalTravel * cloud.travel * (pathname === '/' || mode === 'collections' ? window.innerWidth / 100 : 1), duration: 1 }, 0);
+                motion.to(element, { x: () => direction * horizontalTravel * cloud.travel * (pathname === '/' ? window.innerWidth / 100 : 1), duration: 1 }, 0);
               }
             });
             wisps.filter((wisp) => wisp.depth === depth).forEach((wisp) => {
@@ -206,7 +204,7 @@ export function SoftHavenCloudBackground() {
               id={cloud.id}
               className={`soft-sky__cloud ${cloud.className}`}
             >
-              <span className={`soft-sky__cloud-ambient${cloud.drift && pathname !== '/' && mode !== 'collections' ? ' soft-sky__cloud-ambient--drift' : ''}`}>
+              <span className={`soft-sky__cloud-ambient${cloud.drift && pathname !== '/' ? ' soft-sky__cloud-ambient--drift' : ''}`}>
                 <picture>
                   <source media="(max-width: 767px)" srcSet={cloud.asset.replace('.webp', '-mobile.webp')} />
                   <img src={cloud.asset} alt="" loading="lazy" decoding="async" />

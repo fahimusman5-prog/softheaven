@@ -115,6 +115,7 @@ export function HomeEditorialJourney() {
         </div>
       </section></>}
 
+
       {sections['family']&&<><section className="journey-family" aria-labelledby="journey-family-title">
         <span className="journey-family__cloud journey-family__cloud--top" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-cluster.webp" alt="" fill unoptimized sizes="420px" /></span>
         <span className="journey-family__word" data-family-parallax="word" aria-hidden="true">FAMILY</span>
