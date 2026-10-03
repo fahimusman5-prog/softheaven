@@ -427,3 +427,20 @@
 .journey-family__visual{position:relative;min-height:420px}
 .journey-family__image{position:relative;min-height:420px;overflow:hidden}
 @media(max-width:760px){.journey-family__visual,.journey-family__image{min-height:360px}}
+/* Final CTA collection image: preserve the organic composition while giving the wider group room to breathe. */
+.journey-next-hug__inner{grid-template-columns:minmax(0,1.42fr) minmax(340px,.88fr);gap:clamp(28px,4vw,72px);min-height:clamp(580px,40vw,650px)}
+.journey-next-hug__art{height:clamp(480px,38vw,620px)}
+.journey-next-hug__photo img{object-position:center center;transition:transform .7s cubic-bezier(.2,.8,.2,1);transform:none}
+.journey-next-hug__art:hover .journey-next-hug__photo img{transform:scale(1.012)}
+@media(max-width:1100px){.journey-next-hug__art{height:clamp(420px,43vw,520px)}}
+@media(max-width:760px){
+  .journey-next-hug__art{height:clamp(250px,70vw,430px)}
+  .journey-next-hug__copy{display:contents}
+  .journey-next-hug__eyebrow{order:1}
+  .journey-next-hug h2{order:2}
+  .journey-next-hug__copy>p{order:3}
+  .journey-next-hug__art{order:4}
+  .journey-next-hug__cta{order:5}
+  .journey-next-hug__link{order:6}
+}
+@media(hover:none),(pointer:coarse){.journey-next-hug__art:hover .journey-next-hug__photo img{transform:none}}

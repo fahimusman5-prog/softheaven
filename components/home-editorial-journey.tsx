@@ -166,10 +166,8 @@ export function HomeEditorialJourney() {
             <Link className="journey-next-hug__cta" href={sections['next-hug']?.cta_url??'/shop'}>{sections['next-hug']?.cta_label} <span aria-hidden="true">→</span></Link>
             <Link className="journey-next-hug__link" href="/shop">or explore every soft friend</Link>
           </div>
-          <div className="journey-next-hug__art" data-next-hug-enter="photo" data-next-hug-pointer aria-label="Caramel teddy and cream bunny in a sunlit bedroom">
-            <div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src={sections['next-hug']?.image??'/assets/home-story/teddy-bunny-editorial.jpg'} alt="Caramel teddy with a lavender bow beside a cream bunny with a pink bow" fill unoptimized sizes="(max-width: 760px) 94vw, (max-width: 1100px) 54vw, 920px" /></div></div>
-            <span className="journey-next-hug__note">this one&apos;s<br />waiting for you ♡</span>
-            <svg className="journey-next-hug__doodle" viewBox="0 0 100 84" fill="none" aria-hidden="true"><path d="M48 74C31 58 8 40 14 23c5-16 26-14 34 4 9-18 31-18 38-4 7 18-20 39-38 51Z" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" /><path d="M16 70c14 8 33 7 47 0" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+          <div className="journey-next-hug__art" data-next-hug-enter="photo" aria-label="Five SoftHaven plush companions together in a pastel cloud setting">
+            <div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src="/assets/home-story/softhaven-five-companions.png" alt="Five SoftHaven plush companions including a teddy bear, bunny, elephant, husky and mint dinosaur together in a pastel cloud setting" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 56vw, 920px" /></div></div>
             <Image className="journey-next-hug__cloud journey-next-hug__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
             <Image className="journey-next-hug__cloud journey-next-hug__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1400} height={303} alt="" unoptimized aria-hidden="true" />
           </div>
