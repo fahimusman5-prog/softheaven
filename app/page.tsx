@@ -70,18 +70,24 @@ export default async function HomePage() {
   const { products, slides, sections } = await getStorefront();
   const hero = sections.hero;
   const favourites = sections.favourites;
-  const carouselSlides: PortraitHeroSlide[] = slides.map((s) => ({
-    id: s.id,
-    image: s.desktop_image,
-    mobileImage: s.mobile_image,
-    name: s.title,
-    descriptor: s.description,
-    category: s.badge ?? s.subtitle,
-    alt: s.alt_text,
-    ctaLabel: s.cta_label,
-    ctaUrl: s.cta_url,
-    secondaryCtaLabel: s.secondary_cta_label,
-    secondaryCtaUrl: s.secondary_cta_url,
+  const collectionCards = [
+    ['softhaven', 'The SoftHaven Collection'],
+    ['teddy', 'Teddy Bear Collection'],
+    ['bunny', 'Bunny Collection'],
+    ['puppy-husky', 'Puppy & Husky Collection'],
+    ['safari', 'Safari Friends'],
+    ['fantasy', 'Fantasy Friends'],
+    ['softhaven', 'Animal Friends'],
+  ];
+  const carouselSlides: PortraitHeroSlide[] = collectionCards.map(([image, name], index) => ({
+    id: `collection-${index + 1}`,
+    image: `/assets/home-carousel-collections/${image}-960.webp`,
+    name,
+    alt: name,
+    ctaLabel: slides[index]?.cta_label,
+    ctaUrl: slides[index]?.cta_url,
+    secondaryCtaLabel: slides[index]?.secondary_cta_label,
+    secondaryCtaUrl: slides[index]?.secondary_cta_url,
   }));
   return (
     <HomeMotion>

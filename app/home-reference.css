@@ -208,3 +208,10 @@ body:has(.home-page){
 .home-page .section{width:min(calc(100% - 2 * var(--page-gutter)),var(--content-max));padding-block:var(--section-space)}
 .home-page .portrait-hero-button--secondary{color:#4e4560}
 @media(max-width:760px){.home-page .home-journey .journey-family{grid-template-columns:1fr;gap:24px}.home-page .home-journey .journey-discover{padding-bottom:0}}
+
+/* Collection photograph and its single title travel inside the existing card. */
+.home-page .portrait-carousel__card img{object-position:center center}
+.home-page .portrait-carousel__shade{background:linear-gradient(180deg,transparent 65%,rgba(30,26,45,.04) 75%,rgba(30,26,45,.27) 90%,rgba(30,26,45,.34) 100%)}
+.home-page .portrait-carousel__caption{bottom:8%;left:12px;right:12px;color:#fffdfb;text-align:center}
+.home-page .portrait-carousel__caption h2{margin:0;font:600 22px/1.2 'Plus Jakarta Sans',sans-serif;letter-spacing:-.035em;text-wrap:balance;text-shadow:0 1px 3px rgba(30,26,45,.55);-webkit-font-smoothing:antialiased}
+@media(max-width:767px){.home-page .portrait-carousel__caption h2{font-size:18px}}
