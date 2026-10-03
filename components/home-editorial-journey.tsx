@@ -14,8 +14,9 @@ export function HomeEditorialJourney() {
   const [activeFamilySlug, setActiveFamilySlug] = useState(familyCollections[0]?.slug??'');
   const [previewFamilySlug, setPreviewFamilySlug] = useState<string | null>(null);
   const activeFamily = familyCollections.find((collection) => collection.slug === (previewFamilySlug ?? activeFamilySlug)) ?? familyCollections[0];
+  const [discoverHoverSlug, setDiscoverHoverSlug] = useState<string | null>(null);
   const familyImages: Record<string, string> = {
-    'teddy-classic-cuddles': '/assets/collections/soft-family-editorial.webp',
+    'teddy-classic-cuddles': '/assets/collections/soft-family-editorial-final.png',
     'bunny-sweet-friends': '/images/collections/bunny-sweet-friends.webp',
     'wild-wonderful': '/images/collections/wild-wonderful.webp',
   };
@@ -25,6 +26,16 @@ export function HomeEditorialJourney() {
     'wild-wonderful': 'Made for playful hearts.',
   };
   const featuredCollections = collections.filter((collection) => ['teddy-classic-cuddles', 'bunny-sweet-friends', 'wild-wonderful'].includes(collection.slug));
+  const discoverNames: Record<string, string> = {
+    'teddy-classic-cuddles': 'Teddy & Classic Cuddles',
+    'bunny-sweet-friends': 'Bunny & Sweet Friends',
+    'wild-wonderful': 'Wild & Wonderful',
+  };
+  const discoverImages: Record<string, string> = {
+    'teddy-classic-cuddles': '/assets/home-collections/teddy-classic-cuddles.png',
+    'bunny-sweet-friends': '/assets/home-collections/bunny-sweet-friends.png',
+    'wild-wonderful': '/assets/home-collections/wild-wonderful.png',
+  };
 
   useEffect(() => {
     const node = root.current;
@@ -67,18 +78,18 @@ export function HomeEditorialJourney() {
             <Link className="journey-discover__cta" href={sections['discover']?.cta_url??'/shop'}>{sections['discover']?.cta_label} <span aria-hidden="true">→</span></Link>
           </div>
           <div className="journey-discover__scene" aria-label="SoftHaven plush collection">
-            <div className="journey-discover__bunny"><Image src="/assets/home-collections/bunny-editorial.jpg" alt="A white plush bunny with a pink satin bow" fill unoptimized sizes="(max-width: 700px) 46vw, 290px" /></div>
-            <div className="journey-discover__teddy"><Image src={sections.discover?.image??'/assets/home-collections/teddy-editorial.jpg'} alt="A caramel teddy bear wearing a lavender satin bow" fill unoptimized sizes="(max-width: 700px) 78vw, (max-width: 1100px) 48vw, 600px" /></div>
-            <div className="journey-discover__detail"><Image src="/assets/home-collections/detail-editorial.jpg" alt="Lavender satin bow and gold teddy charm on plush fur" fill unoptimized sizes="(max-width: 700px) 34vw, 250px" /></div>
-            <Link className="journey-discover__float journey-discover__float--teddy" href={`/shop?collection=${featuredCollections[0].slug}`}><span aria-hidden="true">✦</span><span><strong>{featuredCollections[0].name}</strong><small>Timeless favourites.</small></span></Link>
-            <Link className="journey-discover__float journey-discover__float--bunny" href={`/shop?collection=${featuredCollections[1].slug}`}><span aria-hidden="true">♡</span><span><strong>{featuredCollections[1].name}</strong><small>Soft. Playful. Adorable.</small></span></Link>
-            <Link className="journey-discover__float journey-discover__float--wild" href={`/shop?collection=${featuredCollections[2].slug}`}><span aria-hidden="true">⊞</span><span><strong>{featuredCollections[2].name}</strong><small>For little dreamers.</small></span></Link>
+            <div className={`journey-discover__bunny ${discoverHoverSlug === featuredCollections[1].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[1].slug]} alt="Creamy-white, blush-pink and pale lavender plush bunnies together" fill unoptimized sizes="(max-width: 700px) 46vw, (max-width: 1100px) 19vw, 290px" /></div>
+            <div className={`journey-discover__teddy ${discoverHoverSlug === featuredCollections[0].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[0].slug]} alt="Four teddy bears in caramel, cream, pink and mocha gathered together" fill unoptimized sizes="(max-width: 700px) 78vw, (max-width: 1100px) 48vw, 600px" /></div>
+            <div className={`journey-discover__detail ${discoverHoverSlug === featuredCollections[2].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[2].slug]} alt="Grey elephant, husky, mint dinosaur and pastel giraffe plush companions" fill unoptimized sizes="(max-width: 700px) 34vw, 250px" /></div>
+            <Link className={`journey-discover__float journey-discover__float--teddy ${discoverHoverSlug === featuredCollections[0].slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${featuredCollections[0].slug}`} onMouseEnter={() => setDiscoverHoverSlug(featuredCollections[0].slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(featuredCollections[0].slug)} onBlur={() => setDiscoverHoverSlug(null)}><span aria-hidden="true">✦</span><strong>{discoverNames[featuredCollections[0].slug]}</strong></Link>
+            <Link className={`journey-discover__float journey-discover__float--bunny ${discoverHoverSlug === featuredCollections[1].slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${featuredCollections[1].slug}`} onMouseEnter={() => setDiscoverHoverSlug(featuredCollections[1].slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(featuredCollections[1].slug)} onBlur={() => setDiscoverHoverSlug(null)}><span aria-hidden="true">♡</span><strong>{discoverNames[featuredCollections[1].slug]}</strong></Link>
+            <Link className={`journey-discover__float journey-discover__float--wild ${discoverHoverSlug === featuredCollections[2].slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${featuredCollections[2].slug}`} onMouseEnter={() => setDiscoverHoverSlug(featuredCollections[2].slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(featuredCollections[2].slug)} onBlur={() => setDiscoverHoverSlug(null)}><span aria-hidden="true">⊞</span><strong>{discoverNames[featuredCollections[2].slug]}</strong></Link>
           </div>
         </div>
         <div className="journey-discover__clouds" data-discover-parallax="clouds" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill unoptimized sizes="100vw" /></div>
         <nav className="journey-discover__rail" aria-label="Explore featured collections">
-          {featuredCollections.map((collection, index) => <Link className={`journey-discover__rail-item journey-discover__rail-item--${index + 1}`} href={`/shop?collection=${collection.slug}`} key={collection.slug}>
-            <span className="journey-discover__number">0{index + 1}</span><span className="journey-discover__rail-icon" aria-hidden="true">{['✦', '♡', '⊞'][index]}</span><strong>{collection.name}</strong><span className="journey-discover__arrow" aria-hidden="true">→</span>
+          {featuredCollections.map((collection, index) => <Link className={`journey-discover__rail-item journey-discover__rail-item--${index + 1} ${discoverHoverSlug === collection.slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${collection.slug}`} key={collection.slug} onMouseEnter={() => setDiscoverHoverSlug(collection.slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(collection.slug)} onBlur={() => setDiscoverHoverSlug(null)}>
+            <span className="journey-discover__number">0{index + 1}</span><span className="journey-discover__rail-icon" aria-hidden="true">{['✦', '♡', '⊞'][index]}</span><strong>{discoverNames[collection.slug]}</strong><span className="journey-discover__arrow" aria-hidden="true">→</span>
           </Link>)}
         </nav>
       </section></>}
@@ -92,12 +103,12 @@ export function HomeEditorialJourney() {
           <div className="journey-details__art" aria-label="SoftHaven teddy and bunny editorial photography">
             <div className="journey-details__photo-parallax" data-story-parallax="photo">
               <div className="journey-details__photo-enter" data-story-enter="photo">
-                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src={sections.details?.image??'/assets/home-story/teddy-bunny-editorial.jpg'} alt="Caramel teddy with lavender bow cuddled beside a cream bunny with pink bow" fill unoptimized sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
+                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src="/assets/home-story/why-softhaven-main.jpg" alt="SoftHaven caramel teddy, cream bunny and pink teddy nestled together in a soft pastel setting" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
               </div>
             </div>
             <Image className="journey-details__cloud journey-details__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
             <div className="journey-details__cloud-parallax" data-story-parallax="clouds"><Image className="journey-details__cloud journey-details__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1500} height={600} alt="" unoptimized aria-hidden="true" /></div>
-            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-collections/detail-editorial.jpg" alt="Lavender satin ribbon and gold teddy charm on plush fur" fill unoptimized sizes="(max-width: 760px) 36vw, 270px" /></div></div>
+            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-story/why-softhaven-detail.jpg" alt="Close-up of soft caramel teddy fur and lavender satin bow" fill sizes="(max-width: 760px) 36vw, 270px" /></div></div>
             <svg className="journey-details__heart" viewBox="0 0 100 85" fill="none" aria-hidden="true"><path d="M49 73C31 58 8 41 14 24c5-16 26-15 35 3 9-18 31-18 37-4 8 19-20 39-37 50Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M49 73c13 9 26 7 37 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
             <svg className="journey-details__sparkle" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 0c2.2 12 7.8 17.8 20 20-12.2 2.2-17.8 8-20 20C17.8 28 12.2 22.2 0 20 12.2 17.8 17.8 12 20 0Z" fill="currentColor" /></svg>
           </div>
@@ -143,7 +154,7 @@ export function HomeEditorialJourney() {
         </div>
         <div className="journey-family__visual">
           <span className="journey-family__heart" aria-hidden="true">♡</span>
-          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}>{!sections.family?.image && activeFamily.slug === 'teddy-classic-cuddles' && <source media="(max-width: 700px)" srcSet="/assets/collections/soft-family-editorial-mobile.webp" />}<Image src={sections.family?.image??familyImages[activeFamily.slug]??activeFamily.image??'/assets/collections/soft-family-editorial.webp'} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill unoptimized sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
+          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}><Image src={sections.family?.image??familyImages[activeFamily.slug]??activeFamily.image??'/assets/collections/soft-family-editorial.webp'} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill unoptimized sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
           <span className="journey-family__sparkle" aria-hidden="true">✧</span>
           <article className="journey-family__note" aria-live="polite">
             <span>✧</span><div><small>Currently meeting</small><h3>{activeFamily.name}</h3><Link href={`/shop?collection=${activeFamily.slug}`}>Explore collection <span aria-hidden="true">→</span></Link></div>
