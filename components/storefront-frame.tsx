@@ -11,7 +11,10 @@ export function StorefrontFrame({
   footer: React.ReactNode;
   background: React.ReactNode;
 }) {
-  const admin = usePathname().startsWith('/admin');
+  const pathname = usePathname();
+  const admin = pathname.startsWith('/admin');
+  if (pathname === '/account' || pathname.startsWith('/account/'))
+    return <main id="main-content">{children}</main>;
   return admin ? (
     <>{children}</>
   ) : (

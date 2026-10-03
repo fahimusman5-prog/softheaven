@@ -1,0 +1,1 @@
+export default function Loading() { return <div className="account-loading" role="status" aria-label="Loading your SoftHaven account"><div className="account-skeleton" /><div className="account-loading-grid">{[1,2,3,4].map(i => <div className="account-skeleton" key={i} />)}</div><div className="account-skeleton" /></div>; }

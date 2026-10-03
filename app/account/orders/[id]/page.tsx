@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { serverClient } from '@/lib/supabase/server';
 import { notFound, redirect } from 'next/navigation';
 import { formatPrice } from '@/lib/format';
@@ -24,7 +25,8 @@ export default async function OrderPage({
     db.from('order_events').select('*').eq('order_id', id).order('created_at'),
   ]);
   return (
-    <section className="section">
+    <section className="account-order-detail">
+      <Link className="account-button account-button-small" href="/account?section=orders">← My orders</Link>
       <h1>Order SH-{order.order_number}</h1>
       <p>
         {order.status} · Payment: {order.payment_status}
