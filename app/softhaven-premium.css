@@ -477,3 +477,7 @@
   .journey-next-hug__cta{order:5}
   .journey-next-hug__link{order:6}
 }
+
+/* Preserve the existing family cutout without an opaque backing or silhouette crop. */
+.home-page .journey-family__image{background:transparent;clip-path:none;border-radius:0}
+.home-page .journey-family__image img{object-fit:contain}

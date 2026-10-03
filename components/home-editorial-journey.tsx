@@ -16,7 +16,7 @@ export function HomeEditorialJourney() {
   const activeFamily = familyCollections.find((collection) => collection.slug === (previewFamilySlug ?? activeFamilySlug)) ?? familyCollections[0];
   const [discoverHoverSlug, setDiscoverHoverSlug] = useState<string | null>(null);
   const familyImages: Record<string, string> = {
-    'teddy-classic-cuddles': '/assets/collections/soft-family-editorial-final.png',
+    'teddy-classic-cuddles': '/assets/collections/soft-family-editorial-final-complete.webp',
     'bunny-sweet-friends': '/images/collections/bunny-sweet-friends.webp',
     'wild-wonderful': '/images/collections/wild-wonderful.webp',
   };
@@ -32,9 +32,9 @@ export function HomeEditorialJourney() {
     'wild-wonderful': 'Wild & Wonderful',
   };
   const discoverImages: Record<string, string> = {
-    'teddy-classic-cuddles': '/assets/home-collections/teddy-classic-cuddles.png',
-    'bunny-sweet-friends': '/assets/home-collections/bunny-sweet-friends.png',
-    'wild-wonderful': '/assets/home-collections/wild-wonderful.png',
+    'teddy-classic-cuddles': '/assets/home-collections/teddy-classic-cuddles-complete.webp',
+    'bunny-sweet-friends': '/assets/home-collections/bunny-sweet-friends-complete.webp',
+    'wild-wonderful': '/assets/home-collections/wild-wonderful-complete.webp',
   };
 
   useEffect(() => {
@@ -103,12 +103,12 @@ export function HomeEditorialJourney() {
           <div className="journey-details__art" aria-label="SoftHaven teddy and bunny editorial photography">
             <div className="journey-details__photo-parallax" data-story-parallax="photo">
               <div className="journey-details__photo-enter" data-story-enter="photo">
-                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src="/assets/home-story/why-softhaven-main.jpg" alt="SoftHaven caramel teddy, cream bunny and pink teddy nestled together in a soft pastel setting" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
+                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src="/assets/home-story/why-softhaven-main-complete.webp" alt="SoftHaven caramel teddy, cream bunny and pink teddy nestled together in a soft pastel setting" fill unoptimized sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
               </div>
             </div>
             <Image className="journey-details__cloud journey-details__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
             <div className="journey-details__cloud-parallax" data-story-parallax="clouds"><Image className="journey-details__cloud journey-details__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1500} height={600} alt="" unoptimized aria-hidden="true" /></div>
-            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-story/why-softhaven-detail.jpg" alt="Close-up of soft caramel teddy fur and lavender satin bow" fill sizes="(max-width: 760px) 36vw, 270px" /></div></div>
+            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-story/why-softhaven-detail-complete.webp" alt="Close-up of soft caramel teddy fur and lavender satin bow" fill unoptimized sizes="(max-width: 760px) 36vw, 270px" /></div></div>
             <svg className="journey-details__heart" viewBox="0 0 100 85" fill="none" aria-hidden="true"><path d="M49 73C31 58 8 41 14 24c5-16 26-15 35 3 9-18 31-18 37-4 8 19-20 39-37 50Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M49 73c13 9 26 7 37 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
             <svg className="journey-details__sparkle" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 0c2.2 12 7.8 17.8 20 20-12.2 2.2-17.8 8-20 20C17.8 28 12.2 22.2 0 20 12.2 17.8 17.8 12 20 0Z" fill="currentColor" /></svg>
           </div>
@@ -154,7 +154,7 @@ export function HomeEditorialJourney() {
         </div>
         <div className="journey-family__visual">
           <span className="journey-family__heart" aria-hidden="true">♡</span>
-          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}><Image src={sections.family?.image??familyImages[activeFamily.slug]??activeFamily.image??'/assets/collections/soft-family-editorial.webp'} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill unoptimized sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
+          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}><Image src={(sections.family?.image === '/assets/collections/soft-family-editorial-final.png' ? '/assets/collections/soft-family-editorial-final-complete.webp' : sections.family?.image)??familyImages[activeFamily.slug]??activeFamily.image??'/assets/collections/soft-family-editorial.webp'} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill unoptimized sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
           <span className="journey-family__sparkle" aria-hidden="true">✧</span>
           <article className="journey-family__note" aria-live="polite">
             <span>✧</span><div><small>Currently meeting</small><h3>{activeFamily.name}</h3><Link href={`/shop?collection=${activeFamily.slug}`}>Explore collection <span aria-hidden="true">→</span></Link></div>
@@ -178,7 +178,7 @@ export function HomeEditorialJourney() {
             <Link className="journey-next-hug__link" href="/shop">or explore every soft friend</Link>
           </div>
           <div className="journey-next-hug__art" data-next-hug-enter="photo" aria-label="Five SoftHaven plush companions together in a pastel cloud setting">
-            <div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src="/assets/home-story/softhaven-five-companions.png" alt="Five SoftHaven plush companions including a teddy bear, bunny, elephant, husky and mint dinosaur together in a pastel cloud setting" fill sizes="(max-width: 760px) 100vw, (max-width: 1100px) 56vw, 920px" /></div></div>
+            <div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src="/assets/home-story/softhaven-five-companions-complete.webp" alt="Five SoftHaven plush companions including a teddy bear, bunny, elephant, husky and mint dinosaur together in a pastel cloud setting" fill unoptimized sizes="(max-width: 760px) 100vw, (max-width: 1100px) 56vw, 920px" /></div></div>
             <Image className="journey-next-hug__cloud journey-next-hug__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
             <Image className="journey-next-hug__cloud journey-next-hug__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1400} height={303} alt="" unoptimized aria-hidden="true" />
           </div>
