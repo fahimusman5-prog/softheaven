@@ -10,7 +10,7 @@ export function HomeSmoothScroll() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
-    media.add('(prefers-reduced-motion: no-preference)', () => {
+    media.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
       const lenis = new Lenis({
         autoRaf: false,
         lerp: 0.16,

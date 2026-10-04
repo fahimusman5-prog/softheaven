@@ -1,3 +1,4 @@
+import { readJson, AccessError } from '@/lib/request-security';
 import { serverClient } from '@/lib/supabase/server';
 import { sameOrigin, apiError } from '@/lib/admin/auth';
 import { z } from 'zod';
@@ -8,7 +9,7 @@ export async function GET() {
     .select('*,shipping_zones(*)')
     .eq('active', true);
   return error
-    ? Response.json({ error: error.message }, { status: 400 })
+    ? apiError(error)
     : Response.json({ rates: data });
 }
 export async function POST(request: Request) {
@@ -40,8 +41,11 @@ export async function POST(request: Request) {
         key: z.uuid().nullable().default(null),
         notes: z.string().max(2000).default(''),
       })
-      .parse(await request.json());
+      .parse(await readJson(request));
     const db = await serverClient();
+    const { data: { user } } = await db.auth.getUser();
+    if (!user) throw new AccessError('Sign in first', 401);
+    if (v.commit && !v.key) throw new AccessError('Order request key required', 400);
     const { data, error } = await db.rpc('commerce_checkout', {
       p_lines: v.lines,
       p_address: v.address,

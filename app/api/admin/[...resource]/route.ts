@@ -1,3 +1,4 @@
+import { readJson } from '@/lib/request-security';
 import { businessGet, businessPost } from "@/lib/admin/business-api";
 import { validateSettings } from "@/lib/admin/settings";
 import { resources } from "@/lib/admin/resources";
@@ -195,7 +196,7 @@ export async function POST(
   try {
     sameOrigin(request);
     const path = (await params).resource.join("/");
-    const body = await request.json();
+    const body = z.record(z.string(), z.unknown()).parse(await readJson(request, 256 * 1024));
     if (path.startsWith("business/")) return await businessPost(path, body);
     if (path === "notifications/read") {
       const { db, user } = await requireAdmin();

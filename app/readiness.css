@@ -1,0 +1,103 @@
+/* Responsive corrections only; the approved desktop geometry is unchanged. */
+@media (max-width: 1199px) {
+  .sfh-mobile-menu {
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sfh-notice {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+  }
+  :is(.cart-page, .checkout-page, .contact-page, .account-world, .admin-auth)
+    :is(input, select, textarea) {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px;
+    min-height: 48px;
+  }
+  .cart-line-copy {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .checkout-page .form-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .checkout-page .form-card .primary-button {
+    min-height: 48px;
+    white-space: normal;
+  }
+  .quantity button,
+  .remove-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+@media (max-width: 767px) {
+  .shop-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    width: 100%;
+  }
+  .shop-controls .search-field {
+    min-width: 0;
+  }
+  .shop-controls .search-field input {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .shop-controls select {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .category-tabs button,
+  .filter-pill {
+    min-height: 44px;
+  }
+  .journey-details__benefits {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .journey-details__benefits span {
+    min-width: 0;
+  }
+  .sfh-mobile-menu__link {
+    min-height: 48px;
+  }
+  .cart-page,
+  .checkout-page {
+    padding-inline: 16px;
+  }
+  .cart-line {
+    grid-template-columns: 64px minmax(0, 1fr) 44px;
+  }
+  .cart-line > img {
+    width: 64px;
+    height: 80px;
+  }
+  .cart-line > strong {
+    grid-column: 2;
+  }
+  .cart-line .remove-button {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .cart-summary .primary-button {
+    min-height: 48px;
+  }
+}
+@media (max-width: 380px) {
+  .shop-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shop-controls select {
+    max-width: none;
+  }
+}

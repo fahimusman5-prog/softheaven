@@ -258,7 +258,7 @@
   .promise h2 { margin-top: 8px; font-size: clamp(37px,10vw,47px); }
   .promiseCopy>p:not(.eyebrow) { margin-top: 10px; font-size: 12px; }
   .promiseCopy .button { margin-top: 15px; }
-  :global(.site-footer) { padding-top: 42px; }
+  :global(body):has(.aboutPage) :global(.site-footer) { padding-top: 42px; }
 }
 
 @media (max-width: 380px) {

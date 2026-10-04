@@ -82,3 +82,21 @@ body:has(.home-page) .site-footer--refined h3 { font-size:15px }
 .home-page .home-product-grid .product-card:hover { transform:none; box-shadow:none }
 .home-page .home-product-grid a.card-add { display:grid; place-items:center }
 .home-page .journey-family__cloud--bottom img { mask-image:linear-gradient(to bottom,#000 45%,transparent 85%) }
+
+/* A few reusable mid-size accents behind content, with gentle pastel illumination. */
+.soft-sky__cloud--medium-blush { width:clamp(140px,16vw,260px); height:auto; aspect-ratio:2.7; left:-4%; top:24%; opacity:.35; }
+.soft-sky__cloud--medium-lavender { width:clamp(160px,18vw,300px); height:auto; aspect-ratio:2.2; right:-7%; top:64%; opacity:.3; }
+.soft-sky__cloud--medium-blue { width:clamp(140px,15vw,240px); height:auto; aspect-ratio:2.7; left:5%; bottom:6%; opacity:.24; }
+.soft-sky__cloud--medium-blush img { filter:drop-shadow(0 5px 14px rgba(242,190,218,.25)); }
+.soft-sky__cloud--medium-lavender img { filter:drop-shadow(0 4px 12px rgba(194,175,233,.2)); }
+.soft-sky__cloud--medium-blue img { filter:drop-shadow(0 4px 12px rgba(169,207,240,.2)); }
+.soft-sky__center-light {
+  background:radial-gradient(ellipse at 42% 38%,rgba(252,234,244,.13),transparent 64%),radial-gradient(ellipse at 60% 65%,rgba(243,233,255,.13),transparent 68%);
+}
+.soft-sky[data-mode="hero"] .soft-sky__center-light {
+  background:radial-gradient(ellipse 42% 90% at 50% 48%,rgba(255,253,250,.5),transparent 85%),radial-gradient(ellipse at 45% 42%,rgba(252,234,244,.12),transparent 65%),radial-gradient(ellipse at 60% 65%,rgba(243,233,255,.12),transparent 70%);
+}
+@media(max-width:767px) {
+  .soft-sky__light { filter:blur(28px); }
+  .soft-sky__cloud-ambient { animation:none; }
+}

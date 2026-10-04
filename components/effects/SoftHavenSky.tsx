@@ -30,6 +30,9 @@ const depthMotion = {
 } satisfies Record<CloudDepth, { desktopY: number; mobileY: number; desktopX: number; mobileX: number; desktopScrub: number; mobileScrub: number }>;
 
 const clouds: CloudDefinition[] = [
+  { id: 'medium-blush', depth: 'far', className: 'soft-sky__cloud--medium-blush', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.35 },
+  { id: 'medium-lavender', depth: 'middle', className: 'soft-sky__cloud--medium-lavender', asset: '/assets/clouds/soft-cloud-cluster.webp', travel: 0.3 },
+  { id: 'medium-blue', depth: 'far', className: 'soft-sky__cloud--medium-blue', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.25 },
   { id: 'foreground-left', depth: 'foreground', className: 'soft-sky__cloud--foreground-left', asset: '/assets/clouds/soft-cloud-bank.webp', travel: 1 },
   { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 0.82, drift: true },
   { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/generated/dream-cloud-06.webp', travel: 0.94 },
@@ -72,7 +75,7 @@ export function SoftHavenCloudBackground() {
     () => window.matchMedia('(max-width: 767px)').matches,
     () => false,
   );
-  const visibleClouds = pathname === '/' && isMobile
+  const visibleClouds = isMobile
     ? clouds.filter((cloud) => ['far-left', 'far-right', 'middle-left', 'middle-right', 'foreground-left'].includes(cloud.id))
     : clouds.filter((cloud) => pathname === '/' || cloud.depth !== 'foreground');
 

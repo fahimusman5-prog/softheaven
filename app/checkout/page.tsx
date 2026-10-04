@@ -42,6 +42,7 @@ export default function CheckoutPage() {
         onChange={() => setQuote(null)}
         onSubmit={async (e) => {
           e.preventDefault();
+          if (busy) return;
           const submit = (e.nativeEvent as SubmitEvent)
             .submitter as HTMLButtonElement;
           const commit = submit?.value === 'place';
@@ -101,6 +102,8 @@ export default function CheckoutPage() {
             Phone
             <input
               name="phone"
+              type="tel"
+              inputMode="tel"
               required
               minLength={6}
               maxLength={30}

@@ -1,9 +1,13 @@
+import { requireBudget } from '@/lib/request-budget';
+import { readBytes } from '@/lib/request-security';
 import { requireAdmin, sameOrigin, apiError } from '@/lib/admin/auth';
 export async function POST(request: Request) {
   try {
     sameOrigin(request);
     const { db, user } = await requireAdmin('media');
-    const data = await request.formData();
+    await requireBudget(db, 'upload');
+    const upload = await readBytes(request, 6 * 1024 * 1024);
+    const data = await new Response(upload.buffer, { headers: { 'Content-Type': request.headers.get('content-type') ?? '' } }).formData();
     const file = data.get('file');
     if (
       !(file instanceof File) ||

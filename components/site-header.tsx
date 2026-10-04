@@ -91,6 +91,27 @@ export function SiteHeader() {
 
   useEffect(() => { setMenuOpen(false); setSearchOpen(false); setNotice(null); }, [pathname]);
 
+  useEffect(() => {
+    if (!menuOpen || !window.matchMedia('(max-width: 1100px)').matches) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const dismiss = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        document.querySelector<HTMLButtonElement>('[aria-controls="sfh-mobile-menu"]')?.focus();
+      }
+    };
+    const viewport = window.matchMedia('(max-width: 1100px)');
+    const closeOnDesktop = () => { if (!viewport.matches) setMenuOpen(false); };
+    viewport.addEventListener('change', closeOnDesktop);
+    window.addEventListener('keydown', dismiss);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      viewport.removeEventListener('change', closeOnDesktop);
+      window.removeEventListener('keydown', dismiss);
+    };
+  }, [menuOpen]);
+
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const search = query.trim();
@@ -98,5 +119,5 @@ export function SiteHeader() {
     setSearchOpen(false);
   }
 
-  return <header className={`sfh-header ${scrolled ? 'is-compact' : ''}`}><div className="sfh-stage"><div className="sfh-panel"><BrandLogo/><DesktopNavigation pathname={pathname}/><span className="sfh-divider" aria-hidden="true"/><HeaderSearch id="header-product-search" query={query} setQuery={setQuery} submitSearch={submitSearch}/><HeaderActions count={count} setNotice={setNotice}/><span className="sfh-panel__accent" aria-hidden="true"/></div></div><MobileHeader count={count} menuOpen={menuOpen} searchOpen={searchOpen} setMenuOpen={setMenuOpen} setNotice={setNotice} setSearchOpen={setSearchOpen}/>{searchOpen && <form className="sfh-mobile-search" role="search" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="mobile-product-search" className="sr-only">Search for soft toys</label><input id="mobile-product-search" autoFocus type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..."/><button type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>}<motion.nav id="sfh-mobile-menu" className={`sfh-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen} inert={!menuOpen} initial={false} animate={{ opacity: menuOpen ? 1 : 0, y: menuOpen ? 0 : -8, scale: menuOpen ? 1 : 0.98, visibility: menuOpen ? 'visible' : 'hidden' }} transition={{ duration: reduceMotion ? 0 : 0.22, ease: 'easeOut' }}>{navigation.map((item) => <Link className={`sfh-mobile-menu__link ${isCurrent(pathname, item.href) ? 'is-active' : ''}`} href={item.href} key={item.label} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}<button className="sfh-mobile-menu__link" type="button" tabIndex={menuOpen ? 0 : -1} onClick={() => setNotice('account')}><HeaderIcon name="user"/><span>Account</span></button></motion.nav>{notice && <div className="sfh-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Saved on this device. Choose a companion to see its details.'}</span>{notice === 'wishlist' && <div className="sfh-wishlist-list">{savedProducts.length ? savedProducts.map((product) => <Link key={product.id} href={`/product/${product.slug}`}>{product.name} →</Link>) : <p>No saved companions yet. Tap a product heart to save one.</p>}</div>}<button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}</header>;
+  return <header className={`sfh-header ${scrolled ? 'is-compact' : ''}`}><div className="sfh-stage"><div className="sfh-panel"><BrandLogo/><DesktopNavigation pathname={pathname}/><span className="sfh-divider" aria-hidden="true"/><HeaderSearch id="header-product-search" query={query} setQuery={setQuery} submitSearch={submitSearch}/><HeaderActions count={count} setNotice={setNotice}/><span className="sfh-panel__accent" aria-hidden="true"/></div></div><MobileHeader count={count} menuOpen={menuOpen} searchOpen={searchOpen} setMenuOpen={setMenuOpen} setNotice={setNotice} setSearchOpen={setSearchOpen}/>{searchOpen && <form className="sfh-mobile-search" role="search" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="mobile-product-search" className="sr-only">Search for soft toys</label><input id="mobile-product-search" autoFocus type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..."/><button type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>}<motion.nav id="sfh-mobile-menu" className={`sfh-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen} inert={!menuOpen} initial={false} animate={{ opacity: menuOpen ? 1 : 0, y: menuOpen ? 0 : -8, scale: menuOpen ? 1 : 0.98, visibility: menuOpen ? 'visible' : 'hidden' }} transition={{ duration: reduceMotion ? 0 : 0.22, ease: 'easeOut' }}>{navigation.map((item) => <Link className={`sfh-mobile-menu__link ${isCurrent(pathname, item.href) ? 'is-active' : ''}`} href={item.href} key={item.label} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}<Link className="sfh-mobile-menu__link" href="/account" tabIndex={menuOpen ? 0 : -1}><HeaderIcon name="user"/><span>Account</span></Link></motion.nav>{notice && <div className="sfh-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Saved on this device. Choose a companion to see its details.'}</span>{notice === 'wishlist' && <div className="sfh-wishlist-list">{savedProducts.length ? savedProducts.map((product) => <Link key={product.id} href={`/product/${product.slug}`}>{product.name} →</Link>) : <p>No saved companions yet. Tap a product heart to save one.</p>}</div>}<button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}</header>;
 }

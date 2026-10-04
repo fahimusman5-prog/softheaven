@@ -1,3 +1,5 @@
+import { requireBudget } from '@/lib/request-budget';
+import { readJson, AccessError } from '@/lib/request-security';
 import { serverClient } from '@/lib/supabase/server';
 import { sameOrigin, apiError } from '@/lib/admin/auth';
 import { z } from 'zod';
@@ -8,8 +10,9 @@ export async function POST(request: Request) {
     const {
       data: { user },
     } = await db.auth.getUser();
-    if (!user) throw new Error('Sign in first');
-    const body = await request.json();
+    if (!user) throw new AccessError('Sign in first', 401);
+    await requireBudget(db, 'account');
+    const body = z.object({ action: z.string(), id: z.unknown() }).passthrough().partial({ id: true }).parse(await readJson(request));
     if (body.action === 'profile') {
       const v = z
         .object({ name: z.string().max(150), phone: z.string().max(30) })
