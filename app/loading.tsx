@@ -1,1 +1,5 @@
-export default function Loading(){return <section className="section" role="status" aria-live="polite">Loading SoftHaven…</section>;}
+import { SoftHavenLoader } from '@/components/loading/soft-haven-loader';
+
+export default function Loading() {
+  return <SoftHavenLoader />;
+}

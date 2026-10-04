@@ -13,6 +13,8 @@ import { WishlistProvider } from '@/components/wishlist-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
+import { Suspense } from 'react';
+import { SoftHavenLoader } from '@/components/loading/soft-haven-loader';
 
 export const dynamic = 'force-dynamic';
 export async function generateMetadata(): Promise<Metadata> {
@@ -35,26 +37,34 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+async function StorefrontContent({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const catalogue = await getStorefront();
   return (
+    <CatalogueProvider value={catalogue}>
+      <CartProvider>
+        <WishlistProvider>
+          <StorefrontFrame
+            header={<SiteHeader />}
+            footer={<SiteFooter />}
+            background={<SoftHavenCloudBackground />}
+          >
+            {children}
+          </StorefrontFrame>
+        </WishlistProvider>
+      </CartProvider>
+    </CatalogueProvider>
+  );
+}
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <CatalogueProvider value={catalogue}>
-          <CartProvider>
-            <WishlistProvider>
-            <StorefrontFrame
-              header={<SiteHeader />}
-              footer={<SiteFooter />}
-              background={<SoftHavenCloudBackground />}
-            >
-              {children}
-            </StorefrontFrame>
-            </WishlistProvider>
-          </CartProvider>
-        </CatalogueProvider>
+        <Suspense fallback={<SoftHavenLoader />}>
+          <StorefrontContent>{children}</StorefrontContent>
+        </Suspense>
       </body>
     </html>
   );

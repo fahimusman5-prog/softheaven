@@ -1,0 +1,100 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  z-index: 10000;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  touch-action: none;
+  isolation: isolate;
+  color: #71608c;
+  background: radial-gradient(ellipse at 50% 40%, #fffdf2 0%, #fff1ed 22%, #fce1f0 44%, transparent 72%), linear-gradient(140deg, #c5dbfa, #f1daee 45%, #d5dafa 77%, #d4e6fa);
+  visibility: hidden;
+  opacity: 0;
+  animation: reveal 100ms ease-out 160ms forwards;
+}
+.exiting { visibility: visible; animation: none; pointer-events: none; }
+.sky { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cloud { position: absolute; width: 40vw; animation: drift 14s ease-in-out infinite alternate; }
+.cloud img { width: 100%; height: auto; }
+.distantLeft { width: 25vw; left: -6%; top: -9%; opacity: .65; animation-duration: 26s; }
+.distantRight { width: 25vw; right: 7%; top: 6%; opacity: .7; animation-duration: 29s; }
+.middleLeft { left: -10%; top: 24%; opacity: .85; animation-duration: 21s; }
+.middleRight { right: -12%; top: 27%; opacity: .8; animation-duration: 23s; }
+.foregroundLeft { width: 65vw; left: -18%; bottom: -20%; }
+.foregroundRight { width: 64vw; right: -16%; bottom: -20%; animation-duration: 18s; }
+.sky i { position: absolute; font-style: normal; color: #fffdf3; text-shadow: 0 0 14px #fff; animation: glimmer 5s ease-in-out infinite alternate; }
+.starOne { left: 28%; top: 12%; font-size: 28px; }
+.starTwo { right: 17%; top: 38%; font-size: 22px; }
+.starThree { left: 29%; bottom: 25%; font-size: 22px; }
+.content { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: max(20px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom)); text-align: center; }
+.companion { position: relative; width: clamp(140px, 17vw, 240px); height: clamp(170px, 20vw, 260px); flex: 0 0 auto; }
+.teddy { position: relative; width: 100%; height: 100%; object-fit: contain; animation: breathe 8s ease-in-out infinite alternate; }
+.heartHalo { position: absolute; font: 260px/1 Georgia, serif; color: #fffefa; opacity: .65; top: -48px; left: 50%; transform: translateX(-50%); }
+.heartLeft, .heartRight { position: absolute; color: #eca8d2; font: 66px/1 Georgia, serif; top: 42%; left: -13%; transform: rotate(-18deg); }
+.heartRight { left: auto; right: -10%; top: 29%; transform: rotate(18deg); }
+.brand { font: 600 clamp(44px, 4.3vw, 72px)/1.1 'Playfair Display', Georgia, serif; letter-spacing: -.055em; color: #28355b; }
+.brand span { color: #d980b7; }
+.brand sup { display: inline-block; margin-left: 5px; vertical-align: top; padding-top: 11px; font-size: .33em; color: #e497c4; }
+.tagline { font: 600 clamp(8px, .8vw, 12px)/1.5 'Plus Jakarta Sans', sans-serif; letter-spacing: .32em; margin-top: 6px; color: #625276; }
+.divider { display: flex; align-items: center; gap: 12px; margin: clamp(16px, 2vw, 28px) 0 14px; color: #d591bd; font-size: 18px; }
+.divider::before, .divider::after { content: ''; width: 58px; height: 1px; background: linear-gradient(90deg, transparent, #ecb4d5); }
+.divider::after { transform: rotate(180deg); }
+.message { font: 600 clamp(18px, 1.8vw, 29px)/1.4 'Playfair Display', Georgia, serif; color: #79568e; }
+.track { position: relative; flex: 0 0 auto; width: clamp(240px, 34vw, 520px); max-width: 100%; height: 16px; margin-top: 22px; overflow: hidden; border-radius: 999px; border: 2px solid #fff; background: #ffffff70; box-shadow: 0 0 16px #ffffffb0, inset 0 1px 5px #e9bbd680; }
+.shimmer { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, transparent, #efa5ce 24%, #dcc0f5 50%, #bbd8fa 70%, transparent); animation: shimmer 2.6s linear infinite; }
+.statuses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: clamp(260px, 33vw, 490px); max-width: 100%; margin-top: 36px; font: 400 12px/1.35 'Plus Jakarta Sans', sans-serif; color: #75628c; }
+.statuses > div { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.statuses svg { width: 28px; height: 28px; }
+@keyframes reveal { to { visibility: visible; opacity: 1; } }
+@keyframes drift { to { transform: translate3d(6px, 2px, 0); } }
+@keyframes breathe { to { transform: translateY(-3px); } }
+@keyframes glimmer { to { opacity: .45; } }
+@keyframes shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@media (max-width: 600px) {
+  .content { padding-inline: 16px; }
+  .companion { width: 155px; height: 190px; }
+  .heartHalo { font-size: 200px; top: -24px; }
+  .heartLeft, .heartRight { font-size: 46px; }
+  .brand { font-size: 48px; }
+  .tagline { font-size: 8px; }
+  .message { font-size: 19px; }
+  .statuses { gap: 10px; font-size: 10px; margin-top: 28px; }
+  .statuses svg { width: 25px; height: 25px; }
+  .distantLeft, .distantRight, .starTwo { display: none; }
+  .middleLeft, .middleRight { width: 65vw; top: 16%; opacity: .6; }
+  .middleLeft { left: -37%; }
+  .middleRight { right: -38%; }
+  .foregroundLeft, .foregroundRight { width: 115vw; bottom: -3%; }
+  .foregroundLeft { left: -60%; }
+  .foregroundRight { right: -60%; }
+}
+@media (max-height: 600px) {
+  .companion { width: 100px; height: 120px; }
+  .heartHalo { font-size: 140px; top: -20px; }
+  .brand { font-size: 38px; }
+  .divider { margin: 8px 0; }
+  .track { margin-top: 12px; }
+  .statuses { margin-top: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cloud, .teddy, .sky i, .shimmer { animation: none; }
+  .shimmer { background: linear-gradient(90deg, #efa5ce, #dcc0f5, #bbd8fa); }
+  .loader { animation-duration: 1ms; }
+}
+@media (max-height: 480px) {
+  .content { padding-block: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-bottom)); }
+  .companion { width: 60px; height: 72px; }
+  .heartHalo { font-size: 88px; top: -12px; }
+  .heartLeft, .heartRight { font-size: 24px; }
+  .brand { font-size: 32px; }
+  .brand sup { padding-top: 4px; }
+  .tagline { font-size: 7px; margin-top: 2px; }
+  .divider { font-size: 12px; margin: 4px 0; }
+  .message { font-size: 14px; }
+  .track { height: 12px; margin-top: 8px; }
+  .statuses { margin-top: 12px; gap: 8px; font-size: 8px; }
+  .statuses > div { gap: 4px; }
+  .statuses svg { width: 20px; height: 20px; }
+}
