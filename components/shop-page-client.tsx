@@ -1,7 +1,9 @@
 'use client';
+import { StoreMotion } from '@/components/store-motion';
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { ProductCard } from '@/components/product-card';
+import { MAX_SEARCH_LENGTH, normalizeSearch } from '@/lib/search';
 import { SectionReveal } from '@/components/section-reveal';
 import { useCatalogue } from '@/components/catalogue-provider';
 
@@ -22,9 +24,7 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
     [collections],
   );
 
-  const searchValue = Array.isArray(params.search)
-    ? params.search[0]
-    : params.search;
+  const searchValue = normalizeSearch(params.search);
   const requestedCategory = Array.isArray(params.category)
     ? params.category[0]
     : params.category;
@@ -80,7 +80,7 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
   );
 
   return (
-    <div className="shop-page">
+    <StoreMotion><div className="shop-page">
       <section className="page-intro">
         <span className="eyebrow">The SoftHaven atelier</span>
         <h1>{selectedCollection?.name ?? 'Shop the collection'}</h1>
@@ -111,8 +111,9 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
             ⌕
             <input
               aria-label="Search products"
+              maxLength={MAX_SEARCH_LENGTH}
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event) => setQuery(normalizeSearch(event.target.value))}
               placeholder="Search companions"
             />
           </label>
@@ -128,7 +129,7 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
         </div>
       </div>
       <SectionReveal>
-        <div className="shop-grid">
+        <div className="shop-grid" aria-live="polite" aria-label="Product results">
           {visible.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -158,6 +159,6 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
           </button>
         </div>
       )}
-    </div>
+    </div></StoreMotion>
   );
 }

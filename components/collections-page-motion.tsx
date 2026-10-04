@@ -29,10 +29,10 @@ export function CollectionsPageMotion({ children }: { children: React.ReactNode 
         node.querySelectorAll<HTMLElement>('[data-cloud-depth]').forEach((cloud, index) => {
           const section = cloud.closest('section');
           const depth = cloud.dataset.cloudDepth as 'far' | 'mid' | 'front';
-          const travel = { far: .07, mid: .18, front: .32 }[depth];
+          const travel = (mobile ? { far: 4, mid: 8, front: 14 } : { far: 10, mid: 24, front: 40 })[depth];
           const direction = depth === 'far' && index % 2 === 0 ? 1 : -1;
-          gsap.fromTo(cloud, { x: () => -direction * window.innerWidth * travel * .35 }, {
-            x: () => direction * window.innerWidth * travel * (mobile ? .65 : 1),
+          gsap.fromTo(cloud, { x: () => -direction * travel * .35 }, {
+            x: () => direction * travel,
             ease: 'none',
             scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
           });

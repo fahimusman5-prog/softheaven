@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { Product, ProductVariant } from '@/lib/data';
 import { getProductVariants } from '@/lib/data';
 import { useCatalogue } from '@/components/catalogue-provider';
@@ -53,7 +53,7 @@ function readPersistedCart(value: unknown): CartLine[] | null {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const {products}=useCatalogue();
   const [lines, setLines] = useState<CartLine[]>([]);
-  const hasHydrated = useRef(false);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     try {
@@ -74,15 +74,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       window.localStorage.removeItem(PREVIOUS_CART_STORAGE_KEY);
       window.localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
     } finally {
-      hasHydrated.current = true;
+      setHydrated(true);
     }
   }, [products]);
 
   useEffect(() => {
-    if (!hasHydrated.current) return;
+    if (!hydrated) return;
     const persisted: PersistedCart = { version: 3, currency: STORE_CURRENCY, lines };
     window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(persisted));
-  }, [lines]);
+  }, [lines, hydrated]);
 
   const value = useMemo<CartContextValue>(() => ({
     lines,

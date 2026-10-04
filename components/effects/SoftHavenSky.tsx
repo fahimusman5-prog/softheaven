@@ -23,13 +23,15 @@ type WispDefinition = {
 };
 
 const depthMotion = {
-  far: { desktopY: 82, mobileY: 30, desktopX: 18, mobileX: 8, desktopScrub: 0.9, mobileScrub: 0.8 },
-  middle: { desktopY: 168, mobileY: 62, desktopX: 32, mobileX: 13, desktopScrub: 0.68, mobileScrub: 0.66 },
-  near: { desktopY: 305, mobileY: 112, desktopX: 46, mobileX: 19, desktopScrub: 0.48, mobileScrub: 0.58 },
-  foreground: { desktopY: 52, mobileY: 20, desktopX: 40, mobileX: 18, desktopScrub: .25, mobileScrub: .2 },
+  far: { desktopY: 10, mobileY: 4, desktopX: 8, mobileX: 3, desktopScrub: 0.9, mobileScrub: 0.8 },
+  middle: { desktopY: 24, mobileY: 8, desktopX: 16, mobileX: 5, desktopScrub: 0.68, mobileScrub: 0.66 },
+  near: { desktopY: 40, mobileY: 12, desktopX: 24, mobileX: 8, desktopScrub: 0.48, mobileScrub: 0.58 },
+  foreground: { desktopY: 50, mobileY: 14, desktopX: 32, mobileX: 10, desktopScrub: .25, mobileScrub: .2 },
 } satisfies Record<CloudDepth, { desktopY: number; mobileY: number; desktopX: number; mobileX: number; desktopScrub: number; mobileScrub: number }>;
 
 const clouds: CloudDefinition[] = [
+  { id: 'medium-peach-edge', depth: 'far', className: 'soft-sky__cloud--medium-peach-edge', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: .45 },
+  { id: 'medium-lilac-edge', depth: 'middle', className: 'soft-sky__cloud--medium-lilac-edge', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: .5 },
   { id: 'medium-blush', depth: 'far', className: 'soft-sky__cloud--medium-blush', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.35 },
   { id: 'medium-lavender', depth: 'middle', className: 'soft-sky__cloud--medium-lavender', asset: '/assets/clouds/soft-cloud-cluster.webp', travel: 0.3 },
   { id: 'medium-blue', depth: 'far', className: 'soft-sky__cloud--medium-blue', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.25 },
@@ -75,9 +77,13 @@ export function SoftHavenCloudBackground() {
     () => window.matchMedia('(max-width: 767px)').matches,
     () => false,
   );
-  const visibleClouds = isMobile
-    ? clouds.filter((cloud) => ['far-left', 'far-right', 'middle-left', 'middle-right', 'foreground-left'].includes(cloud.id))
-    : clouds.filter((cloud) => pathname === '/' || cloud.depth !== 'foreground');
+  const quiet = mode === 'minimal' || mode === 'quiet' || mode === 'product';
+  const visibleClouds = clouds.filter(cloud => {
+    if (isMobile) return (quiet ? ['far-left', 'far-right'] : ['far-left', 'far-right', 'middle-left', 'middle-right', ...(pathname === '/' ? ['foreground-left'] : [])]).includes(cloud.id);
+    if (quiet) return cloud.depth === 'far' && !cloud.className.includes('--accent');
+    if (mode === 'shop' || mode === 'contact') return ['far', 'middle'].includes(cloud.depth) && !cloud.className.includes('--accent');
+    return pathname === '/' || cloud.depth !== 'foreground';
+  });
 
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
@@ -140,10 +146,8 @@ export function SoftHavenCloudBackground() {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
               if (element && getComputedStyle(element).display !== 'none') {
                 const direction = pathname === '/' ? 1 : cloud.className.includes('--right') ? -1 : 1;
-                const horizontalTravel = pathname === '/'
-                  ? (mobile ? { far: 6, middle: 12, near: 18, foreground: 24 } : { far: 9, middle: 18, near: 29, foreground: 40 })[depth]
-                  : mobile ? settings.mobileX : settings.desktopX;
-                motion.to(element, { x: () => direction * horizontalTravel * cloud.travel * (pathname === '/' ? window.innerWidth / 100 : 1), duration: 1 }, 0);
+                const horizontalTravel = mobile ? settings.mobileX : settings.desktopX;
+                motion.to(element, { x: direction * horizontalTravel * cloud.travel, duration: 1 }, 0);
               }
             });
             wisps.filter((wisp) => wisp.depth === depth).forEach((wisp) => {

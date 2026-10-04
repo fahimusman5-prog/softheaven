@@ -7,6 +7,7 @@ import { gsap } from 'gsap';
 import { AccountIcon } from '@/components/account/ui';
 import { AdminIcon } from '@/components/admin/icons';
 import styles from './soft-haven-loader.module.css';
+import { acquireLoaderLock } from './loader-lock';
 
 /** Mounted only by a real Suspense fallback. Never controls route readiness. */
 export function SoftHavenLoader() {
@@ -24,39 +25,18 @@ export function SoftHavenLoader() {
       exit.remove();
     });
     let revealed = false;
-    let restore = () => {};
+    let release = () => true;
     // Reveal threshold only: resolving Suspense cancels this immediately.
     const threshold = window.setTimeout(() => {
       revealed = true;
-      const overflow = document.documentElement.style.overflow;
-      const gutter = document.documentElement.style.scrollbarGutter;
-      if (window.innerWidth > document.documentElement.clientWidth)
-        document.documentElement.style.scrollbarGutter = 'stable';
-      document.documentElement.style.overflow = 'hidden';
-      const siblings: Array<{ element: HTMLElement; inert: boolean }> = [];
-      let branch: HTMLElement = node;
-      // Disable only siblings outside this fallback, never its ancestors.
-      while (branch.parentElement) {
-        for (const sibling of Array.from(branch.parentElement.children)) {
-          if (sibling !== branch && sibling instanceof HTMLElement) {
-            siblings.push({ element: sibling, inert: sibling.inert });
-            sibling.inert = true;
-          }
-        }
-        branch = branch.parentElement;
-        if (branch === document.body) break;
-      }
-      restore = () => {
-        document.documentElement.style.overflow = overflow;
-        document.documentElement.style.scrollbarGutter = gutter;
-        siblings.forEach(({ element, inert }) => { element.inert = inert; });
-      };
+      release = acquireLoaderLock(node);
     }, 160);
 
     return () => {
       window.clearTimeout(threshold);
-      restore();
-      if (!revealed) return;
+      const lastWait = release();
+      if (!revealed || !lastWait) return;
+      node.removeAttribute('data-loader-secondary');
       // Suspense unmounts its fallback immediately. A short, noninteractive
       // visual copy fades above the ready page without retaining any locks.
       const exit = node.cloneNode(true) as HTMLElement;

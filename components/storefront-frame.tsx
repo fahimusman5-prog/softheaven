@@ -1,4 +1,5 @@
 'use client';
+import { StoreMotion } from './store-motion';
 import { usePathname } from 'next/navigation';
 export function StorefrontFrame({
   children,
@@ -23,7 +24,7 @@ export function StorefrontFrame({
       {background}
       {header}
       <main id="main-content">{children}</main>
-      {footer}
+      <StoreMotion>{footer}</StoreMotion>
     </div>
   );
 }

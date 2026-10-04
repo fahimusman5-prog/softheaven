@@ -1,4 +1,5 @@
 'use client';
+import { useSoftDepth } from './use-soft-depth';
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -30,6 +31,8 @@ export function ProductDetail({ product, relatedProducts }: { product: Product; 
   const [feedback, setFeedback] = useState('');
   const [summary, setSummary] = useState<ReviewSummary | null>(null);
   const root = useRef<HTMLDivElement>(null);
+  const depth = useRef<HTMLButtonElement>(null);
+  useSoftDepth(depth);
   const dialog = useRef<HTMLDialogElement>(null);
   const { add, lines } = useCart();
   const { ids: wishlistIds, toggle: toggleWishlist } = useWishlist();
@@ -85,7 +88,7 @@ export function ProductDetail({ product, relatedProducts }: { product: Product; 
         <div className="pdp-gallery">
           <div className="pdp-stage" onTouchStart={e => { touchStart.current = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY }; }} onTouchEnd={e => { const start = touchStart.current; touchStart.current = null; if (!start || gallery.length < 2) return; const dx = e.changedTouches[0].clientX - start.x; const dy = e.changedTouches[0].clientY - start.y; if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) { e.preventDefault(); moveImage(dx < 0 ? 1 : -1); } }} onTouchCancel={() => { touchStart.current = null; }} onKeyDown={e => { if (e.key === 'ArrowLeft') moveImage(-1); if (e.key === 'ArrowRight') moveImage(1); }}>
             {badge && <span className="pdp-badge">{badge}</span>}
-            <button type="button" className="pdp-image-open" onClick={() => dialog.current?.showModal()} aria-label={`View larger image of ${product.name}`}><ProductMedia key={selectedImage} src={selectedImage} sources={gallery} alt={`${product.name}${variant?.color ? ` in ${variant.color}` : ''}`} fit="cover" className="pdp-hero-image" priority sizes="(max-width: 767px) 95vw, 56vw" fallbackTitle={product.name}/></button>
+            <button type="button" className="pdp-image-open" data-soft-depth ref={depth} onClick={() => dialog.current?.showModal()} aria-label={`View larger image of ${product.name}`}><ProductMedia key={selectedImage} src={selectedImage} sources={gallery} alt={`${product.name}${variant?.color ? ` in ${variant.color}` : ''}`} fit="cover" className="pdp-hero-image" priority sizes="(max-width: 767px) 95vw, 56vw" fallbackTitle={product.name}/></button>
             <button type="button" className="pdp-gallery-heart" aria-pressed={saved} aria-label={`${saved ? 'Unsave' : 'Save'} ${product.name}`} onClick={() => toggleWishlist(product.id)}><Icon name="heart"/></button>
             {gallery.length > 1 && <><button type="button" className="pdp-gallery-arrow pdp-prev" aria-label="Previous product image" onClick={() => moveImage(-1)}><Icon name="chevron"/></button><button type="button" className="pdp-gallery-arrow pdp-next" aria-label="Next product image" onClick={() => moveImage(1)}><Icon name="chevron"/></button><span className="pdp-image-count" aria-live="polite">{imageIndex + 1} / {gallery.length}</span></>}
             <button type="button" className="pdp-zoom" onClick={() => dialog.current?.showModal()} aria-label="Enlarge product image"><Icon name="zoom"/></button>

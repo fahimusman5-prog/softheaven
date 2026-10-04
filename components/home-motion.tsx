@@ -14,7 +14,7 @@ export function HomeMotion({ children }: { children: ReactNode }) {
     const node = scope.current;
     if (!node) return;
     const media = gsap.matchMedia();
-    media.add({ reduce: '(prefers-reduced-motion: reduce)', mobile: '(max-width: 767px)', tablet: '(min-width: 768px) and (max-width: 1100px)' }, (match) => {
+    media.add({ reduce: '(prefers-reduced-motion: reduce)', mobile: '(max-width: 767px)', tablet: '(min-width: 768px) and (max-width: 1100px)', desktop: '(min-width: 1101px)' }, (match) => {
       if (match.conditions?.reduce) return;
       const mobile = Boolean(match.conditions?.mobile);
       const distance = mobile ? 10 : match.conditions?.tablet ? 16 : 22;

@@ -1,3 +1,4 @@
+import { normalizeSearch } from '@/lib/search';
 import type { Metadata } from 'next';
 import ShopClient from '@/components/shop-page-client';
 import { getStorefront } from '@/lib/storefront';
@@ -34,5 +35,6 @@ export default async function ShopPage({
 }: {
   searchParams: Promise<Params>;
 }) {
-  return <ShopClient params={await searchParams} />;
+  const params = await searchParams;
+  return <ShopClient params={{ ...params, search: normalizeSearch(params.search) }} />;
 }

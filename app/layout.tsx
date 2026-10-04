@@ -7,6 +7,7 @@ import './home-reference.css';
 import 'lenis/dist/lenis.css';
 import './home-sky.css';
 import './readiness.css';
+import './premium-motion.css';
 import { StorefrontFrame } from '@/components/storefront-frame';
 import { CartProvider } from '@/components/cart-provider';
 import { WishlistProvider } from '@/components/wishlist-provider';

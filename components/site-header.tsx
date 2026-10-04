@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { useCatalogue } from '@/components/catalogue-provider';
 import { useWishlist } from './wishlist-provider';
 import { useCart } from './cart-provider';
+import { MAX_SEARCH_LENGTH, normalizeSearch } from '@/lib/search';
 
 type IconName = 'home' | 'bag' | 'heart' | 'user' | 'mail' | 'search' | 'cart' | 'menu' | 'close';
 type Notice = 'account' | 'wishlist' | null;
@@ -54,17 +55,17 @@ function DesktopNavigation({ pathname }: { pathname: string }) {
 }
 
 function HeaderSearch({ id, query, setQuery, submitSearch }: { id: string; query: string; setQuery: (value: string) => void; submitSearch: (event: FormEvent<HTMLFormElement>) => void }) {
-  return <form className="sfh-search" role="search" onSubmit={submitSearch}><label htmlFor={id} className="sr-only">Search for soft toys</label><HeaderIcon name="search"/><input id={id} type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..." autoComplete="off"/><button className="sfh-search__bear" type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>;
+  return <form className="sfh-search" role="search" onSubmit={submitSearch}><label htmlFor={id} className="sr-only">Search for soft toys</label><HeaderIcon name="search"/><input id={id} type="search" maxLength={MAX_SEARCH_LENGTH} value={query} onChange={(event) => setQuery(normalizeSearch(event.target.value))} placeholder="Search for soft toys..." autoComplete="off"/><button className="sfh-search__bear" type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>;
 }
 
 function HeaderActions({ count, setNotice }: { count: number; setNotice: (notice: Notice) => void }) {
   const { ids } = useWishlist();
-  return <div className="sfh-actions" aria-label="Account actions"><Link className="sfh-action" href="/account" aria-label="Account"><HeaderIcon name="user"/></Link><button className="sfh-action" type="button" aria-label={`Wishlist, ${ids.length} items`} onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sfh-count">{ids.length}</span></button><Link className="sfh-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sfh-count">{count}</span></Link></div>;
+  return <div className="sfh-actions" aria-label="Account actions"><Link className="sfh-action" href="/account" aria-label="Account"><HeaderIcon name="user"/></Link><button className="sfh-action" type="button" aria-label={`Wishlist, ${ids.length} items`} onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sfh-count" key={ids.length}>{ids.length}</span></button><Link className="sfh-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sfh-count" key={count}>{count}</span></Link></div>;
 }
 
 function MobileHeader({ count, menuOpen, searchOpen, setMenuOpen, setNotice, setSearchOpen }: { count: number; menuOpen: boolean; searchOpen: boolean; setMenuOpen: (value: boolean) => void; setNotice: (notice: Notice) => void; setSearchOpen: (value: boolean) => void }) {
   const { ids } = useWishlist();
-  return <div className="sfh-mobile-panel"><BrandLogo mobile/><div className="sfh-mobile-actions"><button className="sfh-mobile-action" type="button" aria-label="Open search" aria-expanded={searchOpen} onClick={() => { setSearchOpen(!searchOpen); setMenuOpen(false); }}><HeaderIcon name="search"/></button><button className="sfh-mobile-action" type="button" aria-label={`Wishlist, ${ids.length} items`} onClick={() => setNotice('wishlist')}><HeaderIcon name="heart"/><span className="sfh-count">{ids.length}</span></button><Link className="sfh-mobile-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sfh-count">{count}</span></Link><button className="sfh-mobile-action" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="sfh-mobile-menu" onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false); }}><HeaderIcon name={menuOpen ? 'close' : 'menu'}/></button></div></div>;
+  return <div className="sfh-mobile-panel"><BrandLogo mobile/><div className="sfh-mobile-actions"><button className="sfh-mobile-action" type="button" aria-label="Open search" aria-expanded={searchOpen} onClick={() => { setSearchOpen(!searchOpen); setMenuOpen(false); setNotice(null); }}><HeaderIcon name="search"/></button><button className="sfh-mobile-action" type="button" aria-label={`Wishlist, ${ids.length} items`} onClick={() => { setNotice('wishlist'); setMenuOpen(false); setSearchOpen(false); }}><HeaderIcon name="heart"/><span className="sfh-count" key={ids.length}>{ids.length}</span></button><Link className="sfh-mobile-action" href="/cart" aria-label={`Cart, ${count} ${count === 1 ? 'item' : 'items'}`}><HeaderIcon name="cart"/><span className="sfh-count" key={count}>{count}</span></Link><button className="sfh-mobile-action" type="button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} aria-controls="sfh-mobile-menu" onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false); setNotice(null); }}><HeaderIcon name={menuOpen ? 'close' : 'menu'}/></button></div></div>;
 }
 
 export function SiteHeader() {
@@ -81,6 +82,7 @@ export function SiteHeader() {
   const [query, setQuery] = useState('');
   const [notice, setNotice] = useState<Notice>(null);
   const [scrolled, setScrolled] = useState(false);
+  const header = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 120);
@@ -95,7 +97,17 @@ export function SiteHeader() {
     if (!menuOpen || !window.matchMedia('(max-width: 1100px)').matches) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const menu = document.getElementById('sfh-mobile-menu');
+    const trigger = document.querySelector<HTMLButtonElement>('[aria-controls="sfh-mobile-menu"]');
+    const focusFrame = requestAnimationFrame(() => menu?.querySelector<HTMLAnchorElement>('a')?.focus());
     const dismiss = (event: KeyboardEvent) => {
+      if (event.key === 'Tab') {
+        const controls = [trigger, ...Array.from(menu?.querySelectorAll<HTMLAnchorElement>('a') ?? [])].filter((item): item is HTMLButtonElement | HTMLAnchorElement => Boolean(item));
+        const index = controls.indexOf(document.activeElement as HTMLButtonElement | HTMLAnchorElement);
+        if (index < 0 || (!event.shiftKey && index === controls.length - 1) || (event.shiftKey && index === 0)) {
+          event.preventDefault(); controls[event.shiftKey ? controls.length - 1 : 0]?.focus();
+        }
+      }
       if (event.key === 'Escape') {
         setMenuOpen(false);
         document.querySelector<HTMLButtonElement>('[aria-controls="sfh-mobile-menu"]')?.focus();
@@ -106,18 +118,39 @@ export function SiteHeader() {
     viewport.addEventListener('change', closeOnDesktop);
     window.addEventListener('keydown', dismiss);
     return () => {
+      cancelAnimationFrame(focusFrame);
       document.body.style.overflow = previousOverflow;
+      if (menu?.contains(document.activeElement)) trigger?.focus();
       viewport.removeEventListener('change', closeOnDesktop);
       window.removeEventListener('keydown', dismiss);
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!searchOpen && !notice) return;
+    const node = header.current;
+    const previous = document.activeElement as HTMLElement | null;
+    if (notice) node?.querySelector<HTMLButtonElement>('.sfh-notice button')?.focus();
+    const close = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setSearchOpen(false); setNotice(null);
+      if (searchOpen) node?.querySelector<HTMLButtonElement>('[aria-label="Open search"]')?.focus();
+      else previous?.focus();
+    };
+    const outside = (event: PointerEvent) => {
+      if (!node?.contains(event.target as Node)) { setNotice(null); setSearchOpen(false); }
+    };
+    document.addEventListener('keydown', close);
+    document.addEventListener('pointerdown', outside);
+    return () => { document.removeEventListener('keydown', close); document.removeEventListener('pointerdown', outside); };
+  }, [searchOpen, notice]);
+
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const search = query.trim();
+    const search = normalizeSearch(query).trim();
     router.push(search ? `/shop?search=${encodeURIComponent(search)}` : '/shop');
     setSearchOpen(false);
   }
 
-  return <header className={`sfh-header ${scrolled ? 'is-compact' : ''}`}><div className="sfh-stage"><div className="sfh-panel"><BrandLogo/><DesktopNavigation pathname={pathname}/><span className="sfh-divider" aria-hidden="true"/><HeaderSearch id="header-product-search" query={query} setQuery={setQuery} submitSearch={submitSearch}/><HeaderActions count={count} setNotice={setNotice}/><span className="sfh-panel__accent" aria-hidden="true"/></div></div><MobileHeader count={count} menuOpen={menuOpen} searchOpen={searchOpen} setMenuOpen={setMenuOpen} setNotice={setNotice} setSearchOpen={setSearchOpen}/>{searchOpen && <form className="sfh-mobile-search" role="search" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="mobile-product-search" className="sr-only">Search for soft toys</label><input id="mobile-product-search" autoFocus type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for soft toys..."/><button type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>}<motion.nav id="sfh-mobile-menu" className={`sfh-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen} inert={!menuOpen} initial={false} animate={{ opacity: menuOpen ? 1 : 0, y: menuOpen ? 0 : -8, scale: menuOpen ? 1 : 0.98, visibility: menuOpen ? 'visible' : 'hidden' }} transition={{ duration: reduceMotion ? 0 : 0.22, ease: 'easeOut' }}>{navigation.map((item) => <Link className={`sfh-mobile-menu__link ${isCurrent(pathname, item.href) ? 'is-active' : ''}`} href={item.href} key={item.label} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}<Link className="sfh-mobile-menu__link" href="/account" tabIndex={menuOpen ? 0 : -1}><HeaderIcon name="user"/><span>Account</span></Link></motion.nav>{notice && <div className="sfh-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Saved on this device. Choose a companion to see its details.'}</span>{notice === 'wishlist' && <div className="sfh-wishlist-list">{savedProducts.length ? savedProducts.map((product) => <Link key={product.id} href={`/product/${product.slug}`}>{product.name} →</Link>) : <p>No saved companions yet. Tap a product heart to save one.</p>}</div>}<button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}</header>;
+  return <header ref={header} className={`sfh-header ${scrolled ? 'is-compact' : ''}`}><div className="sfh-stage"><div className="sfh-panel"><BrandLogo/><DesktopNavigation pathname={pathname}/><span className="sfh-divider" aria-hidden="true"/><HeaderSearch id="header-product-search" query={query} setQuery={setQuery} submitSearch={submitSearch}/><HeaderActions count={count} setNotice={setNotice}/><span className="sfh-panel__accent" aria-hidden="true"/></div></div><MobileHeader count={count} menuOpen={menuOpen} searchOpen={searchOpen} setMenuOpen={setMenuOpen} setNotice={setNotice} setSearchOpen={setSearchOpen}/>{searchOpen && <form className="sfh-mobile-search" role="search" onSubmit={submitSearch}><HeaderIcon name="search"/><label htmlFor="mobile-product-search" className="sr-only">Search for soft toys</label><input id="mobile-product-search" autoFocus type="search" maxLength={MAX_SEARCH_LENGTH} value={query} onChange={(event) => setQuery(normalizeSearch(event.target.value))} placeholder="Search for soft toys..."/><button type="submit" aria-label="Submit product search"><BearFaceIcon/></button></form>}<motion.nav id="sfh-mobile-menu" className={`sfh-mobile-menu ${menuOpen ? 'is-open' : ''}`} aria-label="Mobile navigation" aria-hidden={!menuOpen} inert={!menuOpen} initial={false} onAnimationComplete={() => { if (menuOpen && document.activeElement === header.current?.querySelector('[aria-controls="sfh-mobile-menu"]')) header.current?.querySelector<HTMLAnchorElement>('#sfh-mobile-menu a')?.focus(); }} animate={{ opacity: menuOpen ? 1 : 0, y: menuOpen ? 0 : -8, scale: menuOpen ? 1 : 0.98, visibility: menuOpen ? 'visible' : 'hidden' }} transition={{ duration: reduceMotion ? 0 : 0.22, ease: 'easeOut', visibility: { duration:0, delay:menuOpen || reduceMotion ? 0 : .22 } }}>{navigation.map((item) => <Link className={`sfh-mobile-menu__link ${isCurrent(pathname, item.href) ? 'is-active' : ''}`} href={item.href} key={item.label} tabIndex={menuOpen ? 0 : -1}><HeaderIcon name={item.icon}/><span>{item.label}</span></Link>)}<Link className="sfh-mobile-menu__link" href="/account" tabIndex={menuOpen ? 0 : -1}><HeaderIcon name="user"/><span>Account</span></Link></motion.nav>{notice && <div className="sfh-notice" role="status"><b>{notice === 'account' ? 'Customer account' : 'Your wishlist'}</b><span>{notice === 'account' ? 'Account access will be available with the customer portal.' : 'Saved on this device. Choose a companion to see its details.'}</span>{notice === 'wishlist' && <div className="sfh-wishlist-list">{savedProducts.length ? savedProducts.map((product) => <Link key={product.id} href={`/product/${product.slug}`}>{product.name} →</Link>) : <p>No saved companions yet. Tap a product heart to save one.</p>}</div>}<button type="button" onClick={() => setNotice(null)} aria-label="Close message"><HeaderIcon name="close"/></button></div>}</header>;
 }

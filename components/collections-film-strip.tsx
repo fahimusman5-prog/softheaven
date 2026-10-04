@@ -212,8 +212,8 @@ export function CollectionsFilmStrip({ collections }: { collections: SoftHavenCo
         // Each layer has one scroll owner, independent of ribbon/card transforms.
         section.querySelectorAll<HTMLElement>('[data-film-cloud]').forEach(cloud => {
           const depth = cloud.dataset.filmCloud as 'far' | 'mid' | 'front';
-          const distance = { far: .08, mid: .16, front: .3 }[depth];
-          gsap.fromTo(cloud, { x: () => viewport.clientWidth * distance * .5 }, { x: () => -viewport.clientWidth * distance * (mobile ? .65 : 1), ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
+          const distance = (mobile ? { far: 4, mid: 8, front: 14 } : { far: 10, mid: 24, front: 40 })[depth];
+          gsap.fromTo(cloud, { x: () => distance * .5 }, { x: () => -distance, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
         });
         gsap.fromTo(section.querySelectorAll('[data-film-enter]'), { y: 12, opacity: .8 }, { y: 0, opacity: 1, duration: .8, stagger: .08, clearProps: 'transform,opacity', scrollTrigger: { trigger: section, start: 'top 85%', once: true } });
         return () => {

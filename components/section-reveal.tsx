@@ -18,6 +18,7 @@ export function SectionReveal({ children, className = '' }: { children: React.Re
         {
           reduce: '(prefers-reduced-motion: reduce)',
           mobile: '(max-width: 767px)',
+          desktop: '(min-width: 768px)',
         },
         (match) => {
           if (match.conditions?.reduce) return;

@@ -1,4 +1,5 @@
 'use client';
+import { StoreMotion } from '@/components/store-motion';
 
 import { useState, type FormEvent } from 'react';
 import { useCatalogue } from '@/components/catalogue-provider';
@@ -158,7 +159,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="contact-page contact-redesign">
+    <StoreMotion><div className="contact-page contact-redesign">
       <header className="contact-hero">
         <span className="contact-eyebrow">The SoftHaven concierge</span>
         <h1>
@@ -340,6 +341,6 @@ export default function ContactPage() {
           </form>
         </section>
       </div>
-    </div>
+    </div></StoreMotion>
   );
 }

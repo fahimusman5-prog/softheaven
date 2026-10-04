@@ -44,7 +44,7 @@ export default async function CollectionsPage() {
             <span className={styles.eyebrow} data-hero-enter>Our collections</span>
             <h1 id="collections-title"><span data-hero-enter>Find Your</span><span data-hero-enter>Kind of <em>Soft.</em></span></h1>
             <p data-hero-enter>Thoughtfully curated collections for every person, every mood and every special moment.</p>
-            <Link className={styles.primaryButton} href="#edit-title" data-hero-enter>Explore Collections <span aria-hidden="true">→</span></Link>
+            <Link className={styles.primaryButton} data-soft-cta href="#edit-title" data-hero-enter>Explore Collections <span aria-hidden="true">→</span></Link>
           </div>
           <div className={styles.heroArt} data-hero-art>
             <picture><source media="(max-width: 700px)" srcSet="/assets/collections/redesign/hero-mobile.webp" /><Image src="/assets/collections/redesign/hero.webp" alt="A pastel plush teddy with a lavender satin bow nestled in pink, lavender and blue clouds" width={1351} height={1164} preload unoptimized sizes="(max-width: 700px) 100vw, 58vw" /></picture>
@@ -70,7 +70,7 @@ export default async function CollectionsPage() {
             const collection = collections.find(item => item.slug === selection.slug);
             return <Link className={styles.selectionRow} href={collection ? `/shop?collection=${collection.slug}` : '/shop'} key={selection.title}><span className={styles.thumbnail}><Image src={selection.image} alt="" width={64} height={64} unoptimized /></span><span className={styles.rowCopy}><strong>{selection.title}</strong><small>{selection.description}</small></span><span className={styles.rowArrow} aria-hidden="true">→</span></Link>;
           })}</nav>
-          <Link className={styles.primaryButton} href="/shop">Discover your companion <span aria-hidden="true">→</span></Link>
+          <Link className={styles.primaryButton} data-soft-cta href="/shop">Discover your companion <span aria-hidden="true">→</span></Link>
         </div>
       </section>
 
@@ -87,7 +87,7 @@ export default async function CollectionsPage() {
       </section>
 
       <section className={`${styles.container} ${styles.ending}`} aria-labelledby="ending-title" data-collections-section="ending">
-        <div className={styles.endingFrame}><span className={styles.eyebrow}>Find your favourite</span><h2 id="ending-title">There&apos;s a soft friend<br /><em>waiting for you.</em></h2><p>Explore the full SoftHaven collection and find the companion that feels just right.</p><Link className={styles.primaryButton} href="/shop">Meet all companions <span aria-hidden="true">→</span></Link></div>
+        <div className={styles.endingFrame}><span className={styles.eyebrow}>Find your favourite</span><h2 id="ending-title">There&apos;s a soft friend<br /><em>waiting for you.</em></h2><p>Explore the full SoftHaven collection and find the companion that feels just right.</p><Link className={styles.primaryButton} data-soft-cta href="/shop">Meet all companions <span aria-hidden="true">→</span></Link></div>
         <Cloud depth="mid" position="endingCloudLeft" asset="soft-cloud-cluster" />
         <Cloud depth="front" position="endingCloudRight" />
       </section>
