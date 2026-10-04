@@ -12,6 +12,7 @@ export function StorefrontFrame({
   background: React.ReactNode;
 }) {
   const pathname = usePathname();
+  if (pathname === '/checkout') return <main id="main-content">{children}</main>;
   const admin = pathname.startsWith('/admin');
   if (pathname === '/account' || pathname.startsWith('/account/'))
     return <main id="main-content">{children}</main>;
