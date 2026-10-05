@@ -9,11 +9,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 type Mode = 'rich' | 'store' | 'product' | 'transaction' | 'standard';
 type Depth = 'far' | 'middle' | 'foreground';
 const profiles: Record<Mode, { desktop: number; tablet: number; mobile: number; motion: number; variant: number }> = {
-  rich: { desktop: 18, tablet: 14, mobile: 9, motion: 1, variant: 0 },
-  store: { desktop: 16, tablet: 12, mobile: 8, motion: .9, variant: 1 },
-  standard: { desktop: 14, tablet: 11, mobile: 8, motion: .85, variant: 2 },
-  product: { desktop: 8, tablet: 8, mobile: 6, motion: .72, variant: 3 },
-  transaction: { desktop: 10, tablet: 8, mobile: 6, motion: .65, variant: 4 },
+  rich: { desktop: 26, tablet: 15, mobile: 11, motion: 1, variant: 0 },
+  store: { desktop: 22, tablet: 15, mobile: 10, motion: .9, variant: 1 },
+  standard: { desktop: 19, tablet: 14, mobile: 10, motion: .85, variant: 2 },
+  product: { desktop: 11, tablet: 10, mobile: 8, motion: .72, variant: 3 },
+  transaction: { desktop: 12, tablet: 10, mobile: 7, motion: .65, variant: 4 },
 };
 // Fixed placement records: responsive composition never depends on random values or hydration.
 const placements: Array<{ x: number; y: number; mobileX: number; mobileY: number; width: number; depth: Depth }> = [
@@ -35,12 +35,20 @@ const placements: Array<{ x: number; y: number; mobileX: number; mobileY: number
   { x: 46, y: 21, mobileX: 43, mobileY: 20, width: 140, depth: 'far' },
   { x: 8, y: 69, mobileX: 3, mobileY: 72, width: 220, depth: 'middle' },
   { x: 86, y: 74, mobileX: 82, mobileY: 75, width: 200, depth: 'middle' },
+  { x: 34, y: 48, mobileX: 28, mobileY: 48, width: 150, depth: 'far' },
+  { x: 14, y: 16, mobileX: 8, mobileY: 16, width: 180, depth: 'middle' },
+  { x: 61, y: 68, mobileX: 56, mobileY: 68, width: 210, depth: 'middle' },
+  { x: 4, y: 57, mobileX: -10, mobileY: 57, width: 240, depth: 'middle' },
+  { x: 75, y: 30, mobileX: 72, mobileY: 30, width: 180, depth: 'middle' },
+  { x: 30, y: 88, mobileX: 25, mobileY: 88, width: 270, depth: 'foreground' },
+  { x: 56, y: 12, mobileX: 52, mobileY: 12, width: 150, depth: 'middle' },
+  { x: -12, y: 34, mobileX: -20, mobileY: 34, width: 270, depth: 'foreground' },
 ];
 const assets = ['pastel-blush', 'pastel-blue', 'dream-cloud-01', 'dream-cloud-02', 'dream-cloud-03', 'dream-cloud-04', 'dream-cloud-05', 'dream-cloud-07', 'dream-cloud-08', 'dream-cloud-warm'];
 const movement: Record<Depth, { desktop: number; mobile: number; y: number }> = {
-  far: { desktop: 55, mobile: 27, y: 10 },
-  middle: { desktop: 145, mobile: 68, y: 22 },
-  foreground: { desktop: 220, mobile: 100, y: 34 },
+  far: { desktop: 110, mobile: 38, y: 10 },
+  middle: { desktop: 290, mobile: 95, y: 22 },
+  foreground: { desktop: 440, mobile: 140, y: 34 },
 };
 function modeFor(path: string): Mode {
   if (path === '/' || path === '/about') return 'rich';
@@ -70,7 +78,7 @@ export function SoftHavenCloudBackground() {
         const timeline = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
           id: 'softhaven-atmosphere', trigger: document.documentElement, start: 'top top',
           end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
-          scrub: mobile ? .35 : .5, invalidateOnRefresh: true,
+          scrub: mobile ? .28 : .35, invalidateOnRefresh: true,
         } });
         sky.querySelectorAll<HTMLElement>('[data-cloud-depth]').forEach((cloud, index) => {
           if (getComputedStyle(cloud).display === 'none') return;
