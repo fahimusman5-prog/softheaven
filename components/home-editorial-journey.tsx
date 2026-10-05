@@ -53,7 +53,7 @@ export function HomeEditorialJourney() {
         ];
         scenes.forEach(({ section, clouds, word }) => {
           const timeline = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: mobile ? .35 : .7, invalidateOnRefresh: true } });
-          timeline.fromTo(clouds, { y: mobile ? 10 : 30 }, { y: mobile ? -24 : -90, ease: 'none' }, 0);
+          timeline.fromTo(clouds, { x: 0, y: 0 }, { x: mobile ? 24 : 70, y: mobile ? -3 : -10, ease: 'none' }, 0);
           if (!mobile) timeline.fromTo(word, { y: 12 }, { y: -32, ease: 'none' }, 0);
         });
         if (!mobile) {

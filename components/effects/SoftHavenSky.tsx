@@ -50,6 +50,20 @@ const clouds: CloudDefinition[] = [
   { id: 'near-small-left', depth: 'near', className: 'soft-sky__cloud--near-small-left soft-sky__cloud--accent', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.76 },
 ];
 
+// Homepage uses three bounded depth planes; other routes retain their existing sky.
+const homeCloudIds = ['far-left', 'far-right', 'far-high-right', 'medium-blue', 'middle-left', 'middle-right', 'middle-small-left', 'middle-small-right', 'medium-lavender', 'medium-peach-edge', 'near-right', 'foreground-left'];
+const homeClouds = homeCloudIds.map((id) => {
+  const cloud = clouds.find((item) => item.id === id)!;
+  const depth: CloudDepth = ['near-right', 'foreground-left'].includes(id) ? 'foreground' : ['far-left', 'far-right', 'far-high-right', 'medium-blue'].includes(id) ? 'far' : 'middle';
+  return { ...cloud, depth, travel: .72 + (homeCloudIds.indexOf(id) % 4) * .09 };
+});
+const homeMotion = {
+  far: { desktopX: 22, mobileX: 10, desktopY: 5, mobileY: 2, desktopScrub: 1.1, mobileScrub: .8 },
+  middle: { desktopX: 68, mobileX: 28, desktopY: 9, mobileY: 4, desktopScrub: 1.1, mobileScrub: .8 },
+  near: depthMotion.near,
+  foreground: { desktopX: 108, mobileX: 42, desktopY: 13, mobileY: 6, desktopScrub: 1.2, mobileScrub: .9 },
+};
+
 const wisps: WispDefinition[] = [
   { id: 'wisp-upper-center', depth: 'far', className: 'soft-sky__wisp--upper-center soft-sky__wisp--mobile' },
   { id: 'wisp-middle-right', depth: 'middle', className: 'soft-sky__wisp--middle-right soft-sky__wisp--mobile' },
@@ -77,8 +91,19 @@ export function SoftHavenCloudBackground() {
     () => window.matchMedia('(max-width: 767px)').matches,
     () => false,
   );
+  const isTablet = useSyncExternalStore(
+    (notify) => { const query = window.matchMedia('(min-width: 768px) and (max-width: 1100px)'); query.addEventListener('change', notify); return () => query.removeEventListener('change', notify); },
+    () => window.matchMedia('(min-width: 768px) and (max-width: 1100px)').matches,
+    () => false,
+  );
+  const cloudSet = pathname === '/' ? homeClouds : clouds;
   const quiet = mode === 'minimal' || mode === 'quiet' || mode === 'product';
-  const visibleClouds = clouds.filter(cloud => {
+  const visibleClouds = cloudSet.filter(cloud => {
+    if (pathname === '/') {
+      if (isMobile) return ['far-left', 'far-right', 'middle-left', 'middle-right', 'foreground-left'].includes(cloud.id);
+      if (isTablet) return !['far-high-right', 'middle-small-left', 'medium-lavender', 'medium-peach-edge'].includes(cloud.id);
+      return true;
+    }
     if (isMobile) return (quiet ? ['far-left', 'far-right'] : ['far-left', 'far-right', 'middle-left', 'middle-right', ...(pathname === '/' ? ['foreground-left'] : [])]).includes(cloud.id);
     if (quiet) return cloud.depth === 'far' && !cloud.className.includes('--accent');
     if (mode === 'shop' || mode === 'contact') return ['far', 'middle'].includes(cloud.depth) && !cloud.className.includes('--accent');
@@ -120,19 +145,22 @@ export function SoftHavenCloudBackground() {
         {
           reduce: '(prefers-reduced-motion: reduce)',
           mobile: '(max-width: 767px)',
-          desktop: '(min-width: 768px)',
+          tablet: '(min-width: 768px) and (max-width: 1100px)',
+          desktop: '(min-width: 1101px)',
         },
         (match) => {
           if (match.conditions?.reduce) return;
           const mobile = Boolean(match.conditions?.mobile);
           (['far', 'middle', 'near', 'foreground'] as const).forEach((depth) => {
             const layer = sky.querySelector<HTMLElement>(`[data-parallax-layer="${depth}"]`);
-            if (!layer || getComputedStyle(layer).display === 'none') return;
+            if (!layer || !layer.children.length || getComputedStyle(layer).display === 'none') return;
 
-            const settings = depthMotion[depth];
+            const settings = pathname === '/' ? homeMotion[depth] : depthMotion[depth];
+            const tabletFactor = pathname === '/' && match.conditions?.tablet ? .7 : 1;
             const motion = gsap.timeline({
               defaults: { ease: 'none' },
               scrollTrigger: {
+                id: `soft-sky-${depth}`,
                 trigger: document.documentElement,
                 start: 'top top',
                 end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
@@ -142,15 +170,15 @@ export function SoftHavenCloudBackground() {
             });
             motion.to(layer, { y: () => -(mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
 
-            clouds.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
+            cloudSet.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
               const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
               if (element && getComputedStyle(element).display !== 'none') {
                 const direction = pathname === '/' ? 1 : cloud.className.includes('--right') ? -1 : 1;
-                const horizontalTravel = mobile ? settings.mobileX : settings.desktopX;
+                const horizontalTravel = (mobile ? settings.mobileX : settings.desktopX) * tabletFactor;
                 motion.to(element, { x: direction * horizontalTravel * cloud.travel, duration: 1 }, 0);
               }
             });
-            wisps.filter((wisp) => wisp.depth === depth).forEach((wisp) => {
+            (pathname === '/' ? [] : wisps).filter((wisp) => wisp.depth === depth).forEach((wisp) => {
               const element = sky.querySelector<HTMLElement>(`#${wisp.id}`);
               if (!element || getComputedStyle(element).display === 'none') return;
               const accentTravel = (mobile ? settings.mobileX : settings.desktopX) * 0.72;
@@ -179,6 +207,7 @@ export function SoftHavenCloudBackground() {
       );
     }, sky);
 
+    refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => {
       disposed = true;
       document.removeEventListener('visibilitychange', syncVisibility);
@@ -188,7 +217,7 @@ export function SoftHavenCloudBackground() {
       media?.revert();
       context.revert();
     };
-  }, [pathname, mode, isMobile]);
+  }, [pathname, mode, isMobile, isTablet, cloudSet]);
 
   if (pathname.startsWith('/admin')) return null;
 
@@ -202,7 +231,7 @@ export function SoftHavenCloudBackground() {
       <div className="soft-sky__light soft-sky__light--mint" data-sky-light />
       {(['far', 'middle', 'near', 'foreground'] as const).map((depth) => (
         <div className={`soft-sky__layer soft-sky__layer--${depth}`} key={depth} data-parallax-layer={depth}>
-          {wisps.filter((wisp) => wisp.depth === depth).map((wisp) => (
+          {(pathname === '/' ? [] : wisps).filter((wisp) => wisp.depth === depth).map((wisp) => (
             <span key={wisp.id} id={wisp.id} className={`soft-sky__wisp ${wisp.className}`} />
           ))}
           {visibleClouds.filter((cloud) => cloud.depth === depth).map((cloud) => (
