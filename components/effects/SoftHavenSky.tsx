@@ -7,13 +7,20 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 type Mode = 'rich' | 'store' | 'product' | 'transaction' | 'standard';
-type Depth = 'far' | 'middle' | 'foreground';
+type Depth = 'haze' | 'far' | 'middle' | 'foreground';
 const profiles: Record<Mode, { desktop: number; tablet: number; mobile: number; motion: number; variant: number }> = {
-  rich: { desktop: 26, tablet: 15, mobile: 11, motion: 1, variant: 0 },
-  store: { desktop: 22, tablet: 15, mobile: 10, motion: .9, variant: 1 },
-  standard: { desktop: 19, tablet: 14, mobile: 10, motion: .85, variant: 2 },
-  product: { desktop: 11, tablet: 10, mobile: 8, motion: .72, variant: 3 },
-  transaction: { desktop: 12, tablet: 10, mobile: 7, motion: .65, variant: 4 },
+  rich: { desktop: 34, tablet: 19, mobile: 13, motion: 1, variant: 0 },
+  store: { desktop: 29, tablet: 19, mobile: 12, motion: .9, variant: 1 },
+  standard: { desktop: 25, tablet: 18, mobile: 12, motion: .85, variant: 2 },
+  product: { desktop: 14, tablet: 13, mobile: 10, motion: .72, variant: 3 },
+  transaction: { desktop: 15, tablet: 13, mobile: 9, motion: .65, variant: 4 },
+};
+const baseCounts: Record<Mode, { desktop: number; tablet: number; mobile: number }> = {
+  rich: { desktop: 26, tablet: 15, mobile: 11 },
+  store: { desktop: 22, tablet: 15, mobile: 10 },
+  standard: { desktop: 19, tablet: 14, mobile: 10 },
+  product: { desktop: 11, tablet: 10, mobile: 8 },
+  transaction: { desktop: 12, tablet: 10, mobile: 7 },
 };
 // Fixed placement records: responsive composition never depends on random values or hydration.
 const placements: Array<{ x: number; y: number; mobileX: number; mobileY: number; width: number; depth: Depth }> = [
@@ -44,11 +51,23 @@ const placements: Array<{ x: number; y: number; mobileX: number; mobileY: number
   { x: 56, y: 12, mobileX: 52, mobileY: 12, width: 150, depth: 'middle' },
   { x: -12, y: 34, mobileX: -20, mobileY: 34, width: 270, depth: 'foreground' },
 ];
+// Small satellites form irregular clusters beside existing clouds, with open sky between groups.
+const satellites: typeof placements = [
+  { x: 8, y: 17, mobileX: 1, mobileY: 16, width: 95, depth: 'haze' },
+  { x: 72, y: 26, mobileX: 77, mobileY: 27, width: 110, depth: 'haze' },
+  { x: 25, y: 83, mobileX: 22, mobileY: 88, width: 80, depth: 'haze' },
+  { x: 55, y: 43, mobileX: 56, mobileY: 40, width: 120, depth: 'haze' },
+  { x: 13, y: 62, mobileX: 6, mobileY: 62, width: 100, depth: 'haze' },
+  { x: 82, y: 79, mobileX: 85, mobileY: 81, width: 125, depth: 'haze' },
+  { x: 3, y: 21, mobileX: -12, mobileY: 19, width: 145, depth: 'middle' },
+  { x: 73, y: 72, mobileX: 70, mobileY: 74, width: 200, depth: 'middle' },
+];
 const assets = ['pastel-blush', 'pastel-blue', 'dream-cloud-01', 'dream-cloud-02', 'dream-cloud-03', 'dream-cloud-04', 'dream-cloud-05', 'dream-cloud-07', 'dream-cloud-08', 'dream-cloud-warm'];
-const movement: Record<Depth, { desktop: number; mobile: number; y: number }> = {
-  far: { desktop: 110, mobile: 38, y: 10 },
-  middle: { desktop: 290, mobile: 95, y: 22 },
-  foreground: { desktop: 440, mobile: 140, y: 34 },
+const movement: Record<Depth, { desktop: number; mobile: number; y: number; scrub: number }> = {
+  haze: { desktop: 40, mobile: 14, y: 4, scrub: .32 },
+  far: { desktop: 220, mobile: 45, y: 10, scrub: .28 },
+  middle: { desktop: 580, mobile: 105, y: 22, scrub: .22 },
+  foreground: { desktop: 880, mobile: 150, y: 34, scrub: .2 },
 };
 function modeFor(path: string): Mode {
   if (path === '/' || path === '/about') return 'rich';
@@ -63,6 +82,7 @@ export function SoftHavenCloudBackground() {
   const pathname = usePathname();
   const mode = modeFor(pathname);
   const profile = profiles[mode];
+  const base = baseCounts[mode];
   const skyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
@@ -74,17 +94,24 @@ export function SoftHavenCloudBackground() {
       media.add({ mobile: '(max-width: 767px)', tablet: '(min-width: 768px) and (max-width: 1100px)', desktop: '(min-width: 1101px)', reduce: '(prefers-reduced-motion: reduce)' }, match => {
         if (match.conditions?.reduce) return;
         const mobile = Boolean(match.conditions?.mobile);
-        const factor = match.conditions?.tablet ? .78 : 1;
-        const timeline = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
-          id: 'softhaven-atmosphere', trigger: document.documentElement, start: 'top top',
-          end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
-          scrub: mobile ? .28 : .35, invalidateOnRefresh: true,
-        } });
+        const factor = match.conditions?.tablet ? .35 : 1;
+        // One context owns the four depths; each gets appropriate smoothing without another RAF loop.
+        const timelines = new Map<Depth, gsap.core.Timeline>();
         sky.querySelectorAll<HTMLElement>('[data-cloud-depth]').forEach((cloud, index) => {
           if (getComputedStyle(cloud).display === 'none') return;
           const depth = cloud.dataset.cloudDepth as Depth;
           const settings = movement[depth];
           const variation = .8 + (index % 4) * .06;
+          let timeline = timelines.get(depth);
+          if (!timeline) {
+            timeline = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
+              id: `softhaven-atmosphere-${depth}`, trigger: document.documentElement, start: 'top top',
+              end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
+              scrub: mobile ? Math.max(.18, settings.scrub - .04) : settings.scrub,
+              invalidateOnRefresh: true,
+            } });
+            timelines.set(depth, timeline);
+          }
           timeline.to(cloud, {
             x: (mobile ? settings.mobile : settings.desktop) * factor * profile.motion * variation,
             y: settings.y * (index % 2 ? 1 : -1) * (mobile ? .4 : factor),
@@ -116,16 +143,19 @@ export function SoftHavenCloudBackground() {
   if (pathname.startsWith('/admin')) return null;
   return <div ref={skyRef} className="sh-atmosphere" data-atmosphere={mode} aria-hidden="true">
     <div className="sh-atmosphere__colour" />
-    {placements.slice(0, profile.desktop).map((cloud, index) => {
+    {[...placements.slice(0, base.desktop), ...satellites.slice(0, profile.desktop - base.desktop)].map((cloud, index) => {
+      const satelliteIndex = index - base.desktop;
+      const mobileVisible = index < base.mobile || (satelliteIndex >= 0 && satelliteIndex < profile.mobile - base.mobile);
+      const tabletVisible = index < base.tablet || (satelliteIndex >= 0 && satelliteIndex < profile.tablet - base.tablet);
       const routeVariation = pathname === '/about' ? 3 : pathname === '/collections' ? 1 : 0;
       const asset = assets[(index + profile.variant * 2 + routeVariation) % assets.length];
       const directory = 'v2';
       const style = {
-        '--cloud-x': `${mode === 'transaction' && cloud.depth !== 'far' ? (index % 2 ? 89 : -10) : cloud.x}%`, '--cloud-y': `${cloud.y}%`,
-        '--cloud-mobile-x': `${mode === 'transaction' && cloud.depth !== 'far' ? (index % 2 ? 87 : -25) : cloud.mobileX}%`, '--cloud-mobile-y': `${cloud.mobileY}%`,
-        '--cloud-width': `${cloud.width}px`, '--cloud-mobile-width': `${Math.round(cloud.width * .58)}px`,
+        '--cloud-x': `${mode === 'transaction' && cloud.depth !== 'far' && cloud.depth !== 'haze' ? (index % 2 ? 89 : -10) : cloud.x}%`, '--cloud-y': `${cloud.y}%`,
+        '--cloud-mobile-x': `${mode === 'transaction' && cloud.depth !== 'far' && cloud.depth !== 'haze' ? (index % 2 ? 87 : -25) : cloud.mobileX}%`, '--cloud-mobile-y': `${cloud.mobileY}%`,
+        '--cloud-flip': satelliteIndex >= 0 && satelliteIndex % 2 ? '-1' : '1', '--cloud-width': `${cloud.width}px`, '--cloud-mobile-width': `${Math.round(cloud.width * .58)}px`,
       } as CSSProperties;
-      return <span key={index} className={`sh-atmosphere__cloud sh-atmosphere__cloud--${cloud.depth}${index >= profile.mobile ? ' sh-atmosphere__cloud--desktop' : ''}${index >= profile.tablet ? ' sh-atmosphere__cloud--wide' : ''}`} data-cloud-depth={cloud.depth} style={style}>
+      return <span key={index} className={`sh-atmosphere__cloud sh-atmosphere__cloud--${cloud.depth}${!mobileVisible ? ' sh-atmosphere__cloud--desktop' : ''}${!tabletVisible ? ' sh-atmosphere__cloud--wide' : ''}`} data-cloud-depth={cloud.depth} style={style}>
         <picture><source media="(max-width: 767px)" srcSet={`/assets/clouds/${directory}/${asset}-mobile.webp`} /><img src={`/assets/clouds/${directory}/${asset}.webp`} alt="" loading="lazy" decoding="async" width="640" height="320" /></picture>
       </span>;
     })}

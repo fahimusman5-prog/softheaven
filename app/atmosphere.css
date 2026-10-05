@@ -1,4 +1,4 @@
-/* One continuous colour field and three scroll-owned cloud depths for customer routes. */
+/* One continuous colour field and four scroll-owned cloud depths for customer routes. */
 .sh-atmosphere{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none;contain:strict;--sky-blush:#f4c0df;--sky-blue:#b6d6fb;--sky-lilac:#d2bdf0;--sky-peach:#ffdac5}
 .sh-atmosphere__colour{position:absolute;inset:0;background:
  radial-gradient(ellipse 46% 47% at 6% 8%,var(--sky-blue),transparent 90%),
@@ -16,9 +16,11 @@
 .sh-atmosphere[data-atmosphere="store"]{--sky-blush:#eac4e8;--sky-blue:#bbd5f7;--sky-peach:#ffdfca}
 .sh-atmosphere[data-atmosphere="transaction"]{--sky-blush:#edcfe5;--sky-blue:#c9def7;--sky-lilac:#ddcff1;--sky-peach:#f7e0d2}
 .sh-atmosphere[data-atmosphere="product"]{--sky-blush:#eed1e7;--sky-blue:#c4dcf6;--sky-peach:#f7dfcc}
-.sh-atmosphere__cloud{position:absolute;display:block;left:var(--cloud-x);top:var(--cloud-y);width:clamp(110px,19vw,var(--cloud-width));height:auto;aspect-ratio:2.3;pointer-events:none;transform-origin:center;will-change:auto}
+.sh-atmosphere__cloud{position:absolute;display:block;left:var(--cloud-x);top:var(--cloud-y);width:clamp(70px,19vw,var(--cloud-width));height:auto;aspect-ratio:2.3;pointer-events:none;transform-origin:center;will-change:auto}
 .sh-atmosphere__cloud picture,.sh-atmosphere__cloud img{display:block;width:100%;height:100%}
 .sh-atmosphere__cloud img{object-fit:contain}
+.sh-atmosphere__cloud picture{transform:scaleX(var(--cloud-flip,1))}
+.sh-atmosphere__cloud--haze{opacity:.24;z-index:0}
 .sh-atmosphere__cloud--far{opacity:.38;z-index:1}
 .sh-atmosphere__cloud--middle{opacity:.68;z-index:2}
 .sh-atmosphere__cloud--foreground{opacity:.78;z-index:3}
@@ -36,6 +38,7 @@ body:has(.sh-atmosphere){animation:none;background:#e9d7ec}
 @media(max-width:767px){
  .sh-atmosphere__cloud--desktop{display:none}
  .sh-atmosphere__cloud{left:var(--cloud-mobile-x);top:var(--cloud-mobile-y);width:var(--cloud-mobile-width);max-width:200px}
+ .sh-atmosphere__cloud--haze{opacity:.2}
  .sh-atmosphere__cloud--far{opacity:.33}
  .sh-atmosphere__cloud--middle{opacity:.58}
  .sh-atmosphere__cloud--foreground{opacity:.65}
