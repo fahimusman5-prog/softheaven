@@ -1,12 +1,12 @@
 import { serverClient } from '@/lib/supabase/server';
-import { AuthForm } from '@/components/auth-form';
+import { AccountAuthEntry } from '@/components/account/auth-entry';
 import { AccountDashboard } from '@/components/account/dashboard';
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'My SoftHaven' };
 export default async function AccountPage() {
   const db = await serverClient();
   const { data: { user } } = await db.auth.getUser();
-  if (!user) return <section className="account-auth"><p className="account-eyebrow">MY SOFTHAVEN</p><h1>Your little SoftHaven corner.</h1><AuthForm /></section>;
+  if (!user) return <AccountAuthEntry />;
   const [orders, rewards, addresses, profile, balance, settings] = await Promise.all([
     db.from('orders').select('*,order_items(name,image,quantity)', { count: 'exact' }).eq('customer_id', user.id).order('created_at', { ascending: false }).limit(25),
     db.from('reward_transactions').select('*').eq('customer_id', user.id).order('created_at', { ascending: false }).limit(100),
