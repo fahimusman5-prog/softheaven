@@ -1,260 +1,125 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useEffect, useRef } from 'react';
+import type { CSSProperties } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-type CloudDepth = 'far' | 'middle' | 'near' | 'foreground';
-
-type CloudDefinition = {
-  id: string;
-  depth: CloudDepth;
-  className: string;
-  asset: string;
-  travel: number;
-  drift?: boolean;
+type Mode = 'rich' | 'store' | 'product' | 'transaction' | 'standard';
+type Depth = 'far' | 'middle' | 'foreground';
+const profiles: Record<Mode, { desktop: number; tablet: number; mobile: number; motion: number; variant: number }> = {
+  rich: { desktop: 18, tablet: 14, mobile: 9, motion: 1, variant: 0 },
+  store: { desktop: 16, tablet: 12, mobile: 8, motion: .9, variant: 1 },
+  standard: { desktop: 14, tablet: 11, mobile: 8, motion: .85, variant: 2 },
+  product: { desktop: 8, tablet: 8, mobile: 6, motion: .72, variant: 3 },
+  transaction: { desktop: 10, tablet: 8, mobile: 6, motion: .65, variant: 4 },
 };
-
-type WispDefinition = {
-  id: string;
-  depth: CloudDepth;
-  className: string;
-};
-
-const depthMotion = {
-  far: { desktopY: 10, mobileY: 4, desktopX: 8, mobileX: 3, desktopScrub: 0.9, mobileScrub: 0.8 },
-  middle: { desktopY: 24, mobileY: 8, desktopX: 16, mobileX: 5, desktopScrub: 0.68, mobileScrub: 0.66 },
-  near: { desktopY: 40, mobileY: 12, desktopX: 24, mobileX: 8, desktopScrub: 0.48, mobileScrub: 0.58 },
-  foreground: { desktopY: 50, mobileY: 14, desktopX: 32, mobileX: 10, desktopScrub: .25, mobileScrub: .2 },
-} satisfies Record<CloudDepth, { desktopY: number; mobileY: number; desktopX: number; mobileX: number; desktopScrub: number; mobileScrub: number }>;
-
-const clouds: CloudDefinition[] = [
-  { id: 'medium-peach-edge', depth: 'far', className: 'soft-sky__cloud--medium-peach-edge', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: .45 },
-  { id: 'medium-lilac-edge', depth: 'middle', className: 'soft-sky__cloud--medium-lilac-edge', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: .5 },
-  { id: 'medium-blush', depth: 'far', className: 'soft-sky__cloud--medium-blush', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.35 },
-  { id: 'medium-lavender', depth: 'middle', className: 'soft-sky__cloud--medium-lavender', asset: '/assets/clouds/soft-cloud-cluster.webp', travel: 0.3 },
-  { id: 'medium-blue', depth: 'far', className: 'soft-sky__cloud--medium-blue', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.25 },
-  { id: 'foreground-left', depth: 'foreground', className: 'soft-sky__cloud--foreground-left', asset: '/assets/clouds/soft-cloud-bank.webp', travel: 1 },
-  { id: 'far-left', depth: 'far', className: 'soft-sky__cloud--far-left', asset: '/assets/clouds/generated/dream-cloud-01.webp', travel: 0.82, drift: true },
-  { id: 'far-right', depth: 'far', className: 'soft-sky__cloud--far-right', asset: '/assets/clouds/generated/dream-cloud-06.webp', travel: 0.94 },
-  { id: 'far-high-left', depth: 'far', className: 'soft-sky__cloud--far-high-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-07.webp', travel: 0.74 },
-  { id: 'far-high-right', depth: 'far', className: 'soft-sky__cloud--far-high-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-02.webp', travel: 1.12 },
-  { id: 'middle-left', depth: 'middle', className: 'soft-sky__cloud--middle-left', asset: '/assets/clouds/generated/dream-cloud-03.webp', travel: 0.9, drift: true },
-  { id: 'middle-right', depth: 'middle', className: 'soft-sky__cloud--middle-right', asset: '/assets/clouds/generated/dream-cloud-04.webp', travel: 1.04 },
-  { id: 'middle-small-left', depth: 'middle', className: 'soft-sky__cloud--middle-small-left soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-08.webp', travel: 0.82 },
-  { id: 'middle-small-right', depth: 'middle', className: 'soft-sky__cloud--middle-small-right soft-sky__cloud--accent', asset: '/assets/clouds/generated/dream-cloud-05.webp', travel: 1.14, drift: true },
-  { id: 'middle-warm', depth: 'middle', className: 'soft-sky__cloud--middle-warm', asset: '/assets/clouds/generated/dream-cloud-warm.webp', travel: 1.08 },
-  { id: 'near-left', depth: 'near', className: 'soft-sky__cloud--near-left', asset: '/assets/clouds/soft-cloud-bank.webp', travel: 0.9, drift: true },
-  { id: 'near-right', depth: 'near', className: 'soft-sky__cloud--near-right', asset: '/assets/clouds/soft-cloud-cluster.webp', travel: 1.08 },
-  { id: 'near-small-left', depth: 'near', className: 'soft-sky__cloud--near-small-left soft-sky__cloud--accent', asset: '/assets/clouds/soft-cloud-distant.webp', travel: 0.76 },
+// Fixed placement records: responsive composition never depends on random values or hydration.
+const placements: Array<{ x: number; y: number; mobileX: number; mobileY: number; width: number; depth: Depth }> = [
+  { x: -4, y: 12, mobileX: -13, mobileY: 12, width: 230, depth: 'middle' },
+  { x: 77, y: 19, mobileX: 72, mobileY: 22, width: 250, depth: 'middle' },
+  { x: 28, y: 8, mobileX: 32, mobileY: 8, width: 160, depth: 'far' },
+  { x: 1, y: 46, mobileX: -15, mobileY: 48, width: 270, depth: 'middle' },
+  { x: 79, y: 55, mobileX: 73, mobileY: 66, width: 270, depth: 'middle' },
+  { x: 20, y: 78, mobileX: 16, mobileY: 86, width: 180, depth: 'far' },
+  { x: 58, y: 38, mobileX: 51, mobileY: 37, width: 160, depth: 'far' },
+  { x: 68, y: 83, mobileX: 62, mobileY: 91, width: 310, depth: 'foreground' },
+  { x: -5, y: 89, mobileX: -16, mobileY: 78, width: 320, depth: 'foreground' },
+  { x: 38, y: 64, mobileX: 40, mobileY: 59, width: 150, depth: 'far' },
+  { x: 9, y: 27, mobileX: 4, mobileY: 30, width: 200, depth: 'middle' },
+  { x: 49, y: 92, mobileX: 45, mobileY: 96, width: 190, depth: 'middle' },
+  { x: 63, y: 5, mobileX: 63, mobileY: 5, width: 170, depth: 'far' },
+  { x: 88, y: 37, mobileX: 85, mobileY: 42, width: 220, depth: 'middle' },
+  { x: 21, y: 58, mobileX: 17, mobileY: 56, width: 160, depth: 'far' },
+  { x: 46, y: 21, mobileX: 43, mobileY: 20, width: 140, depth: 'far' },
+  { x: 8, y: 69, mobileX: 3, mobileY: 72, width: 220, depth: 'middle' },
+  { x: 86, y: 74, mobileX: 82, mobileY: 75, width: 200, depth: 'middle' },
 ];
-
-// Homepage uses three bounded depth planes; other routes retain their existing sky.
-const homeCloudIds = ['far-left', 'far-right', 'far-high-right', 'medium-blue', 'middle-left', 'middle-right', 'middle-small-left', 'middle-small-right', 'medium-lavender', 'medium-peach-edge', 'near-right', 'foreground-left'];
-const homeClouds = homeCloudIds.map((id) => {
-  const cloud = clouds.find((item) => item.id === id)!;
-  const depth: CloudDepth = ['near-right', 'foreground-left'].includes(id) ? 'foreground' : ['far-left', 'far-right', 'far-high-right', 'medium-blue'].includes(id) ? 'far' : 'middle';
-  return { ...cloud, depth, travel: .72 + (homeCloudIds.indexOf(id) % 4) * .09 };
-});
-const homeMotion = {
-  far: { desktopX: 22, mobileX: 10, desktopY: 5, mobileY: 2, desktopScrub: 1.1, mobileScrub: .8 },
-  middle: { desktopX: 68, mobileX: 28, desktopY: 9, mobileY: 4, desktopScrub: 1.1, mobileScrub: .8 },
-  near: depthMotion.near,
-  foreground: { desktopX: 108, mobileX: 42, desktopY: 13, mobileY: 6, desktopScrub: 1.2, mobileScrub: .9 },
+const assets = ['pastel-blush', 'pastel-blue', 'dream-cloud-01', 'dream-cloud-02', 'dream-cloud-03', 'dream-cloud-04', 'dream-cloud-05', 'dream-cloud-07', 'dream-cloud-08', 'dream-cloud-warm'];
+const movement: Record<Depth, { desktop: number; mobile: number; y: number }> = {
+  far: { desktop: 55, mobile: 27, y: 10 },
+  middle: { desktop: 145, mobile: 68, y: 22 },
+  foreground: { desktop: 220, mobile: 100, y: 34 },
 };
-
-const wisps: WispDefinition[] = [
-  { id: 'wisp-upper-center', depth: 'far', className: 'soft-sky__wisp--upper-center soft-sky__wisp--mobile' },
-  { id: 'wisp-middle-right', depth: 'middle', className: 'soft-sky__wisp--middle-right soft-sky__wisp--mobile' },
-  { id: 'wisp-lower-center', depth: 'near', className: 'soft-sky__wisp--lower-center' },
-];
-
-function getAtmosphereMode(pathname: string) {
-  if (pathname === '/') return 'hero';
-  if (pathname.startsWith('/collections')) return 'collections';
-  if (pathname.startsWith('/about')) return 'story';
-  if (pathname.startsWith('/shop')) return 'shop';
-  if (pathname.startsWith('/product/')) return 'product';
-  if (pathname.startsWith('/contact')) return 'contact';
-  if (pathname.startsWith('/cart')) return 'minimal';
-  if (pathname.startsWith('/checkout') || pathname.startsWith('/order-confirmation')) return 'quiet';
-  return 'standard';
+function modeFor(path: string): Mode {
+  if (path === '/' || path === '/about') return 'rich';
+  if (path.startsWith('/shop') || path.startsWith('/collections')) return 'store';
+  if (path.startsWith('/product/')) return 'product';
+  if (/^\/(cart|checkout|account|orders|order-tracking|tracking)(\/|$)/.test(path)) return 'transaction';
+  if (path === '/contact' || path === '/order-confirmation') return 'standard';
+  return 'rich';
 }
 
 export function SoftHavenCloudBackground() {
-  const skyRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const mode = getAtmosphereMode(pathname);
-  const isMobile = useSyncExternalStore(
-    (notify) => { const query = window.matchMedia('(max-width: 767px)'); query.addEventListener('change', notify); return () => query.removeEventListener('change', notify); },
-    () => window.matchMedia('(max-width: 767px)').matches,
-    () => false,
-  );
-  const isTablet = useSyncExternalStore(
-    (notify) => { const query = window.matchMedia('(min-width: 768px) and (max-width: 1100px)'); query.addEventListener('change', notify); return () => query.removeEventListener('change', notify); },
-    () => window.matchMedia('(min-width: 768px) and (max-width: 1100px)').matches,
-    () => false,
-  );
-  const cloudSet = pathname === '/' ? homeClouds : clouds;
-  const quiet = mode === 'minimal' || mode === 'quiet' || mode === 'product';
-  const visibleClouds = cloudSet.filter(cloud => {
-    if (pathname === '/') {
-      if (isMobile) return ['far-left', 'far-right', 'middle-left', 'middle-right', 'foreground-left'].includes(cloud.id);
-      if (isTablet) return !['far-high-right', 'middle-small-left', 'medium-lavender', 'medium-peach-edge'].includes(cloud.id);
-      return true;
-    }
-    if (isMobile) return (quiet ? ['far-left', 'far-right'] : ['far-left', 'far-right', 'middle-left', 'middle-right', ...(pathname === '/' ? ['foreground-left'] : [])]).includes(cloud.id);
-    if (quiet) return cloud.depth === 'far' && !cloud.className.includes('--accent');
-    if (mode === 'shop' || mode === 'contact') return ['far', 'middle'].includes(cloud.depth) && !cloud.className.includes('--accent');
-    return pathname === '/' || cloud.depth !== 'foreground';
-  });
-
+  const mode = modeFor(pathname);
+  const profile = profiles[mode];
+  const skyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
     const sky = skyRef.current;
     if (!sky) return;
-
-    const syncVisibility = () => sky.classList.toggle('is-page-hidden', document.hidden);
-    syncVisibility();
-    document.addEventListener('visibilitychange', syncVisibility);
-
     gsap.registerPlugin(ScrollTrigger);
-    let media: ReturnType<typeof gsap.matchMedia> | undefined;
-    let refreshFrame = 0;
-    let measuredHeight = document.documentElement.scrollHeight;
-    const refreshForLayoutChange = () => {
-      const nextHeight = document.documentElement.scrollHeight;
-      if (nextHeight === measuredHeight) return;
-      measuredHeight = nextHeight;
-      window.cancelAnimationFrame(refreshFrame);
-      refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
-    };
-    const page = sky.closest<HTMLElement>('.softhaven-app');
-    const resizeObserver = typeof ResizeObserver !== 'undefined' && page
-      ? new ResizeObserver(refreshForLayoutChange)
-      : undefined;
-    resizeObserver?.observe(page!);
-    page?.addEventListener('load', refreshForLayoutChange, true);
-
-    let disposed = false;
-    void document.fonts.ready.then(() => { if (!disposed) ScrollTrigger.refresh(); });
+    const media = gsap.matchMedia();
     const context = gsap.context(() => {
-      media = gsap.matchMedia(sky);
-      media.add(
-        {
-          reduce: '(prefers-reduced-motion: reduce)',
-          mobile: '(max-width: 767px)',
-          tablet: '(min-width: 768px) and (max-width: 1100px)',
-          desktop: '(min-width: 1101px)',
-        },
-        (match) => {
-          if (match.conditions?.reduce) return;
-          const mobile = Boolean(match.conditions?.mobile);
-          (['far', 'middle', 'near', 'foreground'] as const).forEach((depth) => {
-            const layer = sky.querySelector<HTMLElement>(`[data-parallax-layer="${depth}"]`);
-            if (!layer || !layer.children.length || getComputedStyle(layer).display === 'none') return;
-
-            const settings = pathname === '/' ? homeMotion[depth] : depthMotion[depth];
-            const tabletFactor = pathname === '/' && match.conditions?.tablet ? .7 : 1;
-            const motion = gsap.timeline({
-              defaults: { ease: 'none' },
-              scrollTrigger: {
-                id: `soft-sky-${depth}`,
-                trigger: document.documentElement,
-                start: 'top top',
-                end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
-                scrub: mobile ? settings.mobileScrub : settings.desktopScrub,
-                invalidateOnRefresh: true,
-              },
-            });
-            motion.to(layer, { y: () => -(mobile ? settings.mobileY : settings.desktopY), duration: 1 }, 0);
-
-            cloudSet.filter((cloud) => cloud.depth === depth).forEach((cloud) => {
-              const element = sky.querySelector<HTMLElement>(`#${cloud.id}`);
-              if (element && getComputedStyle(element).display !== 'none') {
-                const direction = pathname === '/' ? 1 : cloud.className.includes('--right') ? -1 : 1;
-                const horizontalTravel = (mobile ? settings.mobileX : settings.desktopX) * tabletFactor;
-                motion.to(element, { x: direction * horizontalTravel * cloud.travel, duration: 1 }, 0);
-              }
-            });
-            (pathname === '/' ? [] : wisps).filter((wisp) => wisp.depth === depth).forEach((wisp) => {
-              const element = sky.querySelector<HTMLElement>(`#${wisp.id}`);
-              if (!element || getComputedStyle(element).display === 'none') return;
-              const accentTravel = (mobile ? settings.mobileX : settings.desktopX) * 0.72;
-              motion.to(element, { x: wisp.className.includes('right') ? -accentTravel : accentTravel, duration: 1 }, 0);
-            });
-          });
-
-          const editorialImage = mobile ? null : document.querySelector<HTMLElement>('[data-sky-editorial-image]');
-          if (editorialImage) {
-            gsap.to(editorialImage, {
-              y: 26,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: editorialImage.parentElement,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 0.6,
-              },
-            });
-          }
-
-
-
-        },
-        sky,
-      );
+      media.add({ mobile: '(max-width: 767px)', tablet: '(min-width: 768px) and (max-width: 1100px)', desktop: '(min-width: 1101px)', reduce: '(prefers-reduced-motion: reduce)' }, match => {
+        if (match.conditions?.reduce) return;
+        const mobile = Boolean(match.conditions?.mobile);
+        const factor = match.conditions?.tablet ? .78 : 1;
+        const timeline = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
+          id: 'softhaven-atmosphere', trigger: document.documentElement, start: 'top top',
+          end: () => `+=${Math.max(1, ScrollTrigger.maxScroll(window))}`,
+          scrub: mobile ? .35 : .5, invalidateOnRefresh: true,
+        } });
+        sky.querySelectorAll<HTMLElement>('[data-cloud-depth]').forEach((cloud, index) => {
+          if (getComputedStyle(cloud).display === 'none') return;
+          const depth = cloud.dataset.cloudDepth as Depth;
+          const settings = movement[depth];
+          const variation = .8 + (index % 4) * .06;
+          timeline.to(cloud, {
+            x: (mobile ? settings.mobile : settings.desktop) * factor * profile.motion * variation,
+            y: settings.y * (index % 2 ? 1 : -1) * (mobile ? .4 : factor),
+            ...(depth === 'foreground' ? { scale: 1.025 } : {}), duration: 1,
+          }, 0);
+        });
+        const editorialImage = mobile ? null : document.querySelector<HTMLElement>('[data-sky-editorial-image]');
+        if (editorialImage) gsap.to(editorialImage, { y: 26, ease: 'none', scrollTrigger: { trigger: editorialImage.parentElement, start: 'top bottom', end: 'bottom top', scrub: .6 } });
+      });
     }, sky);
-
-    refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
+    let disposed = false;
+    let frame = 0;
+    let height = document.documentElement.scrollHeight;
+    const refresh = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { if (!disposed) ScrollTrigger.refresh(); }); };
+    const page = sky.parentElement;
+    const observer = new ResizeObserver(() => {
+      const next = document.documentElement.scrollHeight;
+      if (next !== height) { height = next; refresh(); }
+    });
+    if (page) observer.observe(page);
+    page?.addEventListener('load', refresh, true);
+    void document.fonts.ready.then(() => { if (!disposed) refresh(); });
+    refresh();
     return () => {
-      disposed = true;
-      document.removeEventListener('visibilitychange', syncVisibility);
-      page?.removeEventListener('load', refreshForLayoutChange, true);
-      resizeObserver?.disconnect();
-      window.cancelAnimationFrame(refreshFrame);
-      media?.revert();
-      context.revert();
+      disposed = true; cancelAnimationFrame(frame); observer.disconnect();
+      page?.removeEventListener('load', refresh, true); media.revert(); context.revert();
     };
-  }, [pathname, mode, isMobile, isTablet, cloudSet]);
-
+  }, [pathname, profile]);
   if (pathname.startsWith('/admin')) return null;
-
-  return (
-    <div ref={skyRef} className="soft-sky" data-mode={mode} aria-hidden="true">
-      <div className="soft-sky__base" />
-      <div className="soft-sky__light soft-sky__light--blush" data-sky-light />
-      <div className="soft-sky__light soft-sky__light--blue" data-sky-light />
-      <div className="soft-sky__light soft-sky__light--lilac" data-sky-light />
-      <div className="soft-sky__light soft-sky__light--peach" data-sky-light />
-      <div className="soft-sky__light soft-sky__light--mint" data-sky-light />
-      {(['far', 'middle', 'near', 'foreground'] as const).map((depth) => (
-        <div className={`soft-sky__layer soft-sky__layer--${depth}`} key={depth} data-parallax-layer={depth}>
-          {(pathname === '/' ? [] : wisps).filter((wisp) => wisp.depth === depth).map((wisp) => (
-            <span key={wisp.id} id={wisp.id} className={`soft-sky__wisp ${wisp.className}`} />
-          ))}
-          {visibleClouds.filter((cloud) => cloud.depth === depth).map((cloud) => (
-            <span
-              key={cloud.id}
-              id={cloud.id}
-              className={`soft-sky__cloud ${cloud.className}`}
-            >
-              <span className={`soft-sky__cloud-ambient${cloud.drift && pathname !== '/' ? ' soft-sky__cloud-ambient--drift' : ''}`}>
-                <picture>
-                  <source media="(max-width: 767px)" srcSet={cloud.asset.replace('.webp', '-mobile.webp')} />
-                  <img src={cloud.asset} alt="" loading="lazy" decoding="async" />
-                </picture>
-              </span>
-            </span>
-          ))}
-        </div>
-      ))}
-      <div className="soft-sky__ambient-fog" aria-hidden="true">
-        <span className="soft-sky__ambient-fog-layer soft-sky__ambient-fog-layer--far" />
-        <span className="soft-sky__ambient-fog-layer soft-sky__ambient-fog-layer--middle" />
-      </div>
-      <div className="soft-sky__center-light" />
-    </div>
-  );
+  return <div ref={skyRef} className="sh-atmosphere" data-atmosphere={mode} aria-hidden="true">
+    <div className="sh-atmosphere__colour" />
+    {placements.slice(0, profile.desktop).map((cloud, index) => {
+      const routeVariation = pathname === '/about' ? 3 : pathname === '/collections' ? 1 : 0;
+      const asset = assets[(index + profile.variant * 2 + routeVariation) % assets.length];
+      const directory = 'v2';
+      const style = {
+        '--cloud-x': `${mode === 'transaction' && cloud.depth !== 'far' ? (index % 2 ? 89 : -10) : cloud.x}%`, '--cloud-y': `${cloud.y}%`,
+        '--cloud-mobile-x': `${mode === 'transaction' && cloud.depth !== 'far' ? (index % 2 ? 87 : -25) : cloud.mobileX}%`, '--cloud-mobile-y': `${cloud.mobileY}%`,
+        '--cloud-width': `${cloud.width}px`, '--cloud-mobile-width': `${Math.round(cloud.width * .58)}px`,
+      } as CSSProperties;
+      return <span key={index} className={`sh-atmosphere__cloud sh-atmosphere__cloud--${cloud.depth}${index >= profile.mobile ? ' sh-atmosphere__cloud--desktop' : ''}${index >= profile.tablet ? ' sh-atmosphere__cloud--wide' : ''}`} data-cloud-depth={cloud.depth} style={style}>
+        <picture><source media="(max-width: 767px)" srcSet={`/assets/clouds/${directory}/${asset}-mobile.webp`} /><img src={`/assets/clouds/${directory}/${asset}.webp`} alt="" loading="lazy" decoding="async" width="640" height="320" /></picture>
+      </span>;
+    })}
+  </div>;
 }

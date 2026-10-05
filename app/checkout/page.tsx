@@ -300,19 +300,6 @@ export default function CheckoutPage() {
   return (
     <div className="sh-checkout">
       <div className="sh-checkout__atmosphere" aria-hidden="true">
-        {["top-left", "top-right", "bottom-left", "bottom-right"].map(
-          (position, i) => (
-            <Image
-              key={position}
-              className={`sh-checkout__cloud sh-checkout__cloud--${position}`}
-              src={`/assets/clouds/${i < 2 ? "soft-cloud-cluster.webp" : "soft-cloud-bank.webp"}`}
-              alt=""
-              width={850}
-              height={400}
-              unoptimized
-            />
-          ),
-        )}
         <span className="sh-checkout__heart">♡</span>
       </div>
       <div className="sh-checkout__shell">

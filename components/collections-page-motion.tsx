@@ -21,22 +21,11 @@ export function CollectionsPageMotion({ children }: { children: React.ReactNode 
     const context = gsap.context(() => {
       media.add({ reduce: '(prefers-reduced-motion: reduce)', mobile: '(max-width: 700px)', desktop: '(min-width: 701px)' }, match => {
         if (match.conditions?.reduce) return;
-        const mobile = Boolean(match.conditions?.mobile);
         // Fully visible server HTML is the baseline; entry motion never hides content.
         gsap.fromTo(node.querySelectorAll('[data-hero-enter]'), { y: 16, opacity: .72 }, { y: 0, opacity: 1, duration: .85, stagger: .09, ease: 'power2.out', clearProps: 'transform,opacity' });
         const heroArt = node.querySelector<HTMLElement>('[data-hero-art]');
         if (heroArt) gsap.fromTo(heroArt, { y: 12, opacity: .85 }, { y: 0, opacity: 1, duration: 1.1, ease: 'power2.out', clearProps: 'transform,opacity' });
-        node.querySelectorAll<HTMLElement>('[data-cloud-depth]').forEach((cloud, index) => {
-          const section = cloud.closest('section');
-          const depth = cloud.dataset.cloudDepth as 'far' | 'mid' | 'front';
-          const travel = (mobile ? { far: 4, mid: 8, front: 14 } : { far: 10, mid: 24, front: 40 })[depth];
-          const direction = depth === 'far' && index % 2 === 0 ? 1 : -1;
-          gsap.fromTo(cloud, { x: () => -direction * travel * .35 }, {
-            x: () => direction * travel,
-            ease: 'none',
-            scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true },
-          });
-        });
+
       });
       media.add('(prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine)', () => {
         const hero = node.querySelector<HTMLElement>('[data-collections-section="hero"]');

@@ -13,10 +13,9 @@ export function StorefrontFrame({
   background: React.ReactNode;
 }) {
   const pathname = usePathname();
-  if (pathname === '/checkout') return <main id="main-content">{children}</main>;
   const admin = pathname.startsWith('/admin');
-  if (pathname === '/account' || pathname.startsWith('/account/'))
-    return <main id="main-content">{children}</main>;
+  if (pathname === '/checkout' || pathname === '/account' || pathname.startsWith('/account/'))
+    return <div className="softhaven-app sh-transaction-shell">{background}<main id="main-content">{children}</main></div>;
   return admin ? (
     <>{children}</>
   ) : (

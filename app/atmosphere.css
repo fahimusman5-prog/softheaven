@@ -1,0 +1,46 @@
+/* One continuous colour field and three scroll-owned cloud depths for customer routes. */
+.sh-atmosphere{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;user-select:none;contain:strict;--sky-blush:#f4c0df;--sky-blue:#b6d6fb;--sky-lilac:#d2bdf0;--sky-peach:#ffdac5}
+.sh-atmosphere__colour{position:absolute;inset:0;background:
+ radial-gradient(ellipse 46% 47% at 6% 8%,var(--sky-blue),transparent 90%),
+ radial-gradient(ellipse 43% 46% at 50% 7%,var(--sky-blush),transparent 91%),
+ radial-gradient(ellipse 46% 46% at 94% 15%,#c9c6f5,transparent 91%),
+ radial-gradient(ellipse 39% 48% at 5% 54%,#e8bce2,transparent 90%),
+ radial-gradient(ellipse 38% 38% at 49% 40%,var(--sky-peach),transparent 94%),
+ radial-gradient(ellipse 41% 38% at 64% 62%,#c8daf7,transparent 95%),
+ radial-gradient(ellipse 45% 43% at 94% 56%,#d0bdf0,transparent 91%),
+ radial-gradient(ellipse 49% 44% at 7% 96%,#f9c9cc,transparent 91%),
+ radial-gradient(ellipse 46% 37% at 49% 96%,#dfc3f0,transparent 95%),
+ radial-gradient(ellipse 44% 40% at 93% 96%,#c4def6,transparent 92%),
+ radial-gradient(ellipse 19% 24% at 73% 72%,#d8e9df,transparent 93%),
+ linear-gradient(135deg,#e0d4f5,#f9dce2 45%,#f6e2bc 70%,#d9d8f2)}
+.sh-atmosphere[data-atmosphere="store"]{--sky-blush:#eac4e8;--sky-blue:#bbd5f7;--sky-peach:#ffdfca}
+.sh-atmosphere[data-atmosphere="transaction"]{--sky-blush:#edcfe5;--sky-blue:#c9def7;--sky-lilac:#ddcff1;--sky-peach:#f7e0d2}
+.sh-atmosphere[data-atmosphere="product"]{--sky-blush:#eed1e7;--sky-blue:#c4dcf6;--sky-peach:#f7dfcc}
+.sh-atmosphere__cloud{position:absolute;display:block;left:var(--cloud-x);top:var(--cloud-y);width:clamp(110px,19vw,var(--cloud-width));height:auto;aspect-ratio:2.3;pointer-events:none;transform-origin:center;will-change:auto}
+.sh-atmosphere__cloud picture,.sh-atmosphere__cloud img{display:block;width:100%;height:100%}
+.sh-atmosphere__cloud img{object-fit:contain}
+.sh-atmosphere__cloud--far{opacity:.38;z-index:1}
+.sh-atmosphere__cloud--middle{opacity:.68;z-index:2}
+.sh-atmosphere__cloud--foreground{opacity:.78;z-index:3}
+/* Deeper interior clouds remain translucent; content owns the next stacking level. */
+.sh-transaction-shell{position:relative;isolation:isolate;min-height:100dvh}
+.sh-transaction-shell>main{position:relative;z-index:2}
+.sh-transaction-shell .account-world,.sh-transaction-shell .sh-checkout{background:transparent}
+.sh-transaction-shell .account-world::before,.sh-transaction-shell .account-world::after{content:none}
+body:has(.sh-atmosphere){animation:none;background:#e9d7ec}
+@media(min-width:768px) and (max-width:1100px){
+ .sh-atmosphere__cloud--wide{display:none}
+ .sh-atmosphere__cloud{width:min(var(--cloud-width),235px)}
+ .sh-atmosphere__cloud--foreground{width:260px}
+}
+@media(max-width:767px){
+ .sh-atmosphere__cloud--desktop{display:none}
+ .sh-atmosphere__cloud{left:var(--cloud-mobile-x);top:var(--cloud-mobile-y);width:var(--cloud-mobile-width);max-width:200px}
+ .sh-atmosphere__cloud--far{opacity:.33}
+ .sh-atmosphere__cloud--middle{opacity:.58}
+ .sh-atmosphere__cloud--foreground{opacity:.65}
+}
+@media(prefers-reduced-motion:reduce){.sh-atmosphere__cloud{transform:none!important;will-change:auto}}
+.sh-atmosphere[data-atmosphere="transaction"] .sh-atmosphere__cloud--middle{opacity:.45}
+.sh-atmosphere[data-atmosphere="transaction"] .sh-atmosphere__cloud--far{opacity:.28}
+body:has(.sh-atmosphere)::before{content:none;animation:none}

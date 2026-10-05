@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -209,12 +208,7 @@ export function CollectionsFilmStrip({ collections }: { collections: SoftHavenCo
         viewport.addEventListener('pointerup', up);
         viewport.addEventListener('pointercancel', up);
         viewport.addEventListener('click', click, true);
-        // Each layer has one scroll owner, independent of ribbon/card transforms.
-        section.querySelectorAll<HTMLElement>('[data-film-cloud]').forEach(cloud => {
-          const depth = cloud.dataset.filmCloud as 'far' | 'mid' | 'front';
-          const distance = (mobile ? { far: 4, mid: 8, front: 14 } : { far: 10, mid: 24, front: 40 })[depth];
-          gsap.fromTo(cloud, { x: () => distance * .5 }, { x: () => -distance, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
-        });
+
         gsap.fromTo(section.querySelectorAll('[data-film-enter]'), { y: 12, opacity: .8 }, { y: 0, opacity: 1, duration: .8, stagger: .08, clearProps: 'transform,opacity', scrollTrigger: { trigger: section, start: 'top 85%', once: true } });
         return () => {
           trigger.kill(); manualTween?.kill();
@@ -269,8 +263,5 @@ export function CollectionsFilmStrip({ collections }: { collections: SoftHavenCo
       <button type="button" className={styles.controlArrow} aria-label="Next collection" onClick={() => moveTo.current(Math.min(count - 1, activeIndex.current + 1))}>→</button>
       <span className={styles.status} aria-hidden="true"><span data-reel-current>01</span> / {String(count).padStart(2, '0')}</span>
     </div>
-    <span className={`${styles.cloud} ${styles.farCloud}`} data-film-cloud="far" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-distant.webp" alt="" width={900} height={200} unoptimized /></span>
-    <span className={`${styles.cloud} ${styles.midCloud}`} data-film-cloud="mid" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-cluster.webp" alt="" width={900} height={500} unoptimized /></span>
-    <span className={`${styles.cloud} ${styles.frontCloud}`} data-film-cloud="front" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" width={1400} height={303} unoptimized /></span>
   </section>;
 }
