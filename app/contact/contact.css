@@ -361,3 +361,5 @@
   .contact-field,
   .contact-send { transition: none; }
 }
+
+.contact-panels.contact-panels--single{grid-template-columns:minmax(0,1fr);max-width:720px;margin-inline:auto}

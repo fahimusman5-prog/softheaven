@@ -16,16 +16,16 @@ Required confirmations:
 - Delivery coverage, estimated delivery time, order-processing time, failed delivery/redelivery arrangements.
 - Canonical website URL and approved policy update date.
 
-Review policy wording with the merchant before replacing bracketed values. Do not invent a rule simply to clear a placeholder.
+Review policy wording with the merchant before configuring optional values. Missing fields remain null and are never displayed to customers.
 
 ## Customer-facing implementation
 
 - Existing About, Shop, Collections, product detail, Cart and Checkout routes retained.
 - Privacy, Returns/Refunds, Shipping/Delivery and Terms pages added.
-- Cancellation Policy is independently linked at `/returns-refunds#cancellation`.
+- Order Cancellation Policy is a clearly titled section within `/returns-refunds#cancellation`.
 - Contact page reuses public settings and displays merchant identity/contact details.
 - Contact composer opens an email application only when a support email exists; it does not claim to send a message automatically.
-- Footer links all policies and customer-care routes; copyright year is dynamic.
+- Minimal footer has Shop, Explore, Customer Care and Legal groups; no newsletter or business directory. Copyright year is dynamic.
 - Checkout links Terms, Privacy and Returns immediately before its final order button.
 - Currency remains LKR; delivery fees and totals remain derived by existing checkout logic.
 

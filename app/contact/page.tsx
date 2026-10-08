@@ -5,7 +5,7 @@ import { useState, type FormEvent } from 'react';
 import { useCatalogue } from '@/components/catalogue-provider';
 import './contact.css';
 import '@/components/policy-page.css';
-import { resolveBusiness, isConfirmed } from '@/lib/business';
+import { resolveBusiness, confirmedUrl } from '@/lib/business';
 import { BusinessDetails } from '@/components/business-details';
 
 type Channel = {
@@ -106,10 +106,10 @@ export default function ContactPage() {
   const { settings } = useCatalogue();
   const business = resolveBusiness(settings);
   const siteConfig = {
-    contact: { email: isConfirmed(business.supportEmail) ? business.supportEmail : null },
-    social: settings.social ?? {},
+    contact: { email: business.supportEmail },
+    social: Object.fromEntries(Object.entries(settings.social ?? {}).map(([key, value]) => [key, confirmedUrl(value)])),
   };
-  const channels: (Channel & { href: string | null })[] = [
+  const channels = ([
     {
       name: 'Email',
       detail: siteConfig.contact.email ?? 'No public address',
@@ -148,7 +148,7 @@ export default function ContactPage() {
       icon: 'tiktok',
       href: siteConfig.social.tiktok,
     },
-  ];
+  ] satisfies (Channel & { href: string | null })[]).filter(channel => Boolean(channel.href));
   const hasConfiguredChannels = channels.some((channel) =>
     Boolean(channel.href),
   );
@@ -157,7 +157,7 @@ export default function ContactPage() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!siteConfig.contact.email) { setNotice('Support email is not configured yet. No message has been sent.'); return; }
+    if (!siteConfig.contact.email) return;
     const data = new FormData(event.currentTarget);
     const subject = encodeURIComponent('SoftHaven support: ' + String(data.get('topic')));
     const body = encodeURIComponent('Name: ' + String(data.get('name')) + '\nReply email: ' + String(data.get('email')) + '\n\n' + message);
@@ -182,7 +182,7 @@ export default function ContactPage() {
         </p>
       </header>
 
-      <div className="contact-panels">
+      <div className={`contact-panels${siteConfig.contact.email ? '' : ' contact-panels--single'}`}>
         <section
           className="contact-panel contact-channels"
           aria-labelledby="contact-channels-title"
@@ -190,9 +190,7 @@ export default function ContactPage() {
           <div className="contact-panel-heading">
             <h2 id="contact-channels-title">Let’s Stay in Touch</h2>
             <p>
-              We keep our public contact details verified. Channels without a
-              confirmed address stay unpublished rather than sending you to an
-              unverified account.
+              For order questions, include your order number so we can help you find the right information.
             </p>
           </div>
           <ul className="contact-channel-list">
@@ -237,13 +235,12 @@ export default function ContactPage() {
           </ul>
           {!hasConfiguredChannels && (
             <p className="contact-verification">
-              <span aria-hidden="true">ⓘ</span> No verified public contact
-              destinations are configured yet.
+              View your orders and delivery details in <a href="/account">your SoftHaven account</a>.
             </p>
           )}
         </section>
 
-        <section
+        {siteConfig.contact.email && <section
           className="contact-panel contact-message-panel"
           aria-labelledby="contact-form-title"
         >
@@ -344,9 +341,9 @@ export default function ContactPage() {
               </p>
             )}
           </form>
-        </section>
+        </section>}
       </div>
-      <section className="contact-business" aria-labelledby="business-title"><h2 id="business-title">Business &amp; support details</h2><BusinessDetails business={business}/><p>Bracketed information requires merchant confirmation before publication.</p></section>
+      {[business.registeredBusinessName,business.businessAddress,business.supportEmail,business.supportPhone,business.supportHours,business.businessRegistrationNumber].some(Boolean) && <section className="contact-business" aria-labelledby="business-title"><h2 id="business-title">Business &amp; support details</h2><BusinessDetails business={business}/></section>}
     </div></StoreMotion>
   );
 }
