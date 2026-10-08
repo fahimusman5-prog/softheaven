@@ -33,6 +33,7 @@ body:has(.sh-atmosphere){animation:none;background:#e9d7ec}
 @media(min-width:768px) and (max-width:1100px){
  .sh-atmosphere__cloud--wide{display:none}
  .sh-atmosphere__cloud{width:min(var(--cloud-width),235px)}
+ .sh-atmosphere__cloud[data-cloud-coverage]{left:var(--cloud-tablet-x);top:var(--cloud-tablet-y)}
  .sh-atmosphere__cloud--foreground{width:260px}
 }
 @media(max-width:767px){

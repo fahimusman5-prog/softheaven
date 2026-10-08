@@ -23,7 +23,12 @@ const baseCounts: Record<Mode, { desktop: number; tablet: number; mobile: number
   transaction: { desktop: 12, tablet: 10, mobile: 7 },
 };
 // Fixed placement records: responsive composition never depends on random values or hydration.
-const placements: Array<{ x: number; y: number; mobileX: number; mobileY: number; width: number; depth: Depth }> = [
+type CloudPlacement = {
+  x: number; y: number; mobileX: number; mobileY: number; width: number; depth: Depth;
+  tabletX?: number; tabletY?: number; desktopTravel?: number; mobileTravel?: number;
+  tabletTravel?: number; coverage?: 'anchor' | 'distant' | 'transition'; opacity?: number;
+};
+const placements: CloudPlacement[] = [
   { x: -4, y: 12, mobileX: -13, mobileY: 12, width: 230, depth: 'middle' },
   { x: 77, y: 19, mobileX: 72, mobileY: 22, width: 250, depth: 'middle' },
   { x: 28, y: 8, mobileX: 32, mobileY: 8, width: 160, depth: 'far' },
@@ -62,6 +67,27 @@ const satellites: typeof placements = [
   { x: 3, y: 21, mobileX: -12, mobileY: 19, width: 145, depth: 'middle' },
   { x: 73, y: 72, mobileX: 70, mobileY: 74, width: 200, depth: 'middle' },
 ];
+// Low-motion coverage stays in its zone when the original moving clouds drift right.
+// Each responsive subset includes anchors on both edges, with irregular clusters and open sky.
+const coverageCounts: Record<Mode, { desktop: number; tablet: number; mobile: number }> = {
+  rich: { desktop: 10, tablet: 5, mobile: 3 },
+  store: { desktop: 8, tablet: 5, mobile: 3 },
+  standard: { desktop: 7, tablet: 5, mobile: 3 },
+  product: { desktop: 4, tablet: 3, mobile: 2 },
+  transaction: { desktop: 4, tablet: 3, mobile: 2 },
+};
+const coverageClouds: CloudPlacement[] = [
+  { x: 2, y: 34, mobileX: -6, mobileY: 42, tabletX: -2, tabletY: 38, width: 155, depth: 'haze', coverage: 'anchor', desktopTravel: 0, mobileTravel: 0, tabletTravel: 0, opacity: .34 },
+  { x: 4, y: 79, mobileX: -8, mobileY: 78, tabletX: 1, tabletY: 80, width: 120, depth: 'far', coverage: 'distant', desktopTravel: 64, mobileTravel: 18, tabletTravel: 30 },
+  { x: 81, y: 69, mobileX: 77, mobileY: 73, tabletX: 83, tabletY: 64, width: 170, depth: 'haze', coverage: 'anchor', desktopTravel: 18, mobileTravel: 6, tabletTravel: 10, opacity: .3 },
+  { x: 19, y: 49, mobileX: 8, mobileY: 58, tabletX: 15, tabletY: 51, width: 95, depth: 'far', coverage: 'distant', desktopTravel: 86, mobileTravel: 22, tabletTravel: 40 },
+  { x: 5, y: 94, mobileX: -4, mobileY: 91, tabletX: 2, tabletY: 93, width: 180, depth: 'haze', coverage: 'anchor', desktopTravel: 12, mobileTravel: 4, tabletTravel: 8, opacity: .32 },
+  { x: 59, y: 87, mobileX: 64, mobileY: 86, width: 100, depth: 'far', coverage: 'distant', desktopTravel: 72, mobileTravel: 18, tabletTravel: 32 },
+  { x: -10, y: 64, mobileX: -18, mobileY: 64, width: 190, depth: 'middle', coverage: 'transition' },
+  { x: 72, y: 10, mobileX: 79, mobileY: 15, width: 105, depth: 'haze', coverage: 'anchor', desktopTravel: 26, mobileTravel: 8, tabletTravel: 14, opacity: .26 },
+  { x: -13, y: 23, mobileX: -20, mobileY: 25, width: 165, depth: 'middle', coverage: 'transition' },
+  { x: -18, y: 86, mobileX: -22, mobileY: 87, width: 245, depth: 'foreground', coverage: 'transition' },
+];
 const assets = ['pastel-blush', 'pastel-blue', 'dream-cloud-01', 'dream-cloud-02', 'dream-cloud-03', 'dream-cloud-04', 'dream-cloud-05', 'dream-cloud-07', 'dream-cloud-08', 'dream-cloud-warm'];
 const movement: Record<Depth, { desktop: number; mobile: number; y: number; scrub: number }> = {
   haze: { desktop: 40, mobile: 14, y: 4, scrub: .32 },
@@ -83,6 +109,7 @@ export function SoftHavenCloudBackground() {
   const mode = modeFor(pathname);
   const profile = profiles[mode];
   const base = baseCounts[mode];
+  const coverage = coverageCounts[mode];
   const skyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
@@ -102,6 +129,12 @@ export function SoftHavenCloudBackground() {
           const depth = cloud.dataset.cloudDepth as Depth;
           const settings = movement[depth];
           const variation = .8 + (index % 4) * .06;
+          const configuredTravel = mobile ? cloud.dataset.mobileTravel : match.conditions?.tablet ? cloud.dataset.tabletTravel : cloud.dataset.desktopTravel;
+          const travel = configuredTravel === undefined
+            ? (mobile ? settings.mobile : settings.desktop) * factor * profile.motion * variation
+            : Number(configuredTravel);
+          // A static anchor needs no tween or compositor work.
+          if (travel === 0) return;
           let timeline = timelines.get(depth);
           if (!timeline) {
             timeline = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: {
@@ -113,7 +146,7 @@ export function SoftHavenCloudBackground() {
             timelines.set(depth, timeline);
           }
           timeline.to(cloud, {
-            x: (mobile ? settings.mobile : settings.desktop) * factor * profile.motion * variation,
+            x: travel,
             y: settings.y * (index % 2 ? 1 : -1) * (mobile ? .4 : factor),
             ...(depth === 'foreground' ? { scale: 1.025 } : {}), duration: 1,
           }, 0);
@@ -143,19 +176,22 @@ export function SoftHavenCloudBackground() {
   if (pathname.startsWith('/admin')) return null;
   return <div ref={skyRef} className="sh-atmosphere" data-atmosphere={mode} aria-hidden="true">
     <div className="sh-atmosphere__colour" />
-    {[...placements.slice(0, base.desktop), ...satellites.slice(0, profile.desktop - base.desktop)].map((cloud, index) => {
+    {[...placements.slice(0, base.desktop), ...satellites.slice(0, profile.desktop - base.desktop), ...coverageClouds.slice(0, coverage.desktop)].map((cloud, index) => {
       const satelliteIndex = index - base.desktop;
-      const mobileVisible = index < base.mobile || (satelliteIndex >= 0 && satelliteIndex < profile.mobile - base.mobile);
-      const tabletVisible = index < base.tablet || (satelliteIndex >= 0 && satelliteIndex < profile.tablet - base.tablet);
+      const coverageIndex = index - profile.desktop;
+      const mobileVisible = coverageIndex >= 0 ? coverageIndex < coverage.mobile : index < base.mobile || (satelliteIndex >= 0 && satelliteIndex < profile.mobile - base.mobile);
+      const tabletVisible = coverageIndex >= 0 ? coverageIndex < coverage.tablet : index < base.tablet || (satelliteIndex >= 0 && satelliteIndex < profile.tablet - base.tablet);
       const routeVariation = pathname === '/about' ? 3 : pathname === '/collections' ? 1 : 0;
       const asset = assets[(index + profile.variant * 2 + routeVariation) % assets.length];
       const directory = 'v2';
       const style = {
         '--cloud-x': `${mode === 'transaction' && cloud.depth !== 'far' && cloud.depth !== 'haze' ? (index % 2 ? 89 : -10) : cloud.x}%`, '--cloud-y': `${cloud.y}%`,
         '--cloud-mobile-x': `${mode === 'transaction' && cloud.depth !== 'far' && cloud.depth !== 'haze' ? (index % 2 ? 87 : -25) : cloud.mobileX}%`, '--cloud-mobile-y': `${cloud.mobileY}%`,
+        '--cloud-tablet-x': `${cloud.tabletX ?? cloud.x}%`, '--cloud-tablet-y': `${cloud.tabletY ?? cloud.y}%`,
+        ...(cloud.opacity === undefined ? {} : { opacity: cloud.opacity }),
         '--cloud-flip': satelliteIndex >= 0 && satelliteIndex % 2 ? '-1' : '1', '--cloud-width': `${cloud.width}px`, '--cloud-mobile-width': `${Math.round(cloud.width * .58)}px`,
       } as CSSProperties;
-      return <span key={index} className={`sh-atmosphere__cloud sh-atmosphere__cloud--${cloud.depth}${!mobileVisible ? ' sh-atmosphere__cloud--desktop' : ''}${!tabletVisible ? ' sh-atmosphere__cloud--wide' : ''}`} data-cloud-depth={cloud.depth} style={style}>
+      return <span key={index} className={`sh-atmosphere__cloud sh-atmosphere__cloud--${cloud.depth}${!mobileVisible ? ' sh-atmosphere__cloud--desktop' : ''}${!tabletVisible ? ' sh-atmosphere__cloud--wide' : ''}`} data-cloud-depth={cloud.depth} data-cloud-coverage={cloud.coverage} data-desktop-travel={cloud.desktopTravel} data-mobile-travel={cloud.mobileTravel} data-tablet-travel={cloud.tabletTravel} style={style}>
         <picture><source media="(max-width: 767px)" srcSet={`/assets/clouds/${directory}/${asset}-mobile.webp`} /><img src={`/assets/clouds/${directory}/${asset}.webp`} alt="" loading="lazy" decoding="async" width="640" height="320" /></picture>
       </span>;
     })}
