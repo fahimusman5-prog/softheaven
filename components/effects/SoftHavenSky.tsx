@@ -96,6 +96,7 @@ const movement: Record<Depth, { desktop: number; mobile: number; y: number; scru
   foreground: { desktop: 880, mobile: 150, y: 34, scrub: .2 },
 };
 function modeFor(path: string): Mode {
+  if (['/privacy-policy','/returns-refunds','/shipping-delivery','/terms-conditions'].includes(path)) return 'transaction';
   if (path === '/' || path === '/about') return 'rich';
   if (path.startsWith('/shop') || path.startsWith('/collections')) return 'store';
   if (path.startsWith('/product/')) return 'product';

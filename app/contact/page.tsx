@@ -4,6 +4,9 @@ import { StoreMotion } from '@/components/store-motion';
 import { useState, type FormEvent } from 'react';
 import { useCatalogue } from '@/components/catalogue-provider';
 import './contact.css';
+import '@/components/policy-page.css';
+import { resolveBusiness, isConfirmed } from '@/lib/business';
+import { BusinessDetails } from '@/components/business-details';
 
 type Channel = {
   name: string;
@@ -101,8 +104,9 @@ function LineIcon({
 
 export default function ContactPage() {
   const { settings } = useCatalogue();
+  const business = resolveBusiness(settings);
   const siteConfig = {
-    contact: { email: settings.general?.email || null },
+    contact: { email: isConfirmed(business.supportEmail) ? business.supportEmail : null },
     social: settings.social ?? {},
   };
   const channels: (Channel & { href: string | null })[] = [
@@ -153,9 +157,12 @@ export default function ContactPage() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setNotice(
-      'This preview does not send messages yet. No information has been submitted.',
-    );
+    if (!siteConfig.contact.email) { setNotice('Support email is not configured yet. No message has been sent.'); return; }
+    const data = new FormData(event.currentTarget);
+    const subject = encodeURIComponent('SoftHaven support: ' + String(data.get('topic')));
+    const body = encodeURIComponent('Name: ' + String(data.get('name')) + '\nReply email: ' + String(data.get('email')) + '\n\n' + message);
+    window.location.href = 'mailto:' + siteConfig.contact.email + '?subject=' + subject + '&body=' + body;
+    setNotice('Your email app will open. Send the message there to contact us.');
   }
 
   return (
@@ -244,8 +251,7 @@ export default function ContactPage() {
             <div>
               <h2 id="contact-form-title">Send us a message</h2>
               <p>
-                Tell us a little about what you need. Your message stays in this
-                local preview.
+                Tell us a little about what you need. Your email app opens so you can review and send your message.
               </p>
             </div>
             <div className="contact-bear" aria-hidden="true">
@@ -326,12 +332,11 @@ export default function ContactPage() {
               {message.length}/500
             </div>
             <button className="contact-send" type="submit">
-              <LineIcon name="send" /> <span>Send Message</span>{' '}
+              <LineIcon name="send" /> <span>Compose email</span>{' '}
               <LineIcon name="arrow" />
             </button>
             <p className="contact-form-note">
-              <span aria-hidden="true">♙</span> This form is a local preview and
-              does not submit information.
+              <span aria-hidden="true">♙</span> This form opens your email app; it does not send a message automatically.
             </p>
             {notice && (
               <p className="contact-form-notice" role="status">
@@ -341,6 +346,7 @@ export default function ContactPage() {
           </form>
         </section>
       </div>
+      <section className="contact-business" aria-labelledby="business-title"><h2 id="business-title">Business &amp; support details</h2><BusinessDetails business={business}/><p>Bracketed information requires merchant confirmation before publication.</p></section>
     </div></StoreMotion>
   );
 }
