@@ -793,7 +793,7 @@ export default function CheckoutPage() {
                       ? "Refresh order total"
                       : "Review order total"}
                 </button>
-                <p className="sh-checkout__legal">By placing your order, you agree to our <Link href="/terms-conditions" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link> and acknowledge our <Link href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link> and <Link href="/returns-refunds" target="_blank" rel="noopener noreferrer">Returns &amp; Refunds Policy</Link>.</p>
+                <p className="sh-checkout__legal">By placing your order, you agree to our <Link href="/terms-conditions" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link> and acknowledge our <Link href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link> and <Link href="/return-policy" target="_blank" rel="noopener noreferrer">Return Policy</Link>.</p>
                 <button
                   className="sh-checkout__cta"
                   type="submit"
