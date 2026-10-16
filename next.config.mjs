@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  async redirects() {
+    return [{ source: '/returns-refunds', destination: '/return-policy', permanent: true }];
+  },
   async headers() {
     return [
       {

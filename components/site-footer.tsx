@@ -7,8 +7,8 @@ import './site-footer.css';
 const groups = [
   { title: 'Shop', links: [['Shop All', '/shop'], ['Collections', '/collections']] },
   { title: 'Explore', links: [['About SoftHaven', '/about'], ['Contact Us', '/contact']] },
-  { title: 'Customer care', links: [['Shipping & Delivery', '/shipping-delivery'], ['Returns & Refunds', '/returns-refunds']] },
-  { title: 'Legal', links: [['Privacy Policy', '/privacy-policy'], ['Terms & Conditions', '/terms-conditions']] },
+  { title: 'Customer care', links: [['Shipping & Delivery', '/shipping-delivery']] },
+  { title: 'Legal', links: [['Privacy Policy', '/privacy-policy'], ['Return Policy', '/return-policy'], ['Terms & Conditions', '/terms-conditions']] },
 ];
 export function SiteFooter() {
   const { settings } = useCatalogue();
