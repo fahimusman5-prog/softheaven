@@ -152,3 +152,5 @@ Final navbar geometry checks at all nine requested mobile widths (320–768px) f
 ## GitHub publication follow-up
 
 On 17 November 2026 the user authorized publishing this tested working application to GitHub. The review branch is `codex/launch-readiness-2026-11-18` in `fahimusman5-prog/softheaven`; this authorization does not merge `main`, apply hosted migrations or deploy production. Earlier statements about no GitHub push describe the audit before this publication follow-up. Local build caches, environment files, screenshots, baseline patches and QA backups are excluded from the publication.
+
+Publication verification: fetching GitHub revealed newer `main` history, including Return Policy review work (main at `b54665f` at inspection). The policy-route finding above applies to this audited checkout, not a fresh review of GitHub main. Keep the review branch separate and reconcile newer main changes before any merge or deployment.
