@@ -18,19 +18,31 @@ export function HomeMotion({ children }: { children: ReactNode }) {
       if (match.conditions?.reduce) return;
       const mobile = Boolean(match.conditions?.mobile);
       const distance = mobile ? 10 : match.conditions?.tablet ? 16 : 22;
+      if (!mobile) {
       const intro = gsap.timeline({ defaults: { duration: .7, ease: 'power3.out', clearProps: 'transform,opacity' } });
       intro.from('.hero-portrait__copy h1', { y: distance, opacity: .78 })
         .from('.hero-portrait__copy p', { y: distance, opacity: .8 }, .15)
         .from('.portrait-carousel__visual', { y: distance, opacity: .85, stagger: .06 }, .3)
         .from('.portrait-carousel__controls, .portrait-hero-actions, .portrait-hero-note', { y: 10, opacity: .8, stagger: .1 }, .65);
+      }
       node.querySelectorAll<HTMLElement>('.journey-why, .journey-discover, .journey-details, .journey-gift, .journey-family, .journey-next-hug').forEach((section, index) => {
         const targets = section.querySelectorAll('.eyebrow, h2, [class$="__copy"] > p, [class$="__intro"] > p, [class$="__heading"] > p, [class$="__cta"], [data-story-enter="photo"], [data-story-enter="detail"], [data-next-hug-enter="photo"], .journey-family__item, .journey-discover__rail-item');
         // Establish animation state only on entry. Offscreen content stays readable if setup fails.
-        ScrollTrigger.create({ trigger: section, start: 'top 85%', once: true, onEnter: () => {
-          match.add(() => {
-            gsap.fromTo(targets, { y: index % 2 ? distance : distance * .7, opacity: .82 }, { y: 0, opacity: 1, duration: mobile ? .55 : .8, stagger: mobile ? .025 : .045, ease: 'power3.out', clearProps: 'transform,opacity' });
-          });
-        }});
+        ScrollTrigger.create({ trigger: section, start: 'top 85%', once: true, onEnter: match.add(`revealSection${index}`, () => {
+          const copy = Array.from(targets).filter((target) => !target.matches('[data-story-enter="photo"], [data-story-enter="detail"], [data-next-hug-enter="photo"]'));
+          if (copy.length) gsap.fromTo(copy, { y: index % 2 ? distance : distance * .7, opacity: .82 }, { y: 0, opacity: 1, duration: mobile ? .55 : .8, stagger: mobile ? .025 : .045, ease: 'power3.out', clearProps: 'transform,opacity' });
+          const photos = section.querySelectorAll('[data-story-enter="photo"], [data-story-enter="detail"], [data-next-hug-enter="photo"]');
+          if (photos.length) {
+            if (section.matches('.journey-details')) {
+              const mainPhoto = section.querySelector('[data-story-enter="photo"]');
+              const detailPhoto = section.querySelector('[data-story-enter="detail"]');
+              if (mainPhoto) gsap.fromTo(mainPhoto, { y: mobile ? 24 : 35, scale: mobile ? .985 : .98, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: mobile ? .9 : 1.05, ease: 'power3.out', clearProps: 'transform,opacity' });
+              if (detailPhoto) gsap.fromTo(detailPhoto, { y: mobile ? 18 : 25, scale: .94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: mobile ? .8 : .95, delay: mobile ? .08 : .14, ease: 'power3.out', clearProps: 'transform,opacity' });
+            } else {
+              gsap.fromTo(photos, { scale: 1.025, opacity: .9 }, { scale: 1, opacity: 1, duration: .85, stagger: .08, ease: 'power2.out', clearProps: 'transform,opacity' });
+            }
+          }
+        }) as () => void });
       });
     });
     let frame = 0;

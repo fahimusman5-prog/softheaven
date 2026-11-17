@@ -11,14 +11,18 @@ export function StorefrontFrame({
   footer: React.ReactNode;
   background: React.ReactNode;
 }) {
-  const admin = usePathname().startsWith('/admin');
+  const pathname = usePathname();
+  if (pathname === '/checkout') return <main id="main-content">{children}</main>;
+  const admin = pathname.startsWith('/admin');
+  if (pathname === '/account' || pathname.startsWith('/account/'))
+    return <main id="main-content">{children}</main>;
   return admin ? (
     <>{children}</>
   ) : (
-    <div className="softhaven-app">
+    <div className="softhaven-app" id="page-top">
       {background}
       {header}
-      <main>{children}</main>
+      <main id="main-content">{children}</main>
       {footer}
     </div>
   );

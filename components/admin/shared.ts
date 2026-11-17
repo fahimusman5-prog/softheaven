@@ -42,6 +42,8 @@ export async function adminRequest(
         ? "Your session has expired. Sign in again."
         : res.status === 403
           ? "Your role cannot perform this action."
+          : result.errorCode === "PRODUCT_CONFLICT"
+            ? "This URL handle or SKU is already used. Choose another value."
           : result.errorCode === "VALIDATION"
             ? "Check the highlighted details and try again."
             : "This action could not be completed. Check your details and try again.",

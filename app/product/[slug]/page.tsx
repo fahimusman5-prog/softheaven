@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getStorefront } from '@/lib/storefront';
 import { notFound } from 'next/navigation';
-import { ProductReviews } from '@/components/product-reviews';
+import './product.css';
 import { ProductDetail } from '@/components/product-detail';
 
 export const dynamic = 'force-dynamic';
@@ -32,12 +32,13 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { products } = await getStorefront();
+  const { products, collections } = await getStorefront();
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
+  const matchingCollections = collections.filter(c => c.productIds.includes(product.id));
   const relatedProducts = products.filter(
     (candidate) =>
-      candidate.id !== product.id && candidate.category === product.category,
+      candidate.id !== product.id && (candidate.category === product.category || matchingCollections.some(c => c.productIds.includes(candidate.id))),
   );
   const remainingProducts = products.filter(
     (candidate) =>
@@ -48,10 +49,10 @@ export default async function ProductPage({
   return (
     <>
       <ProductDetail
+        key={product.id}
         product={product}
         relatedProducts={[...relatedProducts, ...remainingProducts]}
       />
-      <ProductReviews productId={product.id} />
     </>
   );
 }

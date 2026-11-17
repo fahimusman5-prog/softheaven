@@ -1,0 +1,132 @@
+/* Responsive corrections only; the approved desktop geometry is unchanged. */
+@media (max-width: 1199px) {
+  .sfh-mobile-menu {
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .sfh-notice {
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+  }
+  :is(.cart-page, .checkout-page, .contact-page, .account-world, .admin-auth)
+    :is(input, select, textarea) {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px;
+    min-height: 48px;
+  }
+  .cart-line-copy {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .checkout-page .form-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .checkout-page .form-card .primary-button {
+    min-height: 48px;
+    white-space: normal;
+  }
+  .quantity button,
+  .remove-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+@media (max-width: 767px) {
+  .shop-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    width: 100%;
+  }
+  .shop-controls .search-field {
+    min-width: 0;
+  }
+  .shop-controls .search-field input {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .shop-controls select {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  .category-tabs button,
+  .filter-pill {
+    min-height: 44px;
+  }
+  .journey-details__benefits {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .journey-details__benefits span {
+    min-width: 0;
+  }
+  .sfh-mobile-menu__link {
+    min-height: 48px;
+  }
+  .cart-page,
+  .checkout-page {
+    padding-inline: 16px;
+  }
+  .cart-line {
+    grid-template-columns: 64px minmax(0, 1fr) 44px;
+  }
+  .cart-line > img {
+    width: 64px;
+    height: 80px;
+  }
+  .cart-line > strong {
+    grid-column: 2;
+  }
+  .cart-line .remove-button {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .cart-summary .primary-button {
+    min-height: 48px;
+  }
+}
+@media (max-width: 380px) {
+  .shop-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shop-controls select {
+    max-width: none;
+  }
+}
+
+/* The official logo is 293 × 233 with no excess transparent padding. */
+@media (max-width: 1100px) {
+  .sfh-mobile-panel { display: flex; gap: 8px; padding-inline: 12px; }
+  .sfh-brand.sfh-brand--mobile, .sfh-header.is-compact .sfh-brand.sfh-brand--mobile { flex: 1 1 80px; width: auto; min-width: 0; max-width: 116px; height: 56px; }
+  .sfh-brand.sfh-brand--mobile img, .sfh-header.is-compact .sfh-brand.sfh-brand--mobile img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
+  .sfh-mobile-actions { flex: 0 0 auto; gap: 2px; }
+  .sfh-mobile-action { flex: 0 0 44px; width: 44px; height: 44px; }
+  .sfh-mobile-action .sfh-count { top: 0; right: 0; min-width: 18px; padding-inline: 3px; font-size: 10px; }
+  .sfh-mobile-search input { font-size: 16px; }
+}
+.sfh-menu-backdrop { position: fixed; inset: 0; z-index: -1; border: 0; background: rgba(57, 43, 65, .12); cursor: default; }
+.sfh-notice { z-index: 80; }
+.sfh-wishlist-list a { min-height: 44px; display: flex; align-items: center; }
+
+/* Preserve the small pagination marks inside comfortable, separated hit areas. */
+.home-page .portrait-carousel__dots { gap: 0; }
+.home-page .portrait-carousel__dots button,
+.home-page .portrait-carousel__dots button.is-active { display: grid; place-items: center; width: 32px; height: 44px; border-radius: 12px; background: transparent; box-shadow: none; transform: none; }
+.home-page .portrait-carousel__dots button::before { content: ''; width: 8px; height: 8px; border-radius: 8px; background: #b5a3cb; }
+.home-page .portrait-carousel__dots button.is-active::before { width: 22px; background: #775b99; }
+.home-page .portrait-carousel__dots button:focus-visible { outline: 2px solid #775b99; outline-offset: 0; }
+.home-page .journey-discover__number,
+.home-page .journey-family__number { color: #8b5f9b; }
+.home-page .journey-family__label small,
+.product-card .product-info p,
+.product-card .price-stack del { color: #6d6177; }
+
+.home-page .journey-family__item:nth-child(n) .journey-family__number { color: #8b5f9b; }

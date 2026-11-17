@@ -36,7 +36,7 @@ export function NewsletterForm() {
           aria-label="Newsletter email"
         />
       </label>
-      <button disabled={busy}>Subscribe</button>
+      <button disabled={busy}>{busy ? 'Subscribing…' : 'Subscribe'}</button>
       <small role="status">{message}</small>
     </form>
   );

@@ -48,6 +48,15 @@ function define(
   shape: Record<string, z.ZodType>,
   extras: Partial<Resource> = {},
 ): Resource {
+  const schema = z.object(shape).strict().superRefine((value, context) => {
+    if (table !== 'products' && table !== 'product_variants') return;
+    if (typeof value.price === 'number' && typeof value.compare_at === 'number' && value.compare_at < value.price)
+      context.addIssue({ code: 'custom', path: ['compare_at'], message: 'Regular price must be at least the selling price.' });
+    if (table === 'products' && value.status === 'published') {
+      for (const key of ['description', 'image', 'category_id']) if (typeof value[key] !== 'string' || !value[key].trim())
+        context.addIssue({ code: 'custom', path: [key], message: 'Required before publishing.' });
+    }
+  });
   return {
     title,
     table,
@@ -55,7 +64,7 @@ function define(
     columns,
     search,
     fields,
-    schema: z.object(shape).strict(),
+    schema,
     ...extras,
   };
 }

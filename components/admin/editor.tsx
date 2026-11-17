@@ -151,7 +151,9 @@ export function validationMessage(resource: string, error: unknown) {
         return (
           label +
           ": " +
-          (key === "slug"
+          (issue.code === "custom"
+            ? issue.message
+            : key === "slug"
             ? "Use lowercase words separated by hyphens."
             : issue.code === "too_small"
               ? issue.origin === "string"
@@ -253,6 +255,7 @@ export function FormFields({
   fields,
   role,
   hidden = [],
+  errors = {},
 }: {
   resource: string;
   values: Row;
@@ -260,6 +263,7 @@ export function FormFields({
   fields?: Record<string, Field>;
   role: string;
   hidden?: string[];
+  errors?: Record<string, string>;
 }) {
   const config = fields ?? resources[resource].fields;
   const update = (key: string, value: unknown) =>
@@ -330,13 +334,17 @@ export function FormFields({
                 </>
               ) : f.type === "textarea" ? (
                 <textarea
+                  aria-invalid={Boolean(errors[key])}
+                  aria-describedby={errors[key] ? `field-${key}-error` : undefined}
                   value={String(values[key] ?? "")}
                   onChange={(e) => update(key, e.target.value)}
                 />
               ) : (
                 <input
                   required={f.required}
-                  type={f.type ?? "text"}
+                  aria-invalid={Boolean(errors[key])}
+                  aria-describedby={errors[key] ? `field-${key}-error` : undefined}
+                  type={key === "color_hex" ? "color" : f.type ?? "text"}
                   min={f.type === "number" ? 0 : undefined}
                   step={f.type === "number" ? "any" : undefined}
                   value={
@@ -347,6 +355,7 @@ export function FormFields({
                   onChange={(e) => update(key, e.target.value)}
                 />
               )}{" "}
+              {errors[key] && <small role="alert" id={`field-${key}-error`}>{errors[key]}</small>}
               {key === "slug" && (
                 <small>Lowercase words separated by hyphens.</small>
               )}
@@ -464,51 +473,37 @@ export function ResourceEditor({
     </AdminModal>
   );
 }
-export function ImageUpload({
-  onUploaded,
-  role,
-}: {
-  onUploaded: (url: string) => void;
-  role: string;
-}) {
+export function ImageUpload({ onUploaded, role, onBusyChange }: { onUploaded: (url: string) => void; role: string; onBusyChange?: (busy: boolean) => void }) {
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  if (!allowed(role, "media")) return null;
-  return (
-    <label className="admin-upload-control">
-      <AdminIcon name="plus" />
-      <span>{busy ? "Uploading image…" : "Upload product image"}</span>
-      <input
-        type="file"
-        accept="image/jpeg,image/png,image/webp,image/avif"
-        disabled={busy}
-        onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-          setBusy(true);
-          setError("");
-          try {
-            const form = new FormData();
-            form.set("file", file);
-            const res = await fetch("/api/admin/media-upload", {
-              method: "POST",
-              body: form,
-            });
-            const result = await res.json();
-            if (!res.ok)
-              throw new Error(
-                "Image upload failed. Use a JPEG, PNG, WebP or AVIF under 5 MB.",
-              );
-            onUploaded(result.url);
-          } catch (e) {
-            setError((e as Error).message);
-          } finally {
-            setBusy(false);
-            e.target.value = "";
-          }
-        }}
-      />
-      {error && <small role="alert">{error}</small>}
+  const [error, setError] = useState('');
+  const [progress, setProgress] = useState('');
+  if (!allowed(role, 'media')) return null;
+  async function upload(files: File[]) {
+    if (busy || !files.length) return;
+    setBusy(true); onBusyChange?.(true); setError('');
+    try {
+      if (files.length > 30) throw new Error('Choose up to 30 images at a time.');
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type) || file.size > 5 * 1024 * 1024) throw new Error('Use JPEG, PNG, WebP or AVIF images under 5 MB.');
+        const form = new FormData(); form.set('file', file);
+        const url = await new Promise<string>((resolve, reject) => {
+          const xhr = new XMLHttpRequest(); xhr.open('POST', '/api/admin/media-upload'); xhr.timeout = 60000;
+          xhr.upload.onprogress = event => setProgress('Image ' + (i + 1) + ' of ' + files.length + ': ' + (event.lengthComputable ? Math.round(event.loaded / event.total * 100) + '%' : 'uploading…'));
+          xhr.onload = () => { try { const result = JSON.parse(xhr.responseText); if (xhr.status < 200 || xhr.status >= 300 || !result.url) throw new Error(); resolve(result.url); } catch { reject(new Error('Image upload failed. Check your permission, file format and size.')); } };
+          xhr.onerror = xhr.ontimeout = () => reject(new Error('Upload interrupted. Please try again.'));
+          xhr.send(form);
+        });
+        onUploaded(url);
+      }
+      setProgress('Images uploaded. Save the product to keep your changes.');
+    } catch (e) { setError((e as Error).message); }
+    finally { setBusy(false); onBusyChange?.(false); }
+  }
+  return <div className="admin-image-drop" onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); void upload(Array.from(e.dataTransfer.files)); }}>
+    <label className="admin-upload-control"><AdminIcon name="plus" /><span>{busy ? 'Uploading images…' : 'Drop images here or choose files'}</span>
+      <input type="file" multiple accept="image/jpeg,image/png,image/webp,image/avif" disabled={busy} onChange={e => { const files = Array.from(e.target.files ?? []); e.target.value = ''; void upload(files); }} />
     </label>
-  );
+    <small role="status">{progress}</small>{error && <small role="alert">{error}</small>}
+  </div>;
 }

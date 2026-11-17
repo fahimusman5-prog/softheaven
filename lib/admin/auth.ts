@@ -1,14 +1,9 @@
 import 'server-only';
 import { serverClient } from '@/lib/supabase/server';
 import { allowed } from './resources';
-export class AccessError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-  ) {
-    super(message);
-  }
-}
+import { requireBudget } from '@/lib/request-budget';
+import { AccessError } from '@/lib/request-security';
+export { AccessError, sameOrigin, apiError } from '@/lib/request-security';
 export async function requireAdmin(area?: string) {
   const db = await serverClient();
   const {
@@ -28,23 +23,6 @@ export async function requireAdmin(area?: string) {
     );
   if (area && !allowed(access.role, area))
     throw new AccessError('Your role cannot access this area.', 403);
+  await requireBudget(db, 'admin');
   return { db, user, role: access.role as string };
-}
-export function sameOrigin(request: Request) {
-  const origin = request.headers.get('origin');
-  if (!origin || origin !== new URL(request.url).origin)
-    throw new AccessError('Invalid request origin.', 403);
-}
-export function apiError(error: unknown) {
-  return Response.json(
-    {
-      error:
-        error instanceof Error
-          ? error.message
-          : typeof error === 'object' && error && 'message' in error
-            ? String(error.message)
-            : 'Operation failed.',
-    },
-    { status: error instanceof AccessError ? error.status : 400 },
-  );
 }

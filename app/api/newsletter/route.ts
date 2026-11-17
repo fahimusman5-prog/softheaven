@@ -1,10 +1,11 @@
+import { readJson } from '@/lib/request-security';
 import { publicClient } from '@/lib/storefront';
 import { sameOrigin, apiError } from '@/lib/admin/auth';
 import { z } from 'zod';
 export async function POST(request: Request) {
   try {
     sameOrigin(request);
-    const v = z.object({ email: z.email() }).parse(await request.json());
+    const v = z.object({ email: z.email().max(254) }).parse(await readJson(request));
     const { error } = await publicClient().rpc('subscribe_newsletter', {
       p_email: v.email,
     });

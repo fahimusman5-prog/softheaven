@@ -1,4 +1,5 @@
 export type ProductVariant = {
+  lowStockThreshold?: number;
   id: string;
   color: string;
   image: string;
@@ -11,6 +12,9 @@ export type ProductVariant = {
 };
 
 export type Product = {
+  shortDescription?: string;
+  newArrival?: boolean;
+  bestSeller?: boolean;
   featured?: boolean;
   seoTitle?:string;
   seoDescription?:string;

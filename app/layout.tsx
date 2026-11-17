@@ -4,13 +4,17 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './softhaven-premium.css';
 import './home-reference.css';
-import './collections/soft-haven-for-that.css';
-import './collections/collections-difference.css';
+import 'lenis/dist/lenis.css';
+import './home-sky.css';
+import './readiness.css';
 import { StorefrontFrame } from '@/components/storefront-frame';
 import { CartProvider } from '@/components/cart-provider';
+import { WishlistProvider } from '@/components/wishlist-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { SoftHavenCloudBackground } from '@/components/effects/SoftHavenSky';
+import { Suspense } from 'react';
+import { SoftHavenLoader } from '@/components/loading/soft-haven-loader';
 
 export const dynamic = 'force-dynamic';
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,24 +37,34 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+async function StorefrontContent({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const catalogue = await getStorefront();
   return (
-    <html lang="en">
+    <CatalogueProvider value={catalogue}>
+      <CartProvider>
+        <WishlistProvider>
+          <StorefrontFrame
+            header={<SiteHeader />}
+            footer={<SiteFooter />}
+            background={<SoftHavenCloudBackground />}
+          >
+            {children}
+          </StorefrontFrame>
+        </WishlistProvider>
+      </CartProvider>
+    </CatalogueProvider>
+  );
+}
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
-        <CatalogueProvider value={catalogue}>
-          <CartProvider>
-            <StorefrontFrame
-              header={<SiteHeader />}
-              footer={<SiteFooter />}
-              background={<SoftHavenCloudBackground />}
-            >
-              {children}
-            </StorefrontFrame>
-          </CartProvider>
-        </CatalogueProvider>
+        <Suspense fallback={<SoftHavenLoader />}>
+          <StorefrontContent>{children}</StorefrontContent>
+        </Suspense>
       </body>
     </html>
   );

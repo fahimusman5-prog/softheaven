@@ -1,17 +1,22 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback, type KeyboardEvent, type PointerEvent } from 'react';
-import { ProductMedia } from './product-media';
+import Image, { type ImageLoaderProps } from 'next/image';
 import { useSyncExternalStore } from 'react';
 
 export type PortraitHeroSlide = {
   id: string;
   image: string;
   name: string;
-  descriptor: string;
-  category: string;
   mobileImage?:string; alt?:string; ctaLabel?:string; ctaUrl?:string; secondaryCtaLabel?:string; secondaryCtaUrl?:string;
 };
+
+// Serve pre-sized supplied photographs through Next's responsive image markup.
+// This also keeps the carousel independent of the hosted optimizer's quota.
+function collectionImageLoader({ src, width }: ImageLoaderProps) {
+  const variant = width <= 384 ? 384 : width <= 640 ? 640 : 960;
+  return src.replace(/-960\.webp$/, `-${variant}.webp`);
+}
 
 type Position = -2 | -1 | 0 | 1 | 2;
 
@@ -23,10 +28,10 @@ const positionClass: Record<Position, string> = {
   [2]: 'is-far-right',
 };
 
-function getPosition(index: number, activeIndex: number, total: number): Position {
+function getPosition(index: number, activeIndex: number, total: number): number {
   const half = Math.floor(total / 2);
   const offset = ((index - activeIndex + total + half) % total) - half;
-  return Math.max(-2, Math.min(2, offset)) as Position;
+  return offset;
 }
 
 function useMediaQuery(query: string) {
@@ -58,7 +63,6 @@ function ArrowTail() {
 }
 
 export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }) {
-  const isMobile=useMediaQuery('(max-width: 767px)');
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [autoplayStopped, setAutoplayStopped] = useState(false);
@@ -161,27 +165,26 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
           const isActive = position === 0;
           return (
             <article
-              className={`portrait-carousel__card ${positionClass[position]}`}
+              className={`portrait-carousel__card ${positionClass[position as Position]}`}
               key={slide.id}
               aria-hidden={!isActive}
               aria-label={`${slide.name}, slide ${index + 1} of ${slides.length}`}
               aria-roledescription="slide"
             >
               <div className="portrait-carousel__visual">
-              <ProductMedia
-                src={slide.mobileImage && isMobile ? slide.mobileImage : slide.image}
+              <Image
+                loader={collectionImageLoader}
+                src={slide.image}
                 alt={isActive ? slide.alt??slide.name : ''}
                 fill
-                fit="cover"
+                style={{ objectFit: 'cover', objectPosition: 'center center' }}
                 sizes="(max-width: 620px) 260px, (max-width: 1100px) 270px, 290px"
-                priority={index === 0}
-                loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
+                loading={Math.abs(position) <= 1 ? 'eager' : 'lazy'}
               />
               <div className="portrait-carousel__shade" />
               <div className="portrait-carousel__caption">
-                <span>{slide.category}</span>
                 <h2>{slide.name}</h2>
-                <p>{slide.descriptor}</p>
               </div>
               </div>
             </article>
@@ -192,8 +195,8 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
       </div>
 
       <div className="portrait-carousel__controls">
-        <div className="portrait-carousel__dots" role="tablist" aria-label="Choose a featured companion">
-          {slides.map((slide, index) => <button className={index === activeIndex ? 'is-active' : ''} key={slide.id} type="button" role="tab" aria-label={`Show ${slide.name}`} aria-selected={index === activeIndex} onClick={() => { setActiveIndex(index); setIsPaused(true); scheduleResume(); }} />)}
+        <div className="portrait-carousel__dots" role="group" aria-label="Choose a featured companion">
+          {slides.map((slide, index) => <button className={index === activeIndex ? 'is-active' : ''} key={slide.id} type="button" aria-label={`Show ${slide.name}`} aria-pressed={index === activeIndex} onClick={() => { setActiveIndex(index); setIsPaused(true); scheduleResume(); }} />)}
         </div>
         <button className="portrait-carousel__pause" type="button" aria-label={autoplayStopped ? 'Resume carousel autoplay' : 'Pause carousel autoplay'} aria-pressed={autoplayStopped} onClick={() => { if (resumeTimeout.current) clearTimeout(resumeTimeout.current); setAutoplayStopped((stopped) => !stopped); setIsPaused(false); }}>
           {autoplayStopped ? <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 10 7-10 7V5Z" fill="currentColor" /></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2" /></svg>}
