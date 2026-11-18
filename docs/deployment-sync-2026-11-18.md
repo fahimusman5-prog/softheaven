@@ -78,3 +78,20 @@ Review the integrated candidate PR. Restore project-scoped Vercel read/preview a
 Once those gates and business approvals are complete, request explicit approval for the named candidate, correct project/domains and hosted database operations. Merge/promote only under that approval, then verify public aliases and admin build diagnostics. Production is not automatically updated by a review-branch push.
 
 Keep the current production deployment available for rollback. If the prepaid schema is installed, do not independently restore the old COD frontend: it uses a commit path the new schema intentionally rejects. Disable new handoffs safely, preserve callbacks, paid orders, reservations, private receipts, audit/outbox records and repair forward or use a coordinated compatible rollback. Never drop customer/order data to resolve a deployment mismatch.
+
+## Release record after integration
+
+Candidate commit: `d21383bc56f998477a9a7b8d2c28f4304b9f5a13`. Draft PR: https://github.com/fahimusman5-prog/softheaven/pull/8 (GitHub confirms MERGEABLE; not merged). Fresh preview builds succeeded for that SHA:
+
+- softheavenlk: Vercel deployment `BgxXerqLdEz9Vg4YKYvoXLknG3iz`; GitHub deployment `7875669415`, `2026-11-18T06:08:19Z`; https://softheavenlk-fhrky18i7-usmans-projects-6b0baa56.vercel.app
+- softheaven: Vercel deployment `2i89aAeNSnF9nrT8Di5nvCSnfmtf`; GitHub deployment `7875670648`, `2026-11-18T06:08:24Z`; https://softheaven-h8ubcahex-usmans-projects-6b0baa56.vercel.app
+
+Additional email regression passed: deferred snapshots/atomic rollback, grants, deduplication, leases, retries, immutable requests, paid-only card events and retry quarantine. This remains isolated testing, not real delivery.
+
+Diagnostics use the official Vercel Git SHA and environment variables, captured at build time: https://vercel.com/docs/environment-variables/system-environment-variables. Ensure system environment-variable access is enabled for the intended project; unavailable metadata remains explicit instead of misleading.
+
+Hosted verification update: the signed-in native Chrome session successfully rendered the exact d21383b softheavenlk preview. Chrome device toolbar confirmed iPhone 16 viewport 393×852; screenshot showed the contained compact logo/navbar and compact portrait carousel. Product detail Celeste Cloud Bunny rendered and Add to bag changed cart from 0 to 1 with a success message. No payment or production order was created. Broader hosted checks continue separately from the connector-access limitation.
+
+Hosted verification limits: the fresh preview responds to anonymous requests with HTTP 302 to `https://vercel.com/sso-api` and no-store headers. The signed-in Chrome fallback verified the mobile homepage, product and cart, but the context switched to an existing production tab during the review and the native automation later timed out. Hosted checkout/payment-selector/receipt UI, Shop/Collections/Contact/legal route-by-route checks, authenticated editor and diagnostics remain incomplete; local passing results are not substituted for them. The product add-to-cart changed only local browser cart state. The current production database was not mutated.
+
+A follow-up documentation/type-reference commit may follow d21383b. The application implementation validated above remains at d21383b; the later commit records evidence and the Next-generated references to production `.next/types` instead of development `.next/dev/types`. The final PR head is the authoritative release candidate SHA. Re-verify its exact preview before production approval.
