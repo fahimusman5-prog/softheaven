@@ -86,3 +86,6 @@ export function getProductVariants(product: Product): ProductVariant[] {
     compareAt: product.compareAt,
   }];
 }
+
+/** Match the first offered variant on catalogue cards and in price sorting. */
+export function getProductCardPrice(product:Product):number{return getProductVariants(product)[0]?.price ?? product.price;}

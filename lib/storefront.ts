@@ -23,6 +23,7 @@ export const getStorefront = cache(async () => {
       .select('*,categories(name),product_variants(*)')
       .eq('status', 'published')
       .order('created_at')
+      .order('id')
       .limit(500),
     db
       .from('collections')

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import type { Product } from '@/lib/data';
-import { getProductVariants } from '@/lib/data';
+import { getProductVariants, getProductCardPrice } from '@/lib/data';
 import { formatPrice } from '@/lib/format';
 import { useCart } from './cart-provider';
 import { useWishlist } from './wishlist-provider';
@@ -19,8 +19,10 @@ export function ProductCard({ product, imageClassName = '' }: { product: Product
   const reduceMotion = useReducedMotion();
   const variants = getProductVariants(product);
   const variant = variants[0];
-  const soldOut = variants.every((option) => option.stock === 0);
-  const needsChoice = variant?.stock === 0 && !soldOut;
+  const price = getProductCardPrice(product);
+  const compareAt = variant?.compareAt ?? product.compareAt;
+  const soldOut = variants.every((option) => (option.stock ?? 0) <= 0);
+  const needsChoice = (variant?.stock ?? 0) <= 0 && !soldOut;
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
   return (
@@ -31,8 +33,8 @@ export function ProductCard({ product, imageClassName = '' }: { product: Product
           <button className="heart" type="button" aria-pressed={saved} aria-label={`${saved ? 'Unsave' : 'Save'} ${product.name}`} onClick={() => toggle(product.id)}>{saved ? '♥' : '♡'}</button>
         </div>
         <div className="product-info">
-          <div><h3>{product.name}</h3><p>{product.color}</p></div>
-          <div className="price-stack"><strong>{formatPrice(product.price)}</strong>{product.compareAt && <del>{formatPrice(product.compareAt)}</del>}</div>
+          <div><h3>{product.name}</h3><p>{variant?.color ?? product.color}</p></div>
+          <div className="price-stack"><strong>{formatPrice(price)}</strong>{compareAt != null && compareAt > price && <del>{formatPrice(compareAt)}</del>}</div>
         </div>
         {needsChoice ? <Link className="card-add" href={`/product/${product.slug}`}>Choose options →</Link> : <motion.button
           type="button" disabled={soldOut} aria-live="polite"

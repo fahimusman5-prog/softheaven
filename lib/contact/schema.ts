@@ -15,3 +15,9 @@ export const contactSchema = z.object({
 export type ContactMessage = z.infer<typeof contactSchema>;
 export type ContactField = 'name' | 'email' | 'phone' | 'topic' | 'orderNumber' | 'message';
 export const orderTopics: readonly string[] = ['Order Assistance', 'Delivery Enquiry', 'Returns & Exchanges'];
+
+/** WhatsApp enquiry flow: phone is required; email is optional. Legacy email service retains its own schema. */
+export const whatsappContactSchema = contactSchema.extend({
+ email: z.string().trim().max(254).pipe(z.union([z.literal(''),z.email('Please enter a valid email address.')])).default(''),
+ phone: contactSchema.shape.phone.refine(value=>value.replace(/\D/g,'').length>=7,'Please enter your phone number.'),
+});

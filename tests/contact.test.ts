@@ -94,3 +94,14 @@ test('Turnstile frame permissions are isolated to the contact page', async () =>
   assert.ok(contact.includes("'strict-dynamic'"));
   assert.ok(!contact.includes("'unsafe-eval'"));
 });
+
+test('WhatsApp enquiries require phone and accept omitted email without inventing an address',async()=>{
+ const {whatsappContactSchema}=await import('../lib/contact/schema');
+ const {whatsappHandoff}=await import('../lib/contact/whatsapp');
+ const enquiry={name:'Test Customer',phone:'0771234567',topic:'General Enquiry',message:'Please help me choose a companion.'};
+ assert.equal(whatsappContactSchema.safeParse(enquiry).success,true);
+ assert.equal(whatsappContactSchema.safeParse({...enquiry,phone:''}).success,false);
+ assert.equal(whatsappContactSchema.safeParse({...enquiry,email:'invalid'}).success,false);
+ const target=new URL(whatsappHandoff('https://wa.me/94771234567',enquiry));
+ assert.match(target.searchParams.get('text')!,/Phone: 0771234567/);assert.doesNotMatch(target.searchParams.get('text')!,/Email:/);
+});

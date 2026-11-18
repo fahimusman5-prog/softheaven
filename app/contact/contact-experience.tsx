@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useCatalogue } from '@/components/catalogue-provider';
 import { getContactConfig, type ContactOverrides } from '@/lib/contact/config';
 import { whatsappHandoff } from '@/lib/contact/whatsapp';
-import { contactSchema, enquiryTopics, orderTopics, type ContactField } from '@/lib/contact/schema';
+import { whatsappContactSchema as contactSchema, enquiryTopics, orderTopics, type ContactField } from '@/lib/contact/schema';
 
 function ContactIcon({ name }: { name: 'whatsapp' | 'facebook' | 'instagram' | 'tiktok' }) {
   return <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">{name === 'facebook' ? <path d="M13.5 22v-9h3l.5-3.5h-3.5V7.3c0-1 .3-1.8 1.8-1.8H17V2.3a22 22 0 0 0-2.7-.2C11.5 2.1 9.8 3.8 9.8 7v2.5H7V13h2.8v9z" /> : name === 'instagram' ? <g fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></g> : name === 'tiktok' ? <path d="M14 2h3a5 5 0 0 0 5 5v3a8 8 0 0 1-5-1.7V16a6 6 0 1 1-6-6h1v3h-1a3 3 0 1 0 3 3z"/> : <><path fill="none" stroke="currentColor" strokeWidth="1.6" d="M20 11.5a8 8 0 0 1-11.6 7.2L4 20l1.3-4.4A8 8 0 1 1 20 11.5Z"/><path d="m9 7 2 3-1 1a7 7 0 0 0 3 3l1-1 3 2c-.4 2-2 2-3.2 1.5a11 11 0 0 1-6.3-6.3C7 9 7 7.4 9 7Z"/></>}</svg>;
@@ -33,10 +33,10 @@ export function ContactExperience({ configuration = {} }: { configuration?: Cont
   }, []);
   useEffect(() => { if (success) result.current?.focus(); }, [success]);
   const channels = [
-    { icon: 'whatsapp' as const, title: 'WhatsApp', description: 'A little conversation, a little care.', action: 'Chat on WhatsApp', href: contact.whatsapp, tone: 'sage' },
-    { icon: 'facebook' as const, title: 'Facebook', description: 'Find our SoftHaven community.', action: 'Visit Facebook', href: contact.facebook, tone: 'lavender' },
-    { icon: 'instagram' as const, title: 'Instagram', description: 'A little daily inspiration.', action: 'Visit Instagram', href: contact.instagram, tone: 'blush' },
-    { icon: 'tiktok' as const, title: 'TikTok', description: 'Meet our softer side.', action: 'Visit TikTok', href: contact.tiktok, tone: 'lavender' },
+    { icon: 'whatsapp' as const, title: 'Chat With Us', description: 'Our friendly team is just a message away.', action: 'Chat on WhatsApp', href: contact.whatsapp, tone: 'sage' },
+    { icon: 'facebook' as const, title: 'Find Us on Facebook', description: 'Follow SoftHaven for updates, new arrivals, and special moments.', action: 'Visit Facebook', href: contact.facebook, tone: 'lavender' },
+    { icon: 'instagram' as const, title: 'Follow Our Little World', description: 'Discover beautiful companions, gifting inspiration, and more.', action: 'Visit Instagram', href: contact.instagram, tone: 'blush' },
+    { icon: 'tiktok' as const, title: 'See the Magic', description: 'Explore playful videos and the softer side of SoftHaven.', action: 'Visit TikTok', href: contact.tiktok, tone: 'lavender' },
   ].filter(channel => channel.href);
   // Use only policy destinations actually present in public navigation, never invented routes.
   function policy(pattern: RegExp) {
@@ -94,14 +94,14 @@ export function ContactExperience({ configuration = {} }: { configuration?: Cont
           {success ? <div className="concierge-success" tabIndex={-1} ref={result} role="status"><span aria-hidden="true">♡</span><h3>Your message is ready ♡</h3><p>WhatsApp will open with your message ready to send. Please review it and tap Send in WhatsApp.</p><a className="concierge-button" href={handoff} target="_blank" rel="noopener noreferrer">Open your WhatsApp message ↗</a><button className="concierge-button" onClick={() => { setSuccess(false); setCount(0); setTopic(''); }}>Write another note ↗</button></div> : <form className="concierge-form" onSubmit={submit} noValidate aria-busy={pending}>
             <div className="concierge-form-intro"><span>01 / YOUR LITTLE NOTE</span><span aria-hidden="true">♡</span></div>
             <p className="concierge-required">Asterisks (*) mark required fields.</p>
-            <div className="concierge-field-pair"><label>Your name *<input name="name" autoComplete="name" placeholder="What should we call you?" required minLength={2} maxLength={100} {...fieldProps('name')} />{fieldError('name')}</label><label>Email address *<input name="email" type="email" autoComplete="email" placeholder="yourname@example.com" required maxLength={254} {...fieldProps('email')} />{fieldError('email')}</label></div>
-            <div className="concierge-field-pair"><label>Phone number<input name="phone" type="tel" autoComplete="tel" placeholder="Your contact number" maxLength={40} {...fieldProps('phone')} />{fieldError('phone')}</label><label>What can we help you with? *<select name="topic" required value={topic} onChange={e => setTopic(e.target.value)} {...fieldProps('topic')}><option value="" disabled>Select an enquiry</option>{enquiryTopics.map(item => <option key={item}>{item}</option>)}</select>{fieldError('topic')}</label></div>
+            <div className="concierge-field-pair"><label>Your name *<input name="name" autoComplete="name" placeholder="What should we call you?" required minLength={2} maxLength={100} {...fieldProps('name')} />{fieldError('name')}</label><label>Email address (optional)<input name="email" type="email" autoComplete="email" placeholder="yourname@example.com" maxLength={254} {...fieldProps('email')} />{fieldError('email')}</label></div>
+            <div className="concierge-field-pair"><label>Phone number *<input name="phone" type="tel" required autoComplete="tel" placeholder="Your contact number" maxLength={40} {...fieldProps('phone')} />{fieldError('phone')}</label><label>What can we help you with? *<select name="topic" required value={topic} onChange={e => setTopic(e.target.value)} {...fieldProps('topic')}><option value="" disabled>Select an enquiry</option>{enquiryTopics.map(item => <option key={item}>{item}</option>)}</select>{fieldError('topic')}</label></div>
             {orderTopics.includes(topic) && <label>Order number <span className="concierge-optional">(optional)</span><input name="orderNumber" placeholder="Your SoftHaven order number" maxLength={80} {...fieldProps('orderNumber')} />{fieldError('orderNumber')}</label>}
             <label>Your message *<textarea name="message" placeholder="Tell us a little about how we can help…" required minLength={10} maxLength={4000} rows={5} onChange={e => setCount(e.target.value.length)} {...fieldProps('message')} />{fieldError('message')}</label><span className="concierge-count">{count.toLocaleString()} / 4,000</span>
             <div className="concierge-trap" aria-hidden="true"><label>Leave this field empty<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
             {!contact.whatsapp && <p className="concierge-service-note">WhatsApp support is not available yet. Your order information is available in <Link href="/account">your account ↗</Link>.</p>}
             {error && <p className="concierge-submit-error" role="alert">{error}</p>}
-            <button className="concierge-button concierge-submit" type="submit" disabled={pending || !contact.whatsapp}>{pending ? 'Opening WhatsApp…' : 'Continue in WhatsApp'}<span aria-hidden="true">↗</span></button>
+            <button className="concierge-button concierge-submit" type="submit" disabled={pending || !contact.whatsapp}>{pending ? 'Opening WhatsApp…' : 'Continue to WhatsApp ♡'}<span aria-hidden="true">↗</span></button>
             <p className="concierge-privacy">WhatsApp will open with your message ready to send. Your details are shared with WhatsApp when you continue. {privacyPolicy}</p>
           </form>}
         </div>

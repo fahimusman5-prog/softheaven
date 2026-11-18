@@ -42,10 +42,12 @@ export async function proxy(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/account") ||
     request.nextUrl.pathname.startsWith("/api") ||
     request.nextUrl.pathname.startsWith("/checkout") ||
-    request.nextUrl.pathname.startsWith("/order-confirmation")
+    request.nextUrl.pathname.startsWith("/order-confirmation") ||
+    request.nextUrl.pathname.startsWith("/payment-result")
   )
     response.headers.set("Cache-Control", "private, no-store");
   response.headers.set("Content-Security-Policy", csp);
+  if (process.env.VERCEL_ENV !== "production" || /^\/(admin|account|api|checkout|cart|payment-result|order-confirmation)(?:\/|$)/.test(request.nextUrl.pathname)) response.headers.set("X-Robots-Tag", "noindex, nofollow");
   return response;
 }
 export const config = {

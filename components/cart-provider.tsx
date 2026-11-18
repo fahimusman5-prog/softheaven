@@ -64,7 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (source) {
         const parsed: unknown = JSON.parse(source);
         const normalized = readPersistedCart(parsed);
-        if (normalized) setLines(normalized.flatMap(line=>{const product=products.find(p=>p.id===line.product.id);if(!product)return [];const variant=product.variants?.find(v=>v.id===line.variant.id)??(line.variant.id.endsWith('-default')?product.variants?.[0]:undefined);if(!variant || (variant.stock ?? 0) <= 0)return [];return [{product,variant,quantity:Math.min(line.quantity,12,variant.stock ?? 0)}];}));
+        if (normalized) setLines(normalized.flatMap(line=>{const product=products.find(p=>p.id===line.product.id);if(!product)return [];const variant=product.variants?.find(v=>v.id===line.variant.id)??(line.variant.id.endsWith('-default')?product.variants?.[0]:undefined);if(!variant || variant.active === false || (variant.stock ?? 0) <= 0)return [];return [{product,variant,quantity:Math.min(line.quantity,12,variant.stock ?? 0)}];}));
       }
 
       window.localStorage.removeItem(PREVIOUS_CART_STORAGE_KEY);
@@ -92,7 +92,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     subtotal: lines.reduce((sum, line) => sum + line.variant.price * line.quantity, 0),
     add: (product, selectedVariant) => setLines((current) => {
       const variant = selectedVariant ?? getProductVariants(product)[0];
-      if (!variant || (variant.stock ?? 0) <= 0) return current;
+      if (!variant || variant.active === false || (variant.stock ?? 0) <= 0) return current;
       const id = getCartLineId(product, variant);
       const existing = current.find((line) => getCartLineId(line.product, line.variant) === id);
       return existing

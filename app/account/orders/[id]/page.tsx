@@ -40,7 +40,8 @@ export default async function OrderPage({
         ))}
         <p>Subtotal {formatPrice(order.subtotal)}</p>
         <p>Discount {formatPrice(order.discount)}</p>
-        <p>Shipping {formatPrice(order.shipping)}</p>
+        <p>Delivery method: {order.shipping_method || "Delivery"}</p>
+        <p>Shipping {Number(order.shipping) === 0 ? "FREE" : formatPrice(order.shipping)}</p>
         <strong>Total {formatPrice(order.total)}</strong>
       </article>
       <h2>Delivery address</h2>
@@ -53,6 +54,7 @@ export default async function OrderPage({
         <br />
         {order.phone}
       </p>
+      {order.tracking_number && <p>Tracking number: {order.tracking_number}{order.shipping_provider ? ` · ${order.shipping_provider}` : ""}</p>}
       <h2>Order history</h2>
       {events.data?.map((e) => (
         <p key={e.id}>

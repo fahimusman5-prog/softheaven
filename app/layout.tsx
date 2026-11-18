@@ -29,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: '%s | ANTZ SoftHaven',
     },
     description: seo.description ?? '',
+    ...(process.env.VERCEL_ENV !== "production" ? {robots:{index:false,follow:false}} : {}),
     ...(process.env.NEXT_PUBLIC_SITE_URL
       ? { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL) }
       : {}),

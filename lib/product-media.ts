@@ -1,3 +1,4 @@
+import approvedImageAssets from './product-image-assets.json';
 import type { Product } from './data';
 
 // Add product-specific local files here when approved photography is supplied.
@@ -25,5 +26,8 @@ export function resolveProductMedia(product?: MediaProduct, src?: string, extraS
 }
 
 function unique(sources: Array<string | undefined>) {
-  return Array.from(new Set(sources.map((source) => source?.trim()).filter((source): source is string => Boolean(source))));
+  const assets:Record<string,string> = approvedImageAssets;
+  const originals = sources.map(source=>source?.trim()).filter((source):source is string=>Boolean(source));
+  // Exact-source mapping: a future changed photograph is never replaced by an older cache.
+  return Array.from(new Set(originals.flatMap(source=>assets[source] ? [assets[source],source] : [source])));
 }

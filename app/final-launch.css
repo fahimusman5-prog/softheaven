@@ -35,3 +35,12 @@
 }
 
 .free-delivery-notice{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;margin:16px auto;padding:12px 16px;max-width:calc(100% - 32px);box-sizing:border-box;border:1px solid #ffffffb3;border-radius:18px;background:linear-gradient(120deg,#ffffffd9,#f8eefad9);color:#665080;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.free-delivery-notice span{font-size:12px}.sh-checkout__delivery{min-width:0}.sh-checkout__delivery>span{min-width:0;overflow-wrap:anywhere}.sh-checkout__delivery>strong{white-space:nowrap;color:#665080}
+/* Keep phone search and sorting on separate rows. The inner input shares its glass surface. */
+@media(max-width:767px){
+ .shop-page .shop-controls{grid-template-columns:minmax(0,1fr);gap:10px}
+ .shop-page .shop-controls select{grid-row:auto;width:100%;max-width:none;min-height:46px}
+ .shop-page .shop-controls .search-field{display:flex;align-items:center;gap:8px;min-width:0;width:100%;min-height:46px;padding:0 14px}
+ .shop-page .shop-controls .search-field input{flex:1;width:0;min-width:0;min-height:44px;padding:10px 0;background:transparent;border:0;border-radius:0;box-shadow:none}
+ .shop-page .category-tabs{scrollbar-width:none}
+ .shop-page .category-tabs::-webkit-scrollbar{display:none}
+}

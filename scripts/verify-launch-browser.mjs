@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 const { chromium, firefox, webkit } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const base = process.env.BASE_URL || 'http://localhost:3038';
 const dir='artifacts/launch-readiness/browser'; await fs.mkdir(dir,{recursive:true});
-const widths=[320,360,375,390,393,414,430,480,768,1024,1440];
-const routes=['/','/shop','/collections','/product/aurelius-heritage-bear','/cart','/checkout','/account','/about','/contact','/order-confirmation','/account/orders/11111111-1111-4111-8111-111111111111','/admin','/does-not-exist'];
+const widths=[320,360,375,390,393,414,430,480,768,1024,1280,1440,1920];
+const routes=['/','/shop','/collections','/product/aurelius-heritage-bear','/cart','/checkout','/account','/about','/contact','/order-confirmation','/account/orders/11111111-1111-4111-8111-111111111111','/privacy-policy','/return-policy','/shipping-delivery','/terms-conditions','/payment-result','/admin','/does-not-exist'];
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const results=[];const exceptions=[];
 try {
@@ -29,7 +29,7 @@ try {
  await page.getByRole('button',{name:'Open menu',exact:true}).waitFor({state:'visible'});await page.getByRole('button',{name:'Open menu',exact:true}).click();await page.waitForTimeout(80);assert.equal(await page.evaluate(()=>document.body.style.overflow),'hidden');
  await page.keyboard.press('Escape');await page.waitForTimeout(80);assert.equal(await page.getByRole('button',{name:'Open menu',exact:true}).evaluate(e=>e===document.activeElement),true);
  await page.getByRole('button',{name:'Open search',exact:true}).click();await page.locator('#mobile-product-search').fill('Teddy');await page.locator('.sfh-mobile-search').getByRole('button',{name:'Submit product search'}).click();await page.waitForURL('**/shop?search=Teddy');
- await page.goto(base+'/contact',{waitUntil:'domcontentloaded'});assert.ok(await page.getByRole('button',{name:'Continue in WhatsApp'}).isDisabled());
+ await page.goto(base+'/contact',{waitUntil:'domcontentloaded'});assert.ok(await page.getByRole('button',{name:'Continue to WhatsApp ♡'}).isDisabled());
  const contactCalls=[];page.on('request',r=>{if(r.url().includes('/api/contact'))contactCalls.push(r.url());});assert.equal(contactCalls.length,0);
  const internal=await context.request.get(base+'/api/internal/order-emails');assert.equal(internal.status(),401);
  const retired=await context.request.post(base+'/api/contact');assert.equal(retired.status(),410);

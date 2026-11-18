@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { ProductCard } from '@/components/product-card';
+import { getProductCardPrice } from '@/lib/data';
+import { normalizeSearch, MAX_SEARCH_LENGTH } from '@/lib/search';
 import { SectionReveal } from '@/components/section-reveal';
 import { useCatalogue } from '@/components/catalogue-provider';
 
@@ -39,12 +41,12 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
   const [collectionSlug, setCollectionSlug] = useState(
     () => getSoftHavenCollection(requestedCollection)?.slug,
   );
-  const [query, setQuery] = useState(searchValue ?? '');
+  const [query, setQuery] = useState(normalizeSearch(searchValue));
   const [sort, setSort] = useState('Featured');
   const selectedCollection = getSoftHavenCollection(collectionSlug);
 
   useEffect(() => {
-    setQuery(searchValue ?? '');
+    setQuery(normalizeSearch(searchValue));
     setCategory(
       requestedCategory && categories.includes(requestedCategory)
         ? requestedCategory
@@ -67,13 +69,13 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
             (selectedCollection
               ? selectedCollection.productIds.includes(product.id)
               : category === 'All' || product.category === category) &&
-            product.name.toLowerCase().includes(query.toLowerCase()),
+            product.name.toLowerCase().includes(query.trim().toLowerCase()),
         )
         .sort((a, b) =>
           sort === 'Price: low to high'
-            ? a.price - b.price
+            ? getProductCardPrice(a) - getProductCardPrice(b) || a.id.localeCompare(b.id)
             : sort === 'Price: high to low'
-              ? b.price - a.price
+              ? getProductCardPrice(b) - getProductCardPrice(a) || a.id.localeCompare(b.id)
               : 0,
         ),
     [category, query, selectedCollection, sort, products],
@@ -97,6 +99,8 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
                 !selectedCollection && category === item ? 'active' : ''
               }
               key={item}
+              type="button"
+              aria-pressed={!selectedCollection && category === item}
               onClick={() => {
                 setCollectionSlug(undefined);
                 setCategory(item);
@@ -112,7 +116,8 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
             <input
               aria-label="Search products"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              maxLength={MAX_SEARCH_LENGTH}
+              onChange={(event) => setQuery(normalizeSearch(event.target.value))}
               placeholder="Search companions"
             />
           </label>
