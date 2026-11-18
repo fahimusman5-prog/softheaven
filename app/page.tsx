@@ -1,3 +1,4 @@
+import { FreeDeliveryNotice } from '@/components/free-delivery-notice';
 import Link from 'next/link';
 import { getStorefront } from '@/lib/storefront';
 import { ProductCard } from '@/components/product-card';
@@ -137,7 +138,7 @@ export default async function HomePage() {
             </Link>
           </nav>
         </SectionReveal>
-        <HomeEditorialJourney />
+        <FreeDeliveryNotice/><HomeEditorialJourney />
         {favourites && (
           <SectionReveal>
             <section className="section">

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { Product, ProductVariant } from '@/lib/data';
 import { getProductVariants } from '@/lib/data';
 import { useCatalogue } from '@/components/catalogue-provider';
@@ -53,7 +53,7 @@ function readPersistedCart(value: unknown): CartLine[] | null {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const {products}=useCatalogue();
   const [lines, setLines] = useState<CartLine[]>([]);
-  const [hydrated, setHydrated] = useState(false);
+  const hasHydrated = useRef(false);
 
   useEffect(() => {
     try {
@@ -64,25 +64,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (source) {
         const parsed: unknown = JSON.parse(source);
         const normalized = readPersistedCart(parsed);
-        if (normalized) setLines(normalized.flatMap(line=>{const product=products.find(p=>p.id===line.product.id);if(!product)return [];const variant=product.variants?.find(v=>v.id===line.variant.id)??(line.variant.id.endsWith('-default')?product.variants?.[0]:undefined);if(!variant)return [];return [{product,variant,quantity:Math.min(line.quantity,12)}];}));
+        if (normalized) setLines(normalized.flatMap(line=>{const product=products.find(p=>p.id===line.product.id);if(!product)return [];const variant=product.variants?.find(v=>v.id===line.variant.id)??(line.variant.id.endsWith('-default')?product.variants?.[0]:undefined);if(!variant || variant.active === false || (variant.stock ?? 0) <= 0)return [];return [{product,variant,quantity:Math.min(line.quantity,12,variant.stock ?? 0)}];}));
       }
 
       window.localStorage.removeItem(PREVIOUS_CART_STORAGE_KEY);
       window.localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
     } catch {
-      window.localStorage.removeItem(CART_STORAGE_KEY);
-      window.localStorage.removeItem(PREVIOUS_CART_STORAGE_KEY);
-      window.localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
+      try {
+        window.localStorage.removeItem(CART_STORAGE_KEY);
+        window.localStorage.removeItem(PREVIOUS_CART_STORAGE_KEY);
+        window.localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
+      } catch { /* Browser privacy settings may block all storage access. */ }
     } finally {
-      setHydrated(true);
+      hasHydrated.current = true;
     }
   }, [products]);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hasHydrated.current) return;
     const persisted: PersistedCart = { version: 3, currency: STORE_CURRENCY, lines };
-    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(persisted));
-  }, [lines, hydrated]);
+    try { window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(persisted)); } catch { /* Cart remains usable when browser storage is unavailable. */ }
+  }, [lines]);
 
   const value = useMemo<CartContextValue>(() => ({
     lines,
@@ -90,7 +92,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     subtotal: lines.reduce((sum, line) => sum + line.variant.price * line.quantity, 0),
     add: (product, selectedVariant) => setLines((current) => {
       const variant = selectedVariant ?? getProductVariants(product)[0];
-      if (!variant || variant.stock===0) return current;
+      if (!variant || variant.active === false || (variant.stock ?? 0) <= 0) return current;
       const id = getCartLineId(product, variant);
       const existing = current.find((line) => getCartLineId(line.product, line.variant) === id);
       return existing
@@ -99,7 +101,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }),
     update: (id, quantity) => setLines((current) => quantity < 1
       ? current.filter((line) => getCartLineId(line.product, line.variant) !== id)
-      : current.map((line) => getCartLineId(line.product, line.variant) === id ? { ...line, quantity: Math.min(Math.floor(quantity), 12) } : line)),
+      : current.map((line) => getCartLineId(line.product, line.variant) === id ? { ...line, quantity: Math.max(1, Math.min(Math.floor(quantity), 12, line.variant.stock ?? 0)) } : line)),
     remove: (id) => setLines((current) => current.filter((line) => getCartLineId(line.product, line.variant) !== id)),
     clear: () => setLines([]),
   }), [lines]);

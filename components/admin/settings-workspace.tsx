@@ -1,4 +1,5 @@
 "use client";
+import { DeploymentDiagnostics } from "./deployment-diagnostics";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { allowed } from "@/lib/admin/resources";
@@ -61,6 +62,7 @@ export function SettingsForm({ id, title }: { id: string; title: string }) {
                   ["account_name", "Account name"],
                   ["account_number", "Account number"],
                   ["branch", "Branch"],
+                  ["swift", "SWIFT (optional)"],
                 ].map(([key, label]) => (
                   <label key={key}>
                     {label}
@@ -91,7 +93,7 @@ export function SettingsForm({ id, title }: { id: string; title: string }) {
                       setValue({ ...value, enabled: e.target.checked })
                     }
                   />
-                  Enable internal bank instructions
+                  Enable approved bank transfer checkout
                 </label>
               </>
             ) : (
@@ -207,6 +209,7 @@ export function SettingsWorkspace({ role }: { role: string }) {
       ? [
           { id: "general", label: "General" },
           { id: "seo", label: "SEO" },
+          { id: "deployment", label: "Deployment" },
         ]
       : []),
     ...(allowed(role, "users")
@@ -221,7 +224,7 @@ export function SettingsWorkspace({ role }: { role: string }) {
         description="Store contact details, search defaults and administrator access."
       />
       <AdminTabs items={tabs} value={tab} onChange={setTab} />
-      {tab === "administrators" && allowed(role, "users") ? (
+      {tab === "deployment" && allowed(role, "settings") ? (<DeploymentDiagnostics/>) : tab === "administrators" && allowed(role, "users") ? (
         <Admins role={role} />
       ) : allowed(role, "settings") ? (
         <>
@@ -416,7 +419,7 @@ function CommerceTable({
                           {r.shipping_zones?.name}
                           <small className="admin-cell-secondary">
                             {r.shipping_zones?.districts?.join(", ") ||
-                              "All Sri Lanka"}
+                              "Sri Lanka — Islandwide"}
                           </small>
                         </span>
                       ),

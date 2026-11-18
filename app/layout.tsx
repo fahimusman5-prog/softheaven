@@ -9,6 +9,7 @@ import './home-sky.css';
 import './readiness.css';
 import './premium-motion.css';
 import './atmosphere.css';
+import './final-launch.css';
 import { StorefrontFrame } from '@/components/storefront-frame';
 import { CartProvider } from '@/components/cart-provider';
 import { WishlistProvider } from '@/components/wishlist-provider';
@@ -28,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: '%s | ANTZ SoftHaven',
     },
     description: seo.description ?? '',
+    ...(process.env.VERCEL_ENV !== "production" ? {robots:{index:false,follow:false}} : {}),
     ...(process.env.NEXT_PUBLIC_SITE_URL
       ? { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL) }
       : {}),
@@ -63,6 +65,7 @@ async function StorefrontContent({
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
+      <head><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/></head>
       <body>
         <Suspense fallback={<SoftHavenLoader />}>
           <StorefrontContent>{children}</StorefrontContent>

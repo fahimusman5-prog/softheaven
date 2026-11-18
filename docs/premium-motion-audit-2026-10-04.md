@@ -48,4 +48,3 @@ Inspected auth/reset/confirmation, newsletter, account, reviews, checkout, admin
 20. Remaining limits: authenticated customer/admin browser sessions, email delivery, merchant payment/refund and real purchase flow remain unverified. Current data has Celeste stock 10, other active variants 0 and no shipping rates; no store records were changed persistently.
 
 Desktop geometry compared against baseline at 1280px: zero changes across home (13 measured targets), collections (5), About (4) and product page (4). Production screenshots were visually checked on desktop and mobile, including intact homepage image frames and transparent family composition.
-

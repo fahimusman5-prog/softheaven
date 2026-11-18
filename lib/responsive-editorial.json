@@ -1,0 +1,56 @@
+{
+  "/assets/home-collections/teddy-classic-cuddles-complete.webp": {
+    "384": "/assets/responsive/editorial-0-384.webp",
+    "640": "/assets/responsive/editorial-0-640.webp",
+    "960": "/assets/responsive/editorial-0-960.webp",
+    "1440": "/assets/responsive/editorial-0-1440.webp"
+  },
+  "/assets/home-collections/bunny-sweet-friends-complete.webp": {
+    "384": "/assets/responsive/editorial-1-384.webp",
+    "640": "/assets/responsive/editorial-1-640.webp",
+    "960": "/assets/responsive/editorial-1-960.webp",
+    "1440": "/assets/responsive/editorial-1-1440.webp"
+  },
+  "/assets/home-collections/wild-wonderful-complete.webp": {
+    "384": "/assets/responsive/editorial-2-384.webp",
+    "640": "/assets/responsive/editorial-2-640.webp",
+    "960": "/assets/responsive/editorial-2-960.webp",
+    "1440": "/assets/responsive/editorial-2-1440.webp"
+  },
+  "/assets/home-story/why-softhaven-main-complete.webp": {
+    "384": "/assets/responsive/editorial-3-384.webp",
+    "640": "/assets/responsive/editorial-3-640.webp",
+    "960": "/assets/responsive/editorial-3-960.webp",
+    "1440": "/assets/responsive/editorial-3-1440.webp"
+  },
+  "/assets/home-story/why-softhaven-detail-complete.webp": {
+    "384": "/assets/responsive/editorial-4-384.webp",
+    "640": "/assets/responsive/editorial-4-640.webp",
+    "960": "/assets/responsive/editorial-4-960.webp",
+    "1440": "/assets/responsive/editorial-4-1440.webp"
+  },
+  "/assets/home-story/softhaven-five-companions-complete.webp": {
+    "384": "/assets/responsive/editorial-5-384.webp",
+    "640": "/assets/responsive/editorial-5-640.webp",
+    "960": "/assets/responsive/editorial-5-960.webp",
+    "1440": "/assets/responsive/editorial-5-1440.webp"
+  },
+  "/assets/collections/soft-family-editorial-final-complete.webp": {
+    "384": "/assets/responsive/editorial-6-384.webp",
+    "640": "/assets/responsive/editorial-6-640.webp",
+    "960": "/assets/responsive/editorial-6-960.webp",
+    "1440": "/assets/responsive/editorial-6-1440.webp"
+  },
+  "/images/collections/bunny-sweet-friends.webp": {
+    "384": "/assets/responsive/editorial-7-384.webp",
+    "640": "/assets/responsive/editorial-7-640.webp",
+    "960": "/assets/responsive/editorial-7-960.webp",
+    "1440": "/assets/responsive/editorial-7-1440.webp"
+  },
+  "/images/collections/wild-wonderful.webp": {
+    "384": "/assets/responsive/editorial-8-384.webp",
+    "640": "/assets/responsive/editorial-8-640.webp",
+    "960": "/assets/responsive/editorial-8-960.webp",
+    "1440": "/assets/responsive/editorial-8-1440.webp"
+  }
+}

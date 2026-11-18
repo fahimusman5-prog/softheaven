@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import assets from '../lib/product-image-assets.json';import {resolveProductMedia} from '../lib/product-media';
+test('approved photo derivatives retain original fallback and never replace changed photos',()=>{for(const [source,local] of Object.entries(assets)){assert.deepEqual(resolveProductMedia(undefined,source),[local,source]);}assert.deepEqual(resolveProductMedia(undefined,'https://example.com/new-approved-photo.webp'),['https://example.com/new-approved-photo.webp']);});

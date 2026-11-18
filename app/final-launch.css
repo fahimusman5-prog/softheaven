@@ -1,0 +1,46 @@
+/* Phone-specific composition, preserving the shared pastel/cloud identity. */
+@media(max-width:767px){
+ .sfh-header .sfh-mobile-panel{width:calc(100% - 24px);height:68px;padding:6px 10px;gap:8px}
+ .sfh-header .sfh-brand.sfh-brand--mobile,.sfh-header.is-compact .sfh-brand.sfh-brand--mobile{flex:1 1 96px;max-width:105px;height:54px;min-width:0}
+ .sfh-header .sfh-mobile-actions{gap:2px}.sfh-header .sfh-mobile-action{width:44px;height:44px;flex:0 0 44px}
+ .home-page .hero-portrait{padding-top:12px;padding-bottom:24px}.home-page .hero-portrait__copy h1,.home-page .hero-portrait__copy h1 em{font-size:clamp(38px,10vw,44px);line-height:1.03}
+ .home-page .hero-portrait__copy p{font-size:15px;line-height:1.5;margin-top:12px;max-width:34ch;margin-inline:auto}
+ .home-page .portrait-carousel{margin-top:20px}.home-page .portrait-carousel__stage{height:clamp(308px,96vw,354px)}
+ .home-page .portrait-carousel__card{width:min(76vw,270px);height:auto;aspect-ratio:4/5}.home-page .portrait-carousel__card img{object-position:center 34%}
+ .home-page .portrait-hero-actions{margin-top:10px;gap:10px}.home-page .portrait-hero-button{min-height:48px;white-space:nowrap;font-size:14px}.home-page .portrait-hero-note{margin-top:16px;font-size:27px}
+ .home-page .home-journey :is(.journey-details,.journey-family,.journey-next-hug){padding-block:48px}.home-page .home-journey .journey-discover{padding-top:44px}
+ .home-page .home-journey .journey-discover__scene{position:relative;display:block;width:100%;max-width:460px;height:clamp(320px,100vw,410px);margin:24px auto 16px}
+ .home-page .journey-discover__scene .journey-discover__teddy{position:absolute;left:0;top:6%;width:65%;height:84%;margin:0;border-radius:70px 24px 24px 24px;transform:none}
+ .home-page .journey-discover__scene .journey-discover__bunny{position:absolute;left:auto;right:0;top:0;width:33%;height:49%;margin:0;border-radius:28px;transform:none}
+ .home-page .journey-discover__scene .journey-discover__detail{position:absolute;left:auto;right:0;bottom:0;top:auto;width:33%;height:45%;margin:0;border-radius:24px;transform:none}
+ .home-page .journey-discover__scene img{object-position:center 36%}.home-page .journey-discover__scene .journey-discover__float{display:none}
+ .home-page .journey-discover__rail{padding-top:10px}.home-page .journey-discover__rail-item{min-height:64px}.home-page .journey-discover__number{font-size:42px}
+ .shop-page .category-tabs,.shop-toolbar .category-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding:4px 2px 12px;scrollbar-width:thin;gap:7px}
+ .category-tabs button{flex:0 0 auto;white-space:nowrap;padding:10px 15px;min-height:44px}
+ .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}.shop-grid .product-card{min-width:0}.shop-grid .product-image{aspect-ratio:1;height:auto;min-height:0;border-radius:20px}
+ .shop-grid .product-image>a{display:block;width:100%;height:100%}.shop-grid .product-image img{width:100%;height:100%;object-fit:contain}
+ .shop-grid .product-info h3{font-size:14px;line-height:1.4}.shop-grid .card-add{min-height:44px;font-size:12px}.shop-grid .heart{width:44px;height:44px;top:4px;right:4px}
+ .pdp .pdp-purchase h1{font-size:clamp(32px,9vw,38px)}.pdp .pdp-stage{max-height:370px}.pdp .pdp-quantity button{min-width:44px;min-height:44px}.pdp .pdp-related-heart{width:44px;height:44px}
+ .site-footer.site-footer--refined{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px;padding:38px 20px 24px}.site-footer__brand{grid-column:1/-1}.site-footer__column{min-width:0}.site-footer__column a{min-height:36px;display:flex;align-items:center;overflow-wrap:anywhere}.site-footer__column input{width:100%;min-width:0}.site-footer .footer-bottom{gap:16px;grid-column:1/-1;flex-wrap:wrap}.site-footer .footer-bottom a{min-height:44px}
+}
+@media(min-width:1000px){.site-footer.site-footer--refined{grid-template-columns:1.5fr repeat(4,minmax(0,1fr));gap:28px}}
+@media(max-width:359px){.sfh-header .sfh-mobile-panel{width:calc(100% - 16px);padding-inline:8px}.sfh-header .sfh-brand.sfh-brand--mobile{max-width:88px}.sfh-header .sfh-mobile-actions{gap:0}.home-page .hero-portrait__copy h1,.home-page .hero-portrait__copy h1 em{font-size:36px}.home-page .portrait-hero-button{font-size:12px;padding-inline:8px}}
+/* The homepage's legacy logo rule used a 70px image inside a 54px brand box. */
+@media(max-width:1100px){body .sfh-header .sfh-brand.sfh-brand--mobile img,body .sfh-header.is-compact .sfh-brand.sfh-brand--mobile img{width:100%;height:100%;max-height:100%;min-height:0;object-fit:contain;object-position:center}}
+@media(max-width:767px){
+ .sh-checkout__hero{margin:18px 0}.sh-checkout__card{padding:18px 16px}.sh-checkout__card-heading{margin-bottom:18px}
+ .bank-details{padding:16px;margin-top:18px}.bank-details dl{gap:12px}.bank-details dl>div{display:block}.bank-details dt{font-size:12px;line-height:1.5}.bank-details dd{font-size:14px;line-height:1.55;margin-top:2px}.bank-details button{display:inline-flex;align-items:center;min-height:44px;font-size:12px;margin-top:4px}
+ .sh-checkout__payment{min-height:96px;padding:14px}.sh-checkout__payment strong{font-size:15px}.sh-checkout__payment small{font-size:12px;line-height:1.5}
+ .sh-checkout__summary{padding:18px 16px}.sh-checkout__product{padding:10px;grid-template-columns:60px minmax(0,1fr)}.sh-checkout__product-image{width:60px;height:72px}.sh-checkout__product h3{font-size:14px}.sh-checkout__summary .sh-checkout__card-heading p{font-size:12px}.sh-checkout__security{padding:14px}.sh-checkout__fineprint{line-height:1.5}
+}
+
+.free-delivery-notice{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 10px;margin:16px auto;padding:12px 16px;max-width:calc(100% - 32px);box-sizing:border-box;border:1px solid #ffffffb3;border-radius:18px;background:linear-gradient(120deg,#ffffffd9,#f8eefad9);color:#665080;font-size:13px;line-height:1.5;overflow-wrap:anywhere}.free-delivery-notice span{font-size:12px}.sh-checkout__delivery{min-width:0}.sh-checkout__delivery>span{min-width:0;overflow-wrap:anywhere}.sh-checkout__delivery>strong{white-space:nowrap;color:#665080}
+/* Keep phone search and sorting on separate rows. The inner input shares its glass surface. */
+@media(max-width:767px){
+ .shop-page .shop-controls{grid-template-columns:minmax(0,1fr);gap:10px}
+ .shop-page .shop-controls select{grid-row:auto;width:100%;max-width:none;min-height:46px}
+ .shop-page .shop-controls .search-field{display:flex;align-items:center;gap:8px;min-width:0;width:100%;min-height:46px;padding:0 14px}
+ .shop-page .shop-controls .search-field input{flex:1;width:0;min-width:0;min-height:44px;padding:10px 0;background:transparent;border:0;border-radius:0;box-shadow:none}
+ .shop-page .category-tabs{scrollbar-width:none}
+ .shop-page .category-tabs::-webkit-scrollbar{display:none}
+}

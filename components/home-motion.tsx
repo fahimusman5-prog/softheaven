@@ -14,15 +14,17 @@ export function HomeMotion({ children }: { children: ReactNode }) {
     const node = scope.current;
     if (!node) return;
     const media = gsap.matchMedia();
-    media.add({ reduce: '(prefers-reduced-motion: reduce)', mobile: '(max-width: 767px)', tablet: '(min-width: 768px) and (max-width: 1100px)', desktop: '(min-width: 1101px)' }, (match) => {
+    media.add({ reduce: '(prefers-reduced-motion: reduce)', mobile: '(max-width: 767px)', tablet: '(min-width: 768px) and (max-width: 1100px)' }, (match) => {
       if (match.conditions?.reduce) return;
       const mobile = Boolean(match.conditions?.mobile);
       const distance = mobile ? 10 : match.conditions?.tablet ? 16 : 22;
+      if (!mobile) {
       const intro = gsap.timeline({ defaults: { duration: .7, ease: 'power3.out', clearProps: 'transform,opacity' } });
       intro.from('.hero-portrait__copy h1', { y: distance, opacity: .78 })
         .from('.hero-portrait__copy p', { y: distance, opacity: .8 }, .15)
         .from('.portrait-carousel__visual', { y: distance, opacity: .85, stagger: .06 }, .3)
         .from('.portrait-carousel__controls, .portrait-hero-actions, .portrait-hero-note', { y: 10, opacity: .8, stagger: .1 }, .65);
+      }
       node.querySelectorAll<HTMLElement>('.journey-why, .journey-discover, .journey-details, .journey-gift, .journey-family, .journey-next-hug').forEach((section, index) => {
         const targets = section.querySelectorAll('.eyebrow, h2, [class$="__copy"] > p, [class$="__intro"] > p, [class$="__heading"] > p, [class$="__cta"], [data-story-enter="photo"], [data-story-enter="detail"], [data-next-hug-enter="photo"], .journey-family__item, .journey-discover__rail-item');
         // Establish animation state only on entry. Offscreen content stays readable if setup fails.

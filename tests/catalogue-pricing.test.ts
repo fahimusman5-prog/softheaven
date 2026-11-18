@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {getProductCardPrice,type Product} from '../lib/data';
+test('catalogue price matches the offered active variant instead of a different base price',()=>{const product={id:'bear',price:500,color:'Cream',image:'/bear.webp',variants:[{id:'disabled',active:false,price:10,color:'Old',image:'/old.webp'},{id:'active',active:true,price:700,color:'Pink',image:'/pink.webp'}]} as Product;assert.equal(getProductCardPrice(product),700);assert.equal(getProductCardPrice({...product,variants:undefined}),500);});

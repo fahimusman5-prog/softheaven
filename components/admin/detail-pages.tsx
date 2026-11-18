@@ -24,6 +24,7 @@ import {
   AdminModal,
   ProductCell,
 } from "./primitives";
+import { PaymentReview } from './payment-review';
 import { ResourceEditor } from "./editor";
 const transitions: Record<string, string[]> = {
   pending: ["confirmed", "cancelled"],
@@ -96,6 +97,7 @@ export function OrderDetail({ id, role }: { id: string; role: string }) {
             <StatusBadge value={row.payment_status} />
             <span>{human(row.payment_method)}</span>
           </div>
+          {['card','bank_transfer'].includes(row.payment_method) && <PaymentReview order={id} onSaved={refresh}/>}
           <div className="admin-detail-grid">
             <div>
               <Panel title="Order items">
@@ -290,7 +292,7 @@ export function OrderDetail({ id, role }: { id: string; role: string }) {
                   </Link>
                 )}
               </Panel>
-              <Panel title="Delivery address">
+              <Panel title="Delivery address"><p>Delivery method: {row.shipping_method || "Not recorded"}</p>
                 <Address value={row.shipping_address ?? {}} />
               </Panel>
               <Panel title="Payment">

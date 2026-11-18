@@ -180,7 +180,7 @@ export function PortraitHeroCarousel({ slides }: { slides: PortraitHeroSlide[] }
                 style={{ objectFit: 'cover', objectPosition: 'center center' }}
                 sizes="(max-width: 620px) 260px, (max-width: 1100px) 270px, 290px"
                 fetchPriority={index === 0 ? 'high' : 'auto'}
-                loading={index === 0 ? 'eager' : 'lazy'}
+                loading={Math.abs(position) <= 1 ? 'eager' : 'lazy'}
               />
               <div className="portrait-carousel__shade" />
               <div className="portrait-carousel__caption">

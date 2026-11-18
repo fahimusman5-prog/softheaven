@@ -1,23 +1,36 @@
 'use client';
 import Link from 'next/link';
+import {legalLinks} from '@/lib/legal/policies';
 import { useCatalogue } from '@/components/catalogue-provider';
-import { confirmedUrl } from '@/lib/business';
-import './site-footer.css';
+import { NewsletterForm } from '@/components/newsletter-form';
 
-const groups = [
-  { title: 'Shop', links: [['Shop All', '/shop'], ['Collections', '/collections']] },
-  { title: 'Explore', links: [['About SoftHaven', '/about'], ['Contact Us', '/contact']] },
-  { title: 'Customer care', links: [['Shipping & Delivery', '/shipping-delivery']] },
-  { title: 'Legal', links: [['Privacy Policy', '/privacy-policy'], ['Return Policy', '/return-policy'], ['Terms & Conditions', '/terms-conditions']] },
-];
+
+
 export function SiteFooter() {
-  const { settings } = useCatalogue();
-  const socials = [['Instagram', 'instagram'], ['TikTok', 'tiktok'], ['Facebook', 'facebook']]
-    .map(([label, key]) => ({ label, href: confirmedUrl(settings.social?.[key]) }))
-    .filter((social): social is { label: string; href: string } => Boolean(social.href));
-  return <footer className="site-footer site-footer--refined sh-footer--minimal">
-    <div className="site-footer__brand"><Link href="/" className="wordmark">Soft<span>Haven</span></Link><p>Soft companions for thoughtful gifting<br />and everyday comfort.</p></div>
-    {groups.map(group => <nav className="site-footer__column" aria-label={group.title} key={group.title}><h3>{group.title}</h3>{group.links.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}</nav>)}
-    <div className="footer-bottom"><span>© {new Date().getFullYear()} SoftHaven. All rights reserved.</span>{socials.length > 0 && <nav className="sh-footer__socials" aria-label="Social media">{socials.map(social => <a key={social.label} href={social.href} target="_blank" rel="noopener noreferrer">{social.label}</a>)}</nav>}<a href="#page-top">Back to top ↑</a></div>
-  </footer>;
+  const {categories: records, navigation,settings} = useCatalogue();
+  const categories=records.map(c=>c.name);
+  return (
+    <footer className="site-footer site-footer--refined">
+      <div className="site-footer__brand">
+        <Link href="/" className="wordmark">Soft<span>Haven</span></Link>
+        <p>{settings.footer?.description}</p>
+      </div>
+      <div className="site-footer__column">
+        <h3>Shop</h3>
+        <Link href="/shop">All companions</Link>
+        {categories.map((category) => <Link href={`/shop?category=${encodeURIComponent(category)}`} key={category}>{category}</Link>)}
+      </div>
+      <div className="site-footer__column">
+        <h3>Discover</h3>
+        <Link href="/collections">Collections</Link>
+        <Link href="/about">About SoftHaven</Link>
+      </div>
+      <div className="site-footer__column">
+        <h3>Get in touch</h3>
+        <Link href="/contact">Contact SoftHaven</Link>{settings.general?.email&&<a href={"mailto:"+settings.general.email}>{settings.general.email}</a>}{settings.general?.phone&&<a href={"tel:"+settings.general.phone}>{settings.general.phone}</a>}{navigation.filter(n=>n.placement==='footer').map(n=><Link href={n.url} key={n.id}>{n.label}</Link>)}<NewsletterForm/>
+      </div>
+      <div className="site-footer__column site-footer__legal"><h3>Legal <small>(drafts)</small></h3>{legalLinks.map(link=><Link key={link.href} href={link.href}>{link.title}</Link>)}</div>
+      <div className="footer-bottom"><span>{settings.footer?.copyright}</span><a href="#page-top">Back to top ↑</a></div>
+    </footer>
+  );
 }

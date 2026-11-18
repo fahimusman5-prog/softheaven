@@ -1,9 +1,9 @@
 'use client';
-import { StoreMotion } from '@/components/store-motion';
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import { ProductCard } from '@/components/product-card';
-import { MAX_SEARCH_LENGTH, normalizeSearch } from '@/lib/search';
+import { getProductCardPrice } from '@/lib/data';
+import { normalizeSearch, MAX_SEARCH_LENGTH } from '@/lib/search';
 import { SectionReveal } from '@/components/section-reveal';
 import { useCatalogue } from '@/components/catalogue-provider';
 
@@ -24,7 +24,9 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
     [collections],
   );
 
-  const searchValue = normalizeSearch(params.search);
+  const searchValue = Array.isArray(params.search)
+    ? params.search[0]
+    : params.search;
   const requestedCategory = Array.isArray(params.category)
     ? params.category[0]
     : params.category;
@@ -39,12 +41,12 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
   const [collectionSlug, setCollectionSlug] = useState(
     () => getSoftHavenCollection(requestedCollection)?.slug,
   );
-  const [query, setQuery] = useState(searchValue ?? '');
+  const [query, setQuery] = useState(normalizeSearch(searchValue));
   const [sort, setSort] = useState('Featured');
   const selectedCollection = getSoftHavenCollection(collectionSlug);
 
   useEffect(() => {
-    setQuery(searchValue ?? '');
+    setQuery(normalizeSearch(searchValue));
     setCategory(
       requestedCategory && categories.includes(requestedCategory)
         ? requestedCategory
@@ -67,20 +69,20 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
             (selectedCollection
               ? selectedCollection.productIds.includes(product.id)
               : category === 'All' || product.category === category) &&
-            product.name.toLowerCase().includes(query.toLowerCase()),
+            product.name.toLowerCase().includes(query.trim().toLowerCase()),
         )
         .sort((a, b) =>
           sort === 'Price: low to high'
-            ? a.price - b.price
+            ? getProductCardPrice(a) - getProductCardPrice(b) || a.id.localeCompare(b.id)
             : sort === 'Price: high to low'
-              ? b.price - a.price
+              ? getProductCardPrice(b) - getProductCardPrice(a) || a.id.localeCompare(b.id)
               : 0,
         ),
     [category, query, selectedCollection, sort, products],
   );
 
   return (
-    <StoreMotion><div className="shop-page">
+    <div className="shop-page">
       <section className="page-intro">
         <span className="eyebrow">The SoftHaven atelier</span>
         <h1>{selectedCollection?.name ?? 'Shop the collection'}</h1>
@@ -97,6 +99,8 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
                 !selectedCollection && category === item ? 'active' : ''
               }
               key={item}
+              type="button"
+              aria-pressed={!selectedCollection && category === item}
               onClick={() => {
                 setCollectionSlug(undefined);
                 setCategory(item);
@@ -111,8 +115,8 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
             ⌕
             <input
               aria-label="Search products"
-              maxLength={MAX_SEARCH_LENGTH}
               value={query}
+              maxLength={MAX_SEARCH_LENGTH}
               onChange={(event) => setQuery(normalizeSearch(event.target.value))}
               placeholder="Search companions"
             />
@@ -129,7 +133,7 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
         </div>
       </div>
       <SectionReveal>
-        <div className="shop-grid" aria-live="polite" aria-label="Product results">
+        <div className="shop-grid">
           {visible.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -159,6 +163,6 @@ export default function ShopPage({ params }: { params: ShopSearchParams }) {
           </button>
         </div>
       )}
-    </div></StoreMotion>
+    </div>
   );
 }

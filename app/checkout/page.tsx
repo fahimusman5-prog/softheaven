@@ -1,6 +1,9 @@
 "use client";
+import { isFreeIslandwideRate } from '@/lib/shipping/config';
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
 import { useCart, getCartLineId } from "@/components/cart-provider";
 import { ProductMedia } from "@/components/product-media";
@@ -9,8 +12,10 @@ import {
   paymentMethods,
   type PaymentMethod,
 } from "@/lib/checkout/payment-methods";
-import "./checkout.css";
-import "@/components/policy-page.css";
+import { ReceiptUpload } from '@/components/checkout/receipt-upload';
+import { BankDetailsPanel, type BankDetails } from '@/components/checkout/bank-details';
+import { submitPayhere } from '@/lib/payments/handoff';
+import './checkout.css';
 
 type Address = {
   name: string;
@@ -30,7 +35,7 @@ type Rate = {
   id: string;
   name: string;
   rate: number;
-  shipping_zones?: { active: boolean; districts?: string[] };
+  shipping_zones?: { active: boolean; countries?: string[]; districts?: string[] };
 };
 type Quote = {
   subtotal: number;
@@ -155,16 +160,22 @@ function CardHeading({
   );
 }
 export default function CheckoutPage() {
+  const router=useRouter();
   const { lines, clear, update, remove } = useCart();
   const [hydrated, setHydrated] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [deliveryError,setDeliveryError] = useState(false);
   const [rates, setRates] = useState<Rate[]>([]);
   const [rate, setRate] = useState("");
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [address, setAddress] = useState<Address>(blankAddress);
   const [savedAddress, setSavedAddress] = useState("");
   const [saveAddress, setSaveAddress] = useState(false);
-  const [payment, setPayment] = useState<PaymentMethod>("cod");
+  const [payment, setPayment] = useState<PaymentMethod>("card");
+  const [paymentAvailability,setPaymentAvailability] = useState<Record<PaymentMethod,boolean>>({card:false,bank_transfer:false});
+  const [bank,setBank] = useState<BankDetails|null>(null);
+  const [bankVersion,setBankVersion] = useState<string|null>(null);
+  const [receipt,setReceipt] = useState<string|null>(null);
   const [coupon, setCoupon] = useState("");
   const [points, setPoints] = useState(0);
   const [notes, setNotes] = useState("");
@@ -179,7 +190,7 @@ export default function CheckoutPage() {
   const lock = useRef(false);
   const feedback = useRef<HTMLDivElement>(null);
   const addressTouched = useRef(false);
-  const selectedPayment = paymentMethods.find((p) => p.id === payment)!;
+  const selectedPayment = { ...paymentMethods.find((p) => p.id === payment)!, enabled: paymentAvailability[payment] };
   const payload = {
     lines: lines.map((l) => ({
       variant_id: l.variant.id,
@@ -190,9 +201,9 @@ export default function CheckoutPage() {
     coupon,
     points,
     notes,
-    paymentMethod: payment,
+    paymentMethod: payment, receipt, bankVersion,
   };
-  const fingerprint = JSON.stringify(payload);
+  const fingerprint = JSON.stringify({...payload,receipt:undefined});
   const quote =
     quoteState?.fingerprint === fingerprint ? quoteState.value : null;
   useEffect(() => {
@@ -211,6 +222,9 @@ export default function CheckoutPage() {
           (r: Rate) => r.shipping_zones?.active !== false,
         );
         setRates(active);
+        setPaymentAvailability(v.payments ?? {card:false,bank_transfer:false});
+        setBank(v.bank ?? null);
+        setBankVersion(v.bankVersion ?? null);
         setRate(active[0]?.id ?? "");
         setCustomer(v.customer ?? null);
         if (!addressTouched.current && v.customer?.profile)
@@ -223,6 +237,7 @@ export default function CheckoutPage() {
       })
       .catch(() => {
         if (!controller.signal.aborted) {
+          setDeliveryError(true);
           setMessage(
             "Delivery details could not be loaded. Please refresh to retry.",
           );
@@ -237,9 +252,9 @@ export default function CheckoutPage() {
     const commit =
       (event.nativeEvent as SubmitEvent).submitter?.getAttribute("value") ===
       "place";
-    if (!selectedPayment.enabled) {
+    if (commit && !selectedPayment.enabled) {
       setMessage(
-        "This payment method requires configuration. Please choose cash on delivery.",
+        "This payment method is not configured yet. Please contact us for assistance.",
       );
       return;
     }
@@ -247,6 +262,7 @@ export default function CheckoutPage() {
       setMessage("Review your updated total before placing the order.");
       return;
     }
+    if (commit && payment === 'bank_transfer' && !receipt) { setMessage('Upload a valid payment receipt before submitting.'); return; }
     lock.current = true;
     setBusy(true);
     setMessage("");
@@ -262,6 +278,8 @@ export default function CheckoutPage() {
           result.error || "Your order could not be prepared. Please retry.",
         );
       if (commit) {
+        if (result.payment) { submitPayhere(result.payment); return; }
+        router.push('/payment-result?order='+encodeURIComponent(result.id));
         setOrder(result);
         clear();
         if (saveAddress && customer && !savedAddress) {
@@ -301,6 +319,19 @@ export default function CheckoutPage() {
   return (
     <div className="sh-checkout">
       <div className="sh-checkout__atmosphere" aria-hidden="true">
+        {["top-left", "top-right", "bottom-left", "bottom-right"].map(
+          (position, i) => (
+            <Image
+              key={position}
+              className={`sh-checkout__cloud sh-checkout__cloud--${position}`}
+              src={`/assets/clouds/${i < 2 ? "soft-cloud-cluster.webp" : "soft-cloud-bank.webp"}`}
+              alt=""
+              width={850}
+              height={400}
+              unoptimized
+            />
+          ),
+        )}
         <span className="sh-checkout__heart">♡</span>
       </div>
       <div className="sh-checkout__shell">
@@ -363,11 +394,11 @@ export default function CheckoutPage() {
         {order ? (
           <section className="sh-checkout__empty sh-checkout__card">
             <Icon name="bag" />
-            <h2>A little happiness is on its way.</h2>
+            <h2>Your order has been received.</h2>
             <p>
               Order SH-{order.order_number} · {formatPrice(Number(order.total))}
             </p>
-            <p>Payment is pending. Pay cash when your order arrives.</p>
+            <p>Payment verification is pending. View your order for the latest status.</p>
             {message && <p role="status">{message}</p>}
             <Link
               className="sh-checkout__cta"
@@ -515,7 +546,7 @@ export default function CheckoutPage() {
                   />
                   {!loaded ? (
                     <p role="status">Loading delivery options…</p>
-                  ) : !rates.length ? (
+                  ) : deliveryError ? (<p className="sh-checkout__notice" role="alert">Delivery service is unavailable. Please refresh to retry.</p>) : !rates.length ? (
                     <p className="sh-checkout__notice" role="status">
                       Delivery is not configured yet. Orders cannot be placed
                       until an active delivery rate is available.
@@ -541,10 +572,10 @@ export default function CheckoutPage() {
                           <span>
                             <strong>{r.name}</strong>
                             <small>
-                              Delivery within the configured shipping zone.
+                              {isFreeIslandwideRate(r) ? "Enjoy FREE delivery anywhere in Sri Lanka!" : "Delivery within the configured shipping zone."}
                             </small>
                           </span>
-                          <strong>{formatPrice(Number(r.rate))}</strong>
+                          <strong>{Number(r.rate) === 0 ? "FREE" : formatPrice(Number(r.rate))}</strong>
                         </label>
                       ))}
                     </div>
@@ -567,7 +598,7 @@ export default function CheckoutPage() {
                           name="payment-method"
                           value={p.id}
                           checked={payment === p.id}
-                          onChange={() => setPayment(p.id)}
+                          onChange={() => { setPayment(p.id); setReceipt(null); }}
                         />
                         <span className="sh-checkout__icon">
                           <Icon name={p.icon} />
@@ -577,10 +608,10 @@ export default function CheckoutPage() {
                           <small>{p.description}</small>
                           <small
                             className={
-                              !p.enabled ? "sh-checkout__configuration" : ""
+                              !paymentAvailability[p.id] ? "sh-checkout__configuration" : ""
                             }
                           >
-                            {p.detail}
+                            {paymentAvailability[p.id] ? p.detail : 'Configuration required before payment can start.'}
                           </small>
                         </span>
                       </label>
@@ -588,10 +619,10 @@ export default function CheckoutPage() {
                   </div>
                   {!selectedPayment.enabled && (
                     <p className="sh-checkout__notice" role="status">
-                      {selectedPayment.title} is not available yet. Choose cash
-                      on delivery to continue.
+                      {selectedPayment.title} is not available yet. We’ll enable this option after its payment configuration is verified.
                     </p>
                   )}
+                  {payment === 'bank_transfer' && bank && <><BankDetailsPanel bank={bank} amount={quote ? quote.total.toFixed(2) : null}/><ReceiptUpload onChange={setReceipt} disabled={busy}/></>}
                   <label className="sh-checkout__notes">
                     Order notes <span>(optional)</span>
                     <textarea
@@ -743,7 +774,7 @@ export default function CheckoutPage() {
                       <dt>{label}</dt>
                       <dd>
                         {typeof value === "number"
-                          ? `${label === "Discount" || label === "Reward points" ? "− " : ""}${formatPrice(value)}`
+                          ? label === "Delivery" && value === 0 ? "FREE" : `${label === "Discount" || label === "Reward points" ? "− " : ""}${formatPrice(value)}`
                           : "Not yet calculated"}
                       </dd>
                     </div>
@@ -793,21 +824,19 @@ export default function CheckoutPage() {
                       ? "Refresh order total"
                       : "Review order total"}
                 </button>
-                <p className="sh-checkout__legal">By placing your order, you agree to our <Link href="/terms-conditions" target="_blank" rel="noopener noreferrer">Terms &amp; Conditions</Link> and acknowledge our <Link href="/privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</Link> and <Link href="/return-policy" target="_blank" rel="noopener noreferrer">Return Policy</Link>.</p>
                 <button
                   className="sh-checkout__cta"
                   type="submit"
                   value="place"
                   disabled={
-                    !quote || !customer || !rate || !selectedPayment.enabled
+                    !quote || !customer || !rate || !selectedPayment.enabled || (payment === 'bank_transfer' && !receipt)
                   }
                 >
                   {busy ? "Preparing your order…" : selectedPayment.cta}{" "}
                   <span aria-hidden="true">→</span>
                 </button>
                 <p className="sh-checkout__fineprint">
-                  <Icon name="lock" /> Your order is confirmed only after our
-                  server validates your details and total.
+                  <Icon name="lock" /> Payment is confirmed only after provider or authorized staff verification.
                 </p>
               </div>
             </fieldset>

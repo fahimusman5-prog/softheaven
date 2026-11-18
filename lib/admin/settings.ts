@@ -11,6 +11,7 @@ export function validateSettings(id: string, value: unknown) {
         account_name: z.string().max(150),
         account_number: z.string().max(60),
         branch: z.string().max(150),
+        swift: z.string().max(50).optional(),
         instructions: text,
         enabled: z.boolean(),
       })

@@ -8,3 +8,8 @@ tsconfig.tsbuildinfo
 AGENTS.md
 CLAUDE.md
 .DS_Store
+
+.next-*/
+.codex-qa/
+artifacts/
+supabase/.temp/

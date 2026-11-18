@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { editorialImageLoader } from '@/lib/responsive-editorial';
 import Link from 'next/link';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -53,7 +54,7 @@ export function HomeEditorialJourney() {
         ];
         scenes.forEach(({ section, clouds, word }) => {
           const timeline = gsap.timeline({ scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: mobile ? .35 : .7, invalidateOnRefresh: true } });
-          timeline.fromTo(clouds, { x: 0, y: 0 }, { x: mobile ? 24 : 70, y: mobile ? -3 : -10, ease: 'none' }, 0);
+          timeline.fromTo(clouds, { y: mobile ? 10 : 30 }, { y: mobile ? -24 : -90, ease: 'none' }, 0);
           if (!mobile) timeline.fromTo(word, { y: 12 }, { y: -32, ease: 'none' }, 0);
         });
         if (!mobile) {
@@ -78,15 +79,15 @@ export function HomeEditorialJourney() {
             <Link className="journey-discover__cta" href={sections['discover']?.cta_url??'/shop'}>{sections['discover']?.cta_label} <span aria-hidden="true">→</span></Link>
           </div>
           <div className="journey-discover__scene" aria-label="SoftHaven plush collection">
-            <div className={`journey-discover__bunny ${discoverHoverSlug === featuredCollections[1].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[1].slug]} alt="Creamy-white, blush-pink and pale lavender plush bunnies together" fill unoptimized sizes="(max-width: 700px) 46vw, (max-width: 1100px) 19vw, 290px" /></div>
-            <div className={`journey-discover__teddy ${discoverHoverSlug === featuredCollections[0].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[0].slug]} alt="Four teddy bears in caramel, cream, pink and mocha gathered together" fill unoptimized sizes="(max-width: 700px) 78vw, (max-width: 1100px) 48vw, 600px" /></div>
-            <div className={`journey-discover__detail ${discoverHoverSlug === featuredCollections[2].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[2].slug]} alt="Grey elephant, husky, mint dinosaur and pastel giraffe plush companions" fill unoptimized sizes="(max-width: 700px) 34vw, 250px" /></div>
+            <div className={`journey-discover__bunny ${discoverHoverSlug === featuredCollections[1].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[1].slug]} alt="Creamy-white, blush-pink and pale lavender plush bunnies together" fill loader={editorialImageLoader} sizes="(max-width: 700px) 94vw, (max-width: 1100px) 19vw, 290px" /></div>
+            <div className={`journey-discover__teddy ${discoverHoverSlug === featuredCollections[0].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[0].slug]} alt="Four teddy bears in caramel, cream, pink and mocha gathered together" fill loader={editorialImageLoader} sizes="(max-width: 700px) 78vw, (max-width: 1100px) 48vw, 600px" /></div>
+            <div className={`journey-discover__detail ${discoverHoverSlug === featuredCollections[2].slug ? 'is-emphasized' : ''}`}><Image src={discoverImages[featuredCollections[2].slug]} alt="Grey elephant, husky, mint dinosaur and pastel giraffe plush companions" fill loader={editorialImageLoader} sizes="(max-width: 700px) 94vw, 250px" /></div>
             <Link className={`journey-discover__float journey-discover__float--teddy ${discoverHoverSlug === featuredCollections[0].slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${featuredCollections[0].slug}`} onMouseEnter={() => setDiscoverHoverSlug(featuredCollections[0].slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(featuredCollections[0].slug)} onBlur={() => setDiscoverHoverSlug(null)}><span aria-hidden="true">✦</span><strong>{discoverNames[featuredCollections[0].slug]}</strong></Link>
             <Link className={`journey-discover__float journey-discover__float--bunny ${discoverHoverSlug === featuredCollections[1].slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${featuredCollections[1].slug}`} onMouseEnter={() => setDiscoverHoverSlug(featuredCollections[1].slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(featuredCollections[1].slug)} onBlur={() => setDiscoverHoverSlug(null)}><span aria-hidden="true">♡</span><strong>{discoverNames[featuredCollections[1].slug]}</strong></Link>
             <Link className={`journey-discover__float journey-discover__float--wild ${discoverHoverSlug === featuredCollections[2].slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${featuredCollections[2].slug}`} onMouseEnter={() => setDiscoverHoverSlug(featuredCollections[2].slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(featuredCollections[2].slug)} onBlur={() => setDiscoverHoverSlug(null)}><span aria-hidden="true">⊞</span><strong>{discoverNames[featuredCollections[2].slug]}</strong></Link>
           </div>
         </div>
-        <div className="journey-discover__clouds" data-discover-parallax="clouds" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill unoptimized sizes="100vw" /></div>
+        <div className="journey-discover__clouds" data-discover-parallax="clouds" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill loader={editorialImageLoader} sizes="100vw" /></div>
         <nav className="journey-discover__rail" aria-label="Explore featured collections">
           {featuredCollections.map((collection, index) => <Link className={`journey-discover__rail-item journey-discover__rail-item--${index + 1} ${discoverHoverSlug === collection.slug ? 'is-emphasized' : ''}`} href={`/shop?collection=${collection.slug}`} key={collection.slug} onMouseEnter={() => setDiscoverHoverSlug(collection.slug)} onMouseLeave={() => setDiscoverHoverSlug(null)} onFocus={() => setDiscoverHoverSlug(collection.slug)} onBlur={() => setDiscoverHoverSlug(null)}>
             <span className="journey-discover__number">0{index + 1}</span><span className="journey-discover__rail-icon" aria-hidden="true">{['✦', '♡', '⊞'][index]}</span><strong>{discoverNames[collection.slug]}</strong><span className="journey-discover__arrow" aria-hidden="true">→</span>
@@ -103,12 +104,12 @@ export function HomeEditorialJourney() {
           <div className="journey-details__art" aria-label="SoftHaven teddy and bunny editorial photography">
             <div className="journey-details__photo-parallax" data-story-parallax="photo">
               <div className="journey-details__photo-enter" data-story-enter="photo">
-                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src="/assets/home-story/why-softhaven-main-complete.webp" alt="SoftHaven caramel teddy, cream bunny and pink teddy nestled together in a soft pastel setting" fill unoptimized sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
+                <div className="journey-details__photo-outline"><div className="journey-details__photo-mask"><Image src="/assets/home-story/why-softhaven-main-complete.webp" alt="SoftHaven caramel teddy, cream bunny and pink teddy nestled together in a soft pastel setting" fill loader={editorialImageLoader} sizes="(max-width: 760px) 100vw, (max-width: 1100px) 55vw, 900px" /></div></div>
               </div>
             </div>
             <Image className="journey-details__cloud journey-details__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
             <div className="journey-details__cloud-parallax" data-story-parallax="clouds"><Image className="journey-details__cloud journey-details__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1500} height={600} alt="" unoptimized aria-hidden="true" /></div>
-            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-story/why-softhaven-detail-complete.webp" alt="Close-up of soft caramel teddy fur and lavender satin bow" fill unoptimized sizes="(max-width: 760px) 36vw, 270px" /></div></div>
+            <div className="journey-details__detail-parallax" data-story-parallax="detail"><div className="journey-details__detail" data-story-enter="detail"><Image src="/assets/home-story/why-softhaven-detail-complete.webp" alt="Close-up of soft caramel teddy fur and lavender satin bow" fill loader={editorialImageLoader} sizes="(max-width: 760px) 36vw, 270px" /></div></div>
             <svg className="journey-details__heart" viewBox="0 0 100 85" fill="none" aria-hidden="true"><path d="M49 73C31 58 8 41 14 24c5-16 26-15 35 3 9-18 31-18 37-4 8 19-20 39-37 50Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /><path d="M49 73c13 9 26 7 37 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
             <svg className="journey-details__sparkle" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 0c2.2 12 7.8 17.8 20 20-12.2 2.2-17.8 8-20 20C17.8 28 12.2 22.2 0 20 12.2 17.8 17.8 12 20 0Z" fill="currentColor" /></svg>
           </div>
@@ -128,7 +129,7 @@ export function HomeEditorialJourney() {
 
 
       {sections['family']&&<><section className="journey-family" aria-labelledby="journey-family-title">
-        <span className="journey-family__cloud journey-family__cloud--top" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-cluster.webp" alt="" fill unoptimized sizes="420px" /></span>
+        <span className="journey-family__cloud journey-family__cloud--top" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-cluster.webp" alt="" fill loader={editorialImageLoader} sizes="420px" /></span>
         <span className="journey-family__word" data-family-parallax="word" aria-hidden="true">FAMILY</span>
         <div className="journey-family__heading">
           <span className="eyebrow">{sections['family']?.eyebrow} <i aria-hidden="true" /></span>
@@ -154,13 +155,13 @@ export function HomeEditorialJourney() {
         </div>
         <div className="journey-family__visual">
           <span className="journey-family__heart" aria-hidden="true">♡</span>
-          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}><Image src={(sections.family?.image === '/assets/collections/soft-family-editorial-final.png' ? '/assets/collections/soft-family-editorial-final-complete.webp' : sections.family?.image)??familyImages[activeFamily.slug]??activeFamily.image??'/assets/collections/soft-family-editorial.webp'} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill unoptimized sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
+          <div className="journey-family__image" aria-live="polite"><picture key={activeFamily.slug}><Image src={(sections.family?.image === '/assets/collections/soft-family-editorial-final.png' ? '/assets/collections/soft-family-editorial-final-complete.webp' : sections.family?.image)??familyImages[activeFamily.slug]??activeFamily.image??'/assets/collections/soft-family-editorial.webp'} alt={activeFamily.slug === 'teddy-classic-cuddles' ? 'Editorial plush family with a caramel teddy, cream bunny, lamb, puppy and kitten' : activeFamily.imageAlt ?? `${activeFamily.name} plush companions`} fill loader={editorialImageLoader} sizes="(max-width: 700px) 94vw, (max-width: 1100px) 58vw, 64vw" /></picture></div>
           <span className="journey-family__sparkle" aria-hidden="true">✧</span>
           <article className="journey-family__note" aria-live="polite">
             <span>✧</span><div><small>Currently meeting</small><h3>{activeFamily.name}</h3><Link href={`/shop?collection=${activeFamily.slug}`}>Explore collection <span aria-hidden="true">→</span></Link></div>
           </article>
         </div>
-        <span className="journey-family__cloud journey-family__cloud--bottom" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill unoptimized sizes="100vw" /></span>
+        <span className="journey-family__cloud journey-family__cloud--bottom" data-family-parallax="cloud" aria-hidden="true"><Image src="/assets/clouds/soft-cloud-bank.webp" alt="" fill loader={editorialImageLoader} sizes="100vw" /></span>
       </section></>}
 
       {sections['next-hug']&&<><section className="journey-next-hug" aria-labelledby="journey-next-hug-title">
@@ -178,7 +179,7 @@ export function HomeEditorialJourney() {
             <Link className="journey-next-hug__link" href="/shop">or explore every soft friend</Link>
           </div>
           <div className="journey-next-hug__art" data-next-hug-enter="photo" aria-label="Five SoftHaven plush companions together in a pastel cloud setting">
-            <div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src="/assets/home-story/softhaven-five-companions-complete.webp" alt="Five SoftHaven plush companions including a teddy bear, bunny, elephant, husky and mint dinosaur together in a pastel cloud setting" fill unoptimized sizes="(max-width: 760px) 100vw, (max-width: 1100px) 56vw, 920px" /></div></div>
+            <div className="journey-next-hug__photo-outline"><div className="journey-next-hug__photo"><Image src="/assets/home-story/softhaven-five-companions-complete.webp" alt="Five SoftHaven plush companions including a teddy bear, bunny, elephant, husky and mint dinosaur together in a pastel cloud setting" fill loader={editorialImageLoader} sizes="(max-width: 760px) 100vw, (max-width: 1100px) 56vw, 920px" /></div></div>
             <Image className="journey-next-hug__cloud journey-next-hug__cloud--left" src="/assets/clouds/soft-cloud-cluster.webp" width={700} height={370} alt="" unoptimized aria-hidden="true" />
             <Image className="journey-next-hug__cloud journey-next-hug__cloud--front" src="/assets/clouds/soft-cloud-bank.webp" width={1400} height={303} alt="" unoptimized aria-hidden="true" />
           </div>

@@ -15,5 +15,3 @@ Prompt: Original premium editorial collection campaign photograph, square compos
 ## lion
 
 Prompt: Original premium editorial collection campaign photograph, square composition. ONE realistic warm golden plush lion with rich caramel mane and friendly refined face, seated on fluffy dimensional blush and lavender clouds in RIGHT 58% of frame, lower right. Whole lion visible, sophisticated realistic textile fibers, soft paws. LEFT 45% is open pale lavender powder-blue atmospheric sky with faint distant clouds, deliberately quiet for live HTML text overlay. Volumetric pastel clouds, powder blue sky, warm diffused sunlight. High-end DTC plush photography, harmonious pink lavender blue cream palette, elegant sophisticated magical mood. No crown, no accessories, no text, no logo, no interface, no frame, no watermark, no other toys, no extra limbs.
-
-

@@ -1,55 +1,7 @@
-export const paymentIds = [
-  "cod",
-  "card",
-  "bank_transfer",
-  "koko",
-  "mintpay",
-] as const;
+// Historical methods remain on old order records; new checkout accepts only these two.
+export const paymentIds = ['card', 'bank_transfer'] as const;
 export type PaymentMethod = (typeof paymentIds)[number];
 export const paymentMethods = [
-  {
-    id: "cod",
-    title: "Cash on Delivery",
-    description: "Pay when your SoftHaven order arrives.",
-    detail: "No online payment required.",
-    cta: "Place Cash-on-Delivery Order",
-    icon: "parcel",
-    enabled: true,
-  },
-  {
-    id: "card",
-    title: "Card Payment",
-    description: "Pay securely online with your card.",
-    detail: "Gateway configuration required.",
-    cta: "Continue to Secure Card Payment",
-    icon: "card",
-    enabled: false,
-  },
-  {
-    id: "bank_transfer",
-    title: "Bank Transfer",
-    description: "Transfer directly to our bank account.",
-    detail: "Pending-order flow configuration required.",
-    cta: "Place Bank Transfer Order",
-    icon: "bank",
-    enabled: false,
-  },
-  {
-    id: "koko",
-    title: "Koko",
-    description: "Buy now, pay later with Koko.",
-    detail: "Merchant integration required.",
-    cta: "Continue with Koko",
-    icon: "phone",
-    enabled: false,
-  },
-  {
-    id: "mintpay",
-    title: "MintPay",
-    description: "Split your payment with MintPay.",
-    detail: "Merchant integration required.",
-    cta: "Continue with MintPay",
-    icon: "phone",
-    enabled: false,
-  },
+  { id: 'card', title: 'Pay Securely by Card', description: 'Complete your payment securely through PayHere.', detail: 'Your card details are handled by PayHere.', cta: 'Proceed to Secure Payment', icon: 'card' },
+  { id: 'bank_transfer', title: 'Direct Bank Transfer', description: 'Transfer your payment and upload your receipt for verification.', detail: 'A payment receipt is required.', cta: 'Submit Order for Verification', icon: 'bank' },
 ] as const;

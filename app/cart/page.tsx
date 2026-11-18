@@ -1,6 +1,7 @@
 'use client';
 import { StoreMotion } from '@/components/store-motion';
 
+import { FreeDeliveryNotice } from '@/components/free-delivery-notice';
 import Link from 'next/link';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { getCartLineId, useCart } from '@/components/cart-provider';
@@ -53,7 +54,7 @@ export default function CartPage() {
             </AnimatePresence>
           </div>
 
-          <aside className="cart-summary">
+          <aside className="cart-summary"><FreeDeliveryNotice/>
             <h2>Bag summary</h2>
             <div><span>Bag Subtotal</span><b key={subtotal} className="soft-value-response">{formatPrice(subtotal)}</b></div>
             <hr />

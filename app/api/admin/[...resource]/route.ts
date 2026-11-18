@@ -16,6 +16,7 @@ export async function GET(
   try {
     const path = (await params).resource.join("/");
     const url = new URL(request.url);
+    if (path === 'payments') { const {db}=await requireAdmin('orders');const id=z.uuid().parse(url.searchParams.get('order'));const {data,error}=await db.rpc('order_payment_details',{p_order:id});if(error)throw error;return Response.json(data); }
     if (path.startsWith("business/")) return await businessGet(path, url);
     if (path === "dashboard") {
       const { db } = await requireAdmin();
@@ -371,6 +372,7 @@ export async function POST(
       ? db.from(config.table).update(values).eq("id", id)
       : db.from(config.table).insert(values);
     const { data, error } = await query.select("id").single();
+    if (error?.code === '23505' && path === 'products') return Response.json({ error: 'This URL handle or SKU is already used. Choose another value.', errorCode: 'PRODUCT_CONFLICT' }, { status: 409 });
     if (error) throw error;
     return Response.json({ ok: true, id: data.id });
   } catch (e) {
