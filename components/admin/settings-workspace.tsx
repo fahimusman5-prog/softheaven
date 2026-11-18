@@ -1,4 +1,5 @@
 "use client";
+import { DeploymentDiagnostics } from "./deployment-diagnostics";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { allowed } from "@/lib/admin/resources";
@@ -208,6 +209,7 @@ export function SettingsWorkspace({ role }: { role: string }) {
       ? [
           { id: "general", label: "General" },
           { id: "seo", label: "SEO" },
+          { id: "deployment", label: "Deployment" },
         ]
       : []),
     ...(allowed(role, "users")
@@ -222,7 +224,7 @@ export function SettingsWorkspace({ role }: { role: string }) {
         description="Store contact details, search defaults and administrator access."
       />
       <AdminTabs items={tabs} value={tab} onChange={setTab} />
-      {tab === "administrators" && allowed(role, "users") ? (
+      {tab === "deployment" && allowed(role, "settings") ? (<DeploymentDiagnostics/>) : tab === "administrators" && allowed(role, "users") ? (
         <Admins role={role} />
       ) : allowed(role, "settings") ? (
         <>

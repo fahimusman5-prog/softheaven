@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    SOFTHAVEN_BUILD_SHA: /^[a-f0-9]{40}$/i.test(process.env.VERCEL_GIT_COMMIT_SHA || '') ? process.env.VERCEL_GIT_COMMIT_SHA : 'unknown',
+    SOFTHAVEN_BUILD_TIME: new Date().toISOString(),
+    SOFTHAVEN_BUILD_ENV: process.env.VERCEL_ENV || 'local',
+  },
   poweredByHeader: false,
   async headers() {
     return [

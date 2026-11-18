@@ -51,11 +51,11 @@ function ProductImage({ src, alt, className, priority = false, fit = 'contain', 
 function AboutHero() {
   return (
     <section className={styles.hero} aria-labelledby="about-title">
-      <div className={styles.heroCopy}>
+      <div className={styles.heroCopy} data-store-reveal>
         <p className={styles.eyebrow}>Our Story</p>
         <h1 id="about-title">A Softer<br />Kind of<br /><span className={styles.heartLine}><em>Happiness.</em><span className={styles.headingHeart} aria-hidden="true">♡</span></span></h1>
         <p className={styles.heroLede}>At SoftHaven, we believe in the quiet magic of soft things — the kind that bring comfort, joy and a little more love into everyday life.</p>
-        <Link className={styles.button} href="#principles">Our Journey <Icon name="arrow" /></Link>
+        <Link className={styles.button} data-soft-cta href="#principles">Our Journey <Icon name="arrow" /></Link>
       </div>
       <div className={styles.heroVisual}>
         <span className={`${styles.orbit} ${styles.orbitOne}`} aria-hidden="true" />
@@ -89,7 +89,7 @@ function MomentCollage() {
 function EveryMoment() {
   return (
     <section className={styles.everyMoment} aria-labelledby="moment-title">
-      <div className={styles.momentCopy}>
+      <div className={styles.momentCopy} data-store-reveal>
         <p className={styles.eyebrow}>Made For</p>
         <h2 id="moment-title">Every <em>Moment</em></h2>
         <p>Whether it’s a thoughtful gift, a celebration or simply something soft to keep close, SoftHaven is made for meaningful everyday moments.</p>
@@ -107,11 +107,11 @@ function BrandPromise() {
         <Image className={styles.promiseTeddies} src="/assets/about/plush-group.webp" alt="Three SoftHaven plush companions gathered together" fill unoptimized sizes="(max-width: 620px) 88vw, (max-width: 1100px) 45vw, 650px" />
         <Image className={styles.promiseCloud} src="/assets/clouds/soft-cloud-bank.webp" alt="" aria-hidden="true" unoptimized width={1400} height={340} sizes="(max-width: 620px) 100vw, 680px" />
       </div>
-      <div className={styles.promiseCopy}>
+      <div className={styles.promiseCopy} data-store-reveal>
         <p className={styles.eyebrow}>Our Promise</p>
         <h2 id="promise-title">Bringing a Little<br /><em>More Love</em> to the World.</h2>
         <p>Soft companions and thoughtful gifts for the moments worth holding close.</p>
-        <Link className={styles.button} href="/shop">Shop Now <Icon name="arrow" /></Link>
+        <Link className={styles.button} data-soft-cta href="/shop">Shop Now <Icon name="arrow" /></Link>
       </div>
     </section>
   );

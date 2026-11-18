@@ -98,3 +98,6 @@
   .statuses > div { gap: 4px; }
   .statuses svg { width: 20px; height: 20px; }
 }
+
+/* Nested real loading boundaries share one visible artwork and one scroll lock. */
+.loader[data-loader-secondary] { display:none; }

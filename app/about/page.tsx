@@ -1,3 +1,4 @@
+import { StoreMotion } from '@/components/store-motion';
 import type { Metadata } from 'next';
 import { AboutPage as AboutExperience } from '@/components/about-page';
 
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return <AboutExperience />;
+  return <StoreMotion><AboutExperience /></StoreMotion>;
 }
