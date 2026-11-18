@@ -7,6 +7,7 @@ import './home-reference.css';
 import 'lenis/dist/lenis.css';
 import './home-sky.css';
 import './readiness.css';
+import './final-launch.css';
 import { StorefrontFrame } from '@/components/storefront-frame';
 import { CartProvider } from '@/components/cart-provider';
 import { WishlistProvider } from '@/components/wishlist-provider';
@@ -61,6 +62,7 @@ async function StorefrontContent({
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
+      <head><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/></head>
       <body>
         <Suspense fallback={<SoftHavenLoader />}>
           <StorefrontContent>{children}</StorefrontContent>

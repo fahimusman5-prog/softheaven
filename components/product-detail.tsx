@@ -1,5 +1,6 @@
 'use client';
 
+import { FreeDeliveryNotice } from '@/components/free-delivery-notice';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
@@ -112,7 +113,7 @@ export function ProductDetail({ product, relatedProducts }: { product: Product; 
           <div className="pdp-actions"><div className="pdp-quantity" role="group" aria-label="Quantity"><button type="button" aria-label="Decrease quantity" disabled={unavailable || quantity <= 1} onClick={() => setQuantity(q => Math.max(1, q - 1))}>−</button><output aria-live="polite">{quantity}</output><button type="button" aria-label="Increase quantity" disabled={unavailable || quantity >= capacity} onClick={() => setQuantity(q => Math.min(capacity, q + 1))}>+</button></div><button type="button" className="pdp-add" disabled={unavailable || capacity === 0} onClick={addToBag}><Icon name="bag"/>{unavailable ? 'Currently unavailable' : capacity === 0 ? 'Already in your bag' : 'Add to bag'}</button></div>
           <button type="button" className="pdp-wishlist" aria-pressed={saved} onClick={() => toggleWishlist(product.id)}><Icon name="heart"/>{saved ? 'Added to wishlist' : 'Add to wishlist'}</button>
           {feedback && <div className="pdp-bag-feedback"><p role="status">{feedback}</p><Link href="/cart">View bag <span aria-hidden="true">↗</span></Link></div>}
-          <div className="pdp-benefits"><span><Icon name="truck"/>Islandwide delivery</span><span><Icon name="shield"/>Secure checkout</span><span><Icon name="gift"/>Carefully packed</span></div>
+          <FreeDeliveryNotice/><div className="pdp-benefits"><span><Icon name="truck"/>Islandwide delivery</span><span><Icon name="shield"/>Secure checkout</span><span><Icon name="gift"/>Carefully packed</span></div>
         </div>
         <div className="pdp-accordions"><Accordion title="Product Details" icon="details"><p>{product.description}</p><ul>{(product.details ?? []).map(detail => <li key={detail}>{detail}</li>)}</ul><dl><div><dt>Colour</dt><dd>{variant?.color || product.color}</dd></div>{variant?.sku && <div><dt>SKU</dt><dd>{variant.sku}</dd></div>}</dl></Accordion><Accordion title="Care Instructions" icon="heart"><p>{(product.details ?? []).filter(d => /wash|care|clean|machine|hand.?wash/i.test(d)).join('. ') || 'Follow the care label supplied with your companion. For product-specific care advice, please contact our team.'}</p><Link href="/contact">Ask about care →</Link></Accordion><Accordion title="Delivery Information" icon="truck"><p>Delivery charges for your address are calculated at checkout. For delivery timing and assistance with your order, contact our team.</p><Link href="/contact">Delivery enquiries →</Link></Accordion><Accordion title="Returns & Exchanges" icon="return"><p>Need help with an item you received? Contact us with your order details so our team can advise on returns or exchanges.</p><Link href="/contact">Get help with your order →</Link></Accordion></div>
         </div>

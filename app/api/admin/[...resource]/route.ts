@@ -16,6 +16,7 @@ export async function GET(
   try {
     const path = (await params).resource.join("/");
     const url = new URL(request.url);
+    if (path === 'payments') { const {db}=await requireAdmin('orders');const id=z.uuid().parse(url.searchParams.get('order'));const {data,error}=await db.rpc('order_payment_details',{p_order:id});if(error)throw error;return Response.json(data); }
     if (path.startsWith("business/")) return await businessGet(path, url);
     if (path === "dashboard") {
       const { db } = await requireAdmin();

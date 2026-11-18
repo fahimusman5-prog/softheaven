@@ -1,19 +1,12 @@
-import assert from "node:assert/strict";
-import { test } from "node:test";
-import { paymentIds, paymentMethods } from "../lib/checkout/payment-methods";
-test("checkout keeps BNPL providers distinct and only enables the real COD flow", () => {
-  assert.equal(new Set(paymentIds).size, 5);
-  assert.ok(paymentIds.includes("koko") && paymentIds.includes("mintpay"));
-  assert.deepEqual(
-    paymentMethods.filter((p) => p.enabled).map((p) => p.id),
-    ["cod"],
-  );
-  assert.equal(
-    paymentMethods.find((p) => p.id === "koko")?.cta,
-    "Continue with Koko",
-  );
-  assert.equal(
-    paymentMethods.find((p) => p.id === "mintpay")?.cta,
-    "Continue with MintPay",
-  );
-});
+import assert from 'node:assert/strict';
+import { test } from 'node:test';
+import {createHash} from 'node:crypto';
+import { paymentIds, paymentMethods } from '../lib/checkout/payment-methods';
+import {fixedAmount,checkoutHash,verifyNotification,payhereConfig,cardCheckoutAvailable} from '../lib/payments/payhere';
+const md5=(s:string)=>createHash('md5').update(s).digest('hex').toUpperCase();
+test('new checkout exposes exactly Card and Bank Transfer',()=>{assert.deepEqual(paymentIds,['card','bank_transfer']);assert.equal(paymentMethods.length,2);assert.equal(paymentMethods[0].cta,'Proceed to Secure Payment');assert.equal(paymentMethods[1].cta,'Submit Order for Verification');});
+test('gateway amount uses exact minor units and official uppercase MD5',()=>{assert.equal(fixedAmount('1234.5'),'1234.50');assert.equal(fixedAmount('0.01'),'0.01');assert.throws(()=>fixedAmount('1.001'));assert.throws(()=>fixedAmount('1e3'));assert.throws(()=>fixedAmount('0'));assert.equal(checkoutHash('123456','order','12.30','secret'),md5('123456order12.30LKR'+md5('secret')));});
+test('PayHere callback rejects wrong signatures, merchants, currencies and supports all official statuses',()=>{for(const code of ['2','0','-1','-2','-3']){const value={merchant_id:'123456',order_id:'11111111-1111-4111-8111-111111111111',payment_id:'provider-1',payhere_amount:'123.45',payhere_currency:'LKR',status_code:code,md5sig:''};value.md5sig=md5(value.merchant_id+value.order_id+value.payhere_amount+'LKR'+code+md5('test-secret'));assert.equal(verifyNotification(value,{merchant:'123456',secret:'test-secret'}).status_code,code);assert.throws(()=>verifyNotification({...value,payhere_amount:'123.46'},{merchant:'123456',secret:'test-secret'}));assert.throws(()=>verifyNotification(value,{merchant:'999999',secret:'test-secret'}));assert.throws(()=>verifyNotification({...value,payhere_currency:'USD'},{merchant:'123456',secret:'test-secret'}));}});
+test('PayHere credentials and HTTPS origin gate activation without fake fallbacks',()=>{assert.equal(payhereConfig({}),null);const v={PAYHERE_MERCHANT_ID:'123456',PAYHERE_MERCHANT_SECRET:'test-secret',PAYHERE_MODE:'sandbox',NEXT_PUBLIC_SITE_URL:'https://preview.example.com'};assert.equal(payhereConfig(v)?.endpoint,'https://sandbox.payhere.lk/pay/checkout');assert.equal(payhereConfig({...v,PAYHERE_MODE:'production'})?.endpoint,'https://www.payhere.lk/pay/checkout');assert.equal(payhereConfig({...v,PAYHERE_MODE:'wrong'}),null);});
+
+test("disabling new checkout does not disable signed callback configuration",()=>{const env={PAYHERE_MERCHANT_ID:"123456",PAYHERE_MERCHANT_SECRET:"test-secret",PAYHERE_MODE:"sandbox",NEXT_PUBLIC_SITE_URL:"https://preview.example.com"};assert.equal(cardCheckoutAvailable(env),false);assert.ok(payhereConfig(env));assert.equal(cardCheckoutAvailable({...env,PAYHERE_CHECKOUT_ENABLED:"true"}),true);});

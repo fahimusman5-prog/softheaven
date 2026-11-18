@@ -9,6 +9,7 @@ export async function proxy(request: NextRequest) {
     getSupabaseConfig().url,
     process.env.NODE_ENV === "development",
     request.nextUrl.pathname === "/contact",
+    request.nextUrl.pathname === "/checkout" || request.nextUrl.pathname === "/payment-result",
   );
   const forwarded = new Headers(request.headers);
   forwarded.set("x-nonce", nonce);

@@ -3,6 +3,7 @@ export function contentSecurityPolicy(
   supabaseUrl: string,
   development = false,
   contactPage = false,
+  paymentPage = false,
 ) {
   const backend = new URL(supabaseUrl).origin;
   const socket = backend.replace(/^https:/, "wss:");
@@ -16,7 +17,7 @@ export function contentSecurityPolicy(
     `connect-src 'self' ${backend} ${socket}${contactPage ? " https://challenges.cloudflare.com" : ""}${development ? " ws: http://localhost:*" : ""}`,
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
+    `form-action 'self'${paymentPage ? " https://sandbox.payhere.lk/pay/checkout https://www.payhere.lk/pay/checkout" : ""}`,
     "frame-ancestors 'none'",
     contactPage ? "frame-src https://challenges.cloudflare.com" : "frame-src 'none'",
     ...(development ? [] : ["upgrade-insecure-requests"]),

@@ -1,0 +1,6 @@
+import Link from 'next/link';
+import {notFound} from 'next/navigation';
+import {policies,legalLinks} from '@/lib/legal/policies';
+import './policy.css';
+export async function generateMetadata({params}:{params:Promise<{policy:string}>}){const p=policies[(await params).policy];return {title:p?.title||'Policy',robots:{index:false,follow:false}};}
+export default async function PolicyPage({params}:{params:Promise<{policy:string}>}){const policy=policies[(await params).policy];if(!policy)notFound();return <article className="policy-page"><header><span className="eyebrow">SoftHaven customer care</span><h1>{policy.title}</h1><p>{policy.summary}</p></header><aside className="policy-draft" role="note"><strong>Draft for business review</strong><p>This document is not an approved final policy. Business details and operating terms must be confirmed before launch. No return period, delivery guarantee or refund deadline is assumed.</p></aside><div className="policy-body">{policy.sections.map(section=><section key={section.title}><h2>{section.title}</h2><p>{section.text}</p></section>)}</div><footer><p>For order assistance, visit <Link href="/contact">Contact SoftHaven</Link>. Only configured contact methods are shown.</p><nav aria-label="Customer policies">{legalLinks.map(link=><Link key={link.href} href={link.href}>{link.title}</Link>)}</nav></footer></article>;}

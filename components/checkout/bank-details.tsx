@@ -1,0 +1,6 @@
+'use client';
+import {useState} from 'react';
+export type BankDetails={bank_name:string;account_name:string;account_number:string;branch:string;instructions?:string;swift?:string};
+export function BankDetailsPanel({bank,amount}:{bank:BankDetails;amount:string|null}){const [message,setMessage]=useState('');async function copy(value:string){try{await navigator.clipboard.writeText(value);setMessage('Copied.');}catch{setMessage('Copy is unavailable. Please select and copy the displayed value.');}}
+ return <section className="bank-details"><h3>Direct Bank Transfer</h3><dl><div><dt>Bank</dt><dd>{bank.bank_name}</dd></div><div><dt>Account holder</dt><dd>{bank.account_name}</dd></div><div><dt>Account number</dt><dd>{bank.account_number}<button type="button" onClick={()=>copy(bank.account_number)}>Copy account number</button></dd></div><div><dt>Branch</dt><dd>{bank.branch}</dd></div>{bank.swift&&<div><dt>SWIFT</dt><dd>{bank.swift}</dd></div>}<div><dt>Payable amount (LKR)</dt><dd>{amount||'Review your total first'}{amount&&<button type="button" onClick={()=>copy(amount)}>Copy amount</button>}</dd></div></dl>{bank.instructions&&<p>{bank.instructions}</p>}<p role="status">{message}</p></section>;
+}

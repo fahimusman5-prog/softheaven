@@ -61,6 +61,7 @@ export function SettingsForm({ id, title }: { id: string; title: string }) {
                   ["account_name", "Account name"],
                   ["account_number", "Account number"],
                   ["branch", "Branch"],
+                  ["swift", "SWIFT (optional)"],
                 ].map(([key, label]) => (
                   <label key={key}>
                     {label}
@@ -91,7 +92,7 @@ export function SettingsForm({ id, title }: { id: string; title: string }) {
                       setValue({ ...value, enabled: e.target.checked })
                     }
                   />
-                  Enable internal bank instructions
+                  Enable approved bank transfer checkout
                 </label>
               </>
             ) : (
@@ -416,7 +417,7 @@ function CommerceTable({
                           {r.shipping_zones?.name}
                           <small className="admin-cell-secondary">
                             {r.shipping_zones?.districts?.join(", ") ||
-                              "All Sri Lanka"}
+                              "Sri Lanka — Islandwide"}
                           </small>
                         </span>
                       ),

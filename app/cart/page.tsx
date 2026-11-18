@@ -1,5 +1,6 @@
 'use client';
 
+import { FreeDeliveryNotice } from '@/components/free-delivery-notice';
 import Link from 'next/link';
 import { getCartLineId, useCart } from '@/components/cart-provider';
 import { formatPrice } from '@/lib/format';
@@ -47,7 +48,7 @@ export default function CartPage() {
             })}
           </div>
 
-          <aside className="cart-summary">
+          <aside className="cart-summary"><FreeDeliveryNotice/>
             <h2>Bag summary</h2>
             <div><span>Bag Subtotal</span><b>{formatPrice(subtotal)}</b></div>
             <hr />
